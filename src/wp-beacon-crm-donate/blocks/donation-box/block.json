@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wbcd/donation-box",
+  "title": "Beacon Donation Box",
+  "category": "widgets",
+  "description": "CTA box that sends donors to the full BeaconCRM form with preselected currency/frequency/amount.",
+  "textdomain": "wp-beacon-crm-donate",
+  "supports": {
+    "html": false,
+    "anchor": false,
+    "customClassName": false,
+    "reusable": true,
+    "multiple": true
+  },
+  "style": "wbcd-front",
+  "editorStyle": "wbcd-front",
+  "icon": "money",
+  "editorScript": "file:./editor.js"
+}

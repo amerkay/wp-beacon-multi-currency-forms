@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "wbcd/donation-form",
+    "title": "Beacon Donation Form",
+    "category": "widgets",
+    "description": "Full-page BeaconCRM form with currency switcher.",
+    "textdomain": "wp-beacon-crm-donate",
+    "supports": {
+        "html": false,
+        "anchor": false,
+        "customClassName": false,
+        "reusable": true,
+        "multiple": false
+    },
+    "style": "wbcd-front",
+    "editorStyle": "wbcd-front",
+    "icon": "money",
+    "editorScript": "file:./editor.js"
+}
