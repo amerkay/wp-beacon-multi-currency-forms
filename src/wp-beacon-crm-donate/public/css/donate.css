@@ -36,12 +36,12 @@
 /* ---- Donation CTA styles (from your snippet) ---- */
 #wpbcd-donate {
     --wpbcd-text: #222;
-    --wpbcd-brand: #465833;
-    --wpbcd-brand-600: #3a492a;
+    --wpbcd-brand: #676767;
+    --wpbcd-brand-600: color-mix(in srgb, var(--wpbcd-brand) 85%, black);
     --wpbcd-muted: #9ca3af;
     --wpbcd-focus: #1f2937;
     --wpbcd-primary: #FF7B1A;
-    --wpbcd-primary-600: #e66000;
+    --wpbcd-primary-600: color-mix(in srgb, var(--wpbcd-primary) 85%, black);
 }
 
 #wpbcd-donate .wpbcd-card {

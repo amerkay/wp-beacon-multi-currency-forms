@@ -62,6 +62,8 @@ A lightweight, flexible WordPress plugin for integrating BeaconCRM donation form
 4. Look for the embed code: `<div class="beacon-form" data-account="yourorg" data-form="f0rm1d"></div>`
 5. The value in `data-account` is your account name (e.g., `yourorg`)
 
+**Note:** The form ID in `data-form` (e.g., `f0rm1d`) is what you'll use when configuring currencies below.
+
 ---
 
 ### Donation Forms Setup
@@ -147,7 +149,11 @@ Use this on dedicated donation pages.
 3. Search for **"Beacon Donation Form"**
 4. Insert the block
 5. In the block settings sidebar:
-   - Select which form to display (or leave default for the first form)
+   - **Form Settings:** Select which form to display (or leave default for the first form)
+   - **Required URL Parameters:** Add parameters that must be in the URL. If missing, users will be automatically redirected to include them.
+
+**Use Case for Required Parameters:**
+Perfect for tracking campaigns or ensuring specific data is present. For example, if you require `campaign=spring2025`, visitors accessing the page without this parameter will be automatically redirected to include it.
 
 **Best For:** Full-width donation pages
 
@@ -162,13 +168,32 @@ Use this in content areas, sidebars, or any widget area.
 3. Search for **"Beacon Donation Box"**
 4. Insert the block
 5. In the block settings sidebar:
-   - Select which form to use (or leave default)
+   - **Form Settings:** Select which form to use (or leave default)
+   - **Colors:** Customize primary and brand colors with color pickers
+   - **Text Content:** Override title, subtitle, and notice text
+   - **Frequencies:** Choose which donation frequencies to display (Single, Monthly, Annual)
+   - **Default Preset Amounts:** Set custom donation amounts for each frequency
+   - **Custom URL Parameters:** Add unlimited parameter rows with name/value pairs (user-friendly interface)
+
+**Customization Options:**
+- **Primary Color:** Override the "Donate now" button color
+- **Brand Color:** Override the color used for frequency tabs and links
+- **Title:** Change "Make a donation" to your custom text
+- **Subtitle:** Change "Pick your currency, frequency, and amount"
+- **Notice Text:** Customize the security message
+- **Frequencies:** Control which frequencies are available (Single, Monthly, Annual) - API settings override these
+- **Default Preset Amounts:** Set initial donation amounts per frequency - API settings override these
+- **Custom Parameters:** Pass additional data to BeaconCRM forms (useful for tracking campaigns, pre-selecting options, or passing entity references)
 
 **Best For:** 
 - Sidebar widgets
 - End of blog posts
 - Campaign landing pages
 - Homepage highlights
+
+**Important Notes:**
+- **Frequencies & Preset Amounts:** The settings you configure act as immediate defaults shown to visitors. When the BeaconCRM API loads (usually within a second), it will replace these with the values configured in your BeaconCRM account. This provides a seamless experience with instant display followed by API-synced accuracy.
+- **Custom Parameters:** These are appended to the donation form URL and passed to BeaconCRM, allowing you to pre-fill fields, track campaigns, or pass any data your form accepts.
 
 ---
 
@@ -187,6 +212,13 @@ Perfect for classic editor users or embedding in theme files.
 [beaconcrm_donate_form form="General Donations"]
 ```
 
+**With Required URL Parameters:**
+```
+[beaconcrm_donate_form form="Emergency Relief" params="campaign=spring2025&source=email"]
+```
+
+If visitors access the page without these parameters in the URL, they will be automatically redirected to include them.
+
 **Usage in Theme Files:**
 ```php
 <?php echo do_shortcode('[beaconcrm_donate_form]'); ?>
@@ -204,6 +236,68 @@ Perfect for classic editor users or embedding in theme files.
 ```
 [beaconcrm_donate_box form="Emergency Relief"]
 ```
+
+**With Color Customization:**
+```
+[beaconcrm_donate_box form="Monthly Giving" primary_color="#FF5733" brand_color="#2C3E50"]
+```
+
+**With Custom Text:**
+```
+[beaconcrm_donate_box 
+    title="Support Our Mission" 
+    subtitle="Choose your contribution" 
+    notice="Secure checkout powered by Stripe"
+]
+```
+
+**With Custom URL Parameters (URL-encoded format):**
+```
+[beaconcrm_donate_box params="bcn_c_adopted_animals=elephant-123&campaign=spring2025"]
+```
+
+**With Frequency Control:**
+```
+[beaconcrm_donate_box frequencies="monthly,annual"]
+```
+
+**With Custom Preset Amounts:**
+```
+[beaconcrm_donate_box 
+    presets_single="10,20,30"
+    presets_monthly="5,10,15"
+    presets_annual="50,100,200"
+]
+```
+
+**Complete Example:**
+```
+[beaconcrm_donate_box 
+    form="Wildlife Adoption"
+    primary_color="#34D399"
+    brand_color="#065F46"
+    title="Adopt an Elephant"
+    subtitle="Support our conservation efforts"
+    notice="Your adoption helps protect endangered wildlife"
+    frequencies="single,monthly"
+    presets_single="25,50,100"
+    presets_monthly="10,25,50"
+    params="bcn_c_adopted_animals=elephant-123&campaign=spring2025"
+]
+```
+
+**Shortcode Parameters:**
+- `form` - Name of the donation form to use
+- `primary_color` - Hex color for the donate button (e.g., `#FF5733`)
+- `brand_color` - Hex color for tabs and links (e.g., `#2C3E50`)
+- `title` - Custom heading text
+- `subtitle` - Custom subheading text
+- `notice` - Custom notice/security message
+- `frequencies` - Comma-separated list of allowed frequencies: `single`, `monthly`, `annual` (default: all three)
+- `presets_single` - Comma-separated amounts for single donations (e.g., `10,20,30`)
+- `presets_monthly` - Comma-separated amounts for monthly donations (e.g., `5,10,15`)
+- `presets_annual` - Comma-separated amounts for annual donations (e.g., `50,100,200`)
+- `params` - Custom URL parameters in URL-encoded format (e.g., `key1=value1&key2=value2`)
 
 **Usage in Theme Files:**
 ```php
@@ -224,7 +318,32 @@ If you use Elementor page builder, the plugin adds two widgets.
    - **"Beacon Donation Box"** (CTA box)
 3. Drag the widget to your desired location
 4. In the widget settings:
-   - **Form Name:** Select which form to display
+   - **Form Settings Tab:**
+     - **Form Name:** Select which form to display
+   - **Style Tab (Donation Box only):**
+     - **Primary Color:** Color picker for donate button
+     - **Brand Color:** Color picker for tabs and links
+   - **Content Tab (Donation Box only):**
+     - **Frequencies:** Toggle switches for Single, Monthly, and Annual frequencies
+     - **Default Preset Amounts:** Text fields for custom amounts per frequency (comma-separated)
+     - **Text Content:** Edit title, subtitle, and notice text
+     - **Custom URL Parameters:** Add unlimited parameter rows with name/value pairs (user-friendly interface)
+
+**Donation Form - Required URL Parameters:**
+The full-page donation form widget supports required URL parameters. Use the repeater control in the widget settings to add parameter name/value pairs. When the page loads, the form will check if those parameters exist in the URL with the correct values. If any parameter is missing or has a different value, the user will be automatically redirected to add them. This is perfect for tracking campaigns or ensuring specific data is present before a user can donate.
+
+**Example in Elementor:**
+1. Add "Beacon Donation Form" widget
+2. In widget settings, find "Required URL Parameters" section
+3. Click "Add Item" to add rows:
+   - Parameter Name: `campaign`, Parameter Value: `spring2025`
+   - Parameter Name: `source`, Parameter Value: `email`
+4. When users visit the page without `?campaign=spring2025&source=email`, they'll be automatically redirected to include these parameters.
+
+**Donation Box - Example Use Cases:**
+- Pass campaign tracking: `campaign` = `spring2025`
+- Pre-select adopted animals: `bcn_c_adopted_animals` = `elephant-123`
+- Track referral sources: `source` = `newsletter`
 
 **Styling:**
 - Both widgets inherit your theme's styling
@@ -244,8 +363,24 @@ If you use Divi, the plugin adds two modules.
    - **"Beacon Donation Form"** (full form)
    - **"Beacon Donation Box"** (CTA box)
 4. Add the module to your layout
-5. In the module settings:
+5. In the module settings (Donation Box):
    - **Form Name:** Select which form to display
+   - **Primary Color:** Color picker for donate button
+   - **Brand Color:** Color picker for tabs and links
+   - **Title:** Custom heading text
+   - **Subtitle:** Custom subheading text
+   - **Notice Text:** Custom security message
+   - **Show Single Frequency:** Yes/No toggle for single donations
+   - **Show Monthly Frequency:** Yes/No toggle for monthly donations
+   - **Show Annual Frequency:** Yes/No toggle for annual donations
+   - **Single Preset Amounts:** Comma-separated amounts (e.g., `10, 20, 30`)
+   - **Monthly Preset Amounts:** Comma-separated amounts (e.g., `5, 10, 15`)
+   - **Annual Preset Amounts:** Comma-separated amounts (e.g., `50, 100, 200`)
+   - **Custom URL Parameters:** URL-encoded format (e.g., `bcn_c_adopted_animals=elephant-123&campaign=spring2025`)
+
+6. In the Donation Form module settings:
+   - **Form Name:** Select which form to display
+   - **Required URL Parameters:** URL-encoded format specifying parameters that must be present in the page URL (e.g., `campaign=spring2025&source=email`). The form will automatically redirect users if these parameters are missing or have incorrect values.
 
 **Design Options:**
 - Modules support Divi's design settings
@@ -285,6 +420,45 @@ Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip
 
 ## ❓ FAQ
 
+### Q: Can I customize the colors of the donation box?
+**A:** Yes! All integration methods (Gutenberg, Shortcode, Elementor, Divi) support custom primary and brand colors. Use native HTML5 color pickers in the block/widget settings, or hex color codes in shortcodes.
+
+### Q: How do I pass custom parameters to the BeaconCRM form?
+**A:** Use the Custom URL Parameters feature available in all integration methods:
+- **Gutenberg & Elementor:** Use the visual interface to add parameter name/value pairs (no coding required)
+- **Divi & Shortcode:** Enter parameters in URL-encoded format: `key1=value1&key2=value2`
+
+This is useful for:
+- Pre-selecting form fields (e.g., `bcn_c_adopted_animals=elephant-123`)
+- Campaign tracking (e.g., `campaign=spring2025`, `source=newsletter`)
+- Passing any data that your BeaconCRM form accepts via URL parameters
+
+### Q: Can I customize the text shown in the donation box?
+**A:** Absolutely! You can customize:
+- The main title (default: "Make a donation")
+- The subtitle (default: "Pick your currency, frequency, and amount")
+- The notice text (default: "You'll be taken to our secure donation form to complete your gift.")
+
+All text fields support your customizations across all integration methods.
+
+### Q: Can I control which donation frequencies are shown?
+**A:** Yes! You can choose to show only specific frequencies (Single, Monthly, Annual):
+- **Gutenberg:** Use the checkboxes in the "Frequencies" panel
+- **Elementor:** Use the toggle switches in the "Frequencies" section
+- **Divi:** Use the Yes/No buttons for each frequency
+- **Shortcode:** Use the `frequencies` attribute (e.g., `frequencies="monthly,annual"`)
+
+Note: These are initial defaults. If BeaconCRM API returns allowed frequencies, those will override your settings.
+
+### Q: Can I set custom donation amounts?
+**A:** Yes! You can set default preset amounts for each frequency:
+- **Gutenberg:** Enter comma-separated amounts in the "Default Preset Amounts" panel
+- **Elementor:** Use the text fields for each frequency in the "Default Preset Amounts" section
+- **Divi:** Use the preset amount fields for single, monthly, and annual
+- **Shortcode:** Use attributes like `presets_monthly="5,10,15"`
+
+Note: These are fallback defaults. When the BeaconCRM form loads, it will replace these with amounts configured in your BeaconCRM account if available.
+
 ### Q: Can I use the same currency in multiple forms?
 **A:** Yes! Multiple forms can use the same currency. This is useful when you have different campaigns or regional variations. However, each currency can only appear once within the same form to prevent duplicates.
 
@@ -292,11 +466,23 @@ Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip
 **A:** The plugin will automatically select the default currency you've configured for that form.
 
 ### Q: Can I customize the styling?
-**A:** Yes! The plugin uses your theme's styling by default. You can add custom CSS in **Appearance → Customize → Additional CSS**. The main CSS classes are:
+**A:** Yes! The plugin uses your theme's styling by default. You can:
+- Use the built-in color pickers to customize primary and brand colors
+- Add custom CSS in **Appearance → Customize → Additional CSS**
+- Use your page builder's styling options (Elementor/Divi)
+
+Main CSS classes for advanced styling:
 - `.wpbcd-wrap` - Main container
 - `.wpbcd-card` - CTA box card
 - `.wpbcd-btn` - Buttons
 - `.wpbcd-select` - Dropdowns
+- `.wpbcd-tab` - Frequency and amount buttons
+
+CSS variables you can override:
+- `--wpbcd-primary` - Primary button color
+- `--wpbcd-brand` - Brand color for tabs/links
+- `--wpbcd-text` - Text color
+- `--wpbcd-border` - Border color
 
 ### Q: Do I need a BeaconCRM account?
 **A:** Yes, you need an active BeaconCRM account with configured donation forms for each currency you want to support.
@@ -357,6 +543,18 @@ This plugin is licensed under GPL v2 or later.
 ---
 
 ## 📝 Changelog
+
+### Version 0.2.0
+- **New:** Color customization - Override primary and brand colors via UI
+- **New:** Custom URL parameters - Pass unlimited parameters to donation forms
+- **New:** Text customization - Override title, subtitle, and notice text
+- **New:** Frequency control - Choose which donation frequencies to display (Single, Monthly, Annual)
+- **New:** Default preset amounts - Set custom donation amounts per frequency as fallback defaults
+- **New:** Dynamic frequency detection - Show only allowed frequencies from BeaconCRM (overrides local settings)
+- **New:** Auto brand color sync - Automatically match form brand colors from BeaconCRM
+- **Enhancement:** Enter key support for custom amount input
+- **Enhancement:** All customization options available in Gutenberg, Shortcode, Elementor, and Divi
+- **Enhancement:** Smart fallbacks - Local settings used until API data loads, then seamlessly replaced
 
 ### Version 0.1.0
 - Initial release

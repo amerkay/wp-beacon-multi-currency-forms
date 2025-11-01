@@ -1,5 +1,6 @@
 (function(){
   // Expect localized WPBCD_FORM_DATA with: beaconAccountName, formsByCurrency, allowedCurrencies, defaultCurrency
+  // Note: Required URL parameters are validated via inline script in the render class before this executes
   if (typeof WPBCD_FORM_DATA !== 'object') return;
 
   var BEACON_ACCOUNT_NAME = WPBCD_FORM_DATA.beaconAccountName;

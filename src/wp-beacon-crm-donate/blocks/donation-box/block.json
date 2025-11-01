@@ -10,6 +10,58 @@
     "formName": {
       "type": "string",
       "default": ""
+    },
+    "primaryColor": {
+      "type": "string",
+      "default": ""
+    },
+    "brandColor": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": "Make a donation"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Pick your currency, frequency, and amount"
+    },
+    "noticeText": {
+      "type": "string",
+      "default": "You'll be taken to our secure donation form to complete your gift."
+    },
+    "customParams": {
+      "type": "array",
+      "default": []
+    },
+    "allowedFrequencies": {
+      "type": "array",
+      "default": [
+        "single",
+        "monthly",
+        "annual"
+      ]
+    },
+    "defaultPresets": {
+      "type": "object",
+      "default": {
+        "single": [
+          10,
+          20,
+          30
+        ],
+        "monthly": [
+          5,
+          10,
+          15
+        ],
+        "annual": [
+          50,
+          100,
+          200
+        ]
+      }
     }
   },
   "supports": {

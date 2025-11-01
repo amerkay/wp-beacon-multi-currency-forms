@@ -7,8 +7,24 @@ if (! defined('ABSPATH')) exit;
 class Donate_CTA_Render
 {
 
-    public static function render($form_name = '')
+    public static function render($form_name = '', $args = [])
     {
+        // Parse arguments with defaults
+        $args = wp_parse_args($args, [
+            'primaryColor' => '',
+            'brandColor' => '',
+            'customParams' => [],
+            'allowedFrequencies' => ['single', 'monthly', 'annual'],
+            'defaultPresets' => [
+                'single' => [10, 20, 30],
+                'monthly' => [5, 10, 15],
+                'annual' => [50, 100, 200]
+            ],
+            'title' => __('Make a donation', 'wp-beacon-crm-donate'),
+            'subtitle' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
+            'noticeText' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
+        ]);
+
         $currencies = \WBCD\Settings::get_forms_by_currency($form_name);
         $symbols = \WBCD\Settings::get_currency_symbols();
 
@@ -25,13 +41,40 @@ class Donate_CTA_Render
             return '<div class="wpbcd-wrap"><p>' . esc_html__('Please configure donation forms in the Beacon Donate settings.', 'wp-beacon-crm-donate') . '</p></div>';
         }
 
+        // Build inline style for custom colors
+        $inline_style = '';
+        if (!empty($args['brandColor'])) {
+            $inline_style .= '--wpbcd-brand: ' . esc_attr($args['brandColor']) . '; ';
+        }
+        if (!empty($args['primaryColor'])) {
+            $inline_style .= '--wpbcd-primary: ' . esc_attr($args['primaryColor']) . '; ';
+        }
+
+        // Prepare custom params for JavaScript
+        $custom_params_json = !empty($args['customParams']) ? wp_json_encode($args['customParams']) : '{}';
+
+        // Prepare allowed frequencies for JavaScript
+        $allowed_frequencies = !empty($args['allowedFrequencies']) ? $args['allowedFrequencies'] : ['single', 'monthly', 'annual'];
+        $allowed_frequencies_json = wp_json_encode($allowed_frequencies);
+
+        // Prepare default presets for JavaScript
+        $default_presets = !empty($args['defaultPresets']) ? $args['defaultPresets'] : [
+            'single' => [10, 20, 30],
+            'monthly' => [5, 10, 15],
+            'annual' => [50, 100, 200]
+        ];
+        $default_presets_json = wp_json_encode($default_presets);
+
         ob_start();
 ?>
-        <div id="wpbcd-donate" class="wpbcd-wrap">
+        <div id="wpbcd-donate" class="wpbcd-wrap" style="<?php echo esc_attr($inline_style); ?>"
+            data-custom-params="<?php echo esc_attr($custom_params_json); ?>"
+            data-allowed-frequencies="<?php echo esc_attr($allowed_frequencies_json); ?>"
+            data-default-presets="<?php echo esc_attr($default_presets_json); ?>">
             <div class="wpbcd-card">
                 <header class="wpbcd-header">
-                    <h3 class="wpbcd-title"><?php esc_html_e('Make a donation', 'wp-beacon-crm-donate'); ?></h3>
-                    <p class="wpbcd-sub"><?php esc_html_e('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'); ?></p>
+                    <h3 class="wpbcd-title"><?php echo esc_html($args['title']); ?></h3>
+                    <p class="wpbcd-sub"><?php echo esc_html($args['subtitle']); ?></p>
                 </header>
 
                 <div class="wpbcd-section">
@@ -75,7 +118,7 @@ class Donate_CTA_Render
 
                 <div class="wpbcd-actions">
                     <button id="wpbcd-next" class="wpbcd-btn wpbcd-btn-next" type="button" aria-label="<?php esc_attr_e('Continue to secure form', 'wp-beacon-crm-donate'); ?>" disabled><?php esc_html_e('Donate now →', 'wp-beacon-crm-donate'); ?></button>
-                    <div class="wpbcd-note"><?php esc_html_e('You\'ll be taken to our secure donation form to complete your gift.', 'wp-beacon-crm-donate'); ?></div>
+                    <div class="wpbcd-note"><?php echo esc_html($args['noticeText']); ?></div>
                 </div>
             </div>
         </div>

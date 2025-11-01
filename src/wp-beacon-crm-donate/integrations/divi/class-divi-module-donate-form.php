@@ -37,6 +37,12 @@ class Donate_Form_Module extends \ET_Builder_Module
                 'default' => '',
                 'description' => __('Choose which donation form to display', 'wp-beacon-crm-donate'),
             ],
+            'custom_params' => [
+                'label' => __('Required URL Parameters', 'wp-beacon-crm-donate'),
+                'type' => 'textarea',
+                'default' => '',
+                'description' => __('Enter required parameters in URL format: campaign=spring2025&source=email. If missing, users will be redirected to include them.', 'wp-beacon-crm-donate'),
+            ],
         ];
     }
 
@@ -44,8 +50,19 @@ class Donate_Form_Module extends \ET_Builder_Module
     {
         $form_name = isset($this->props['form_name']) ? $this->props['form_name'] : '';
 
+        // Parse custom params from URL-encoded format
+        $custom_params = [];
+        if (!empty($this->props['custom_params'])) {
+            // Parse URL-encoded format
+            parse_str($this->props['custom_params'], $custom_params);
+        }
+
+        $render_args = [
+            'customParams' => $custom_params
+        ];
+
         \WBCD\Assets::enqueue_front_base();
         \WBCD\Assets::enqueue_donation_form($form_name);
-        return \WBCD\Render\Donate_Form_Render::render($form_name);
+        return \WBCD\Render\Donate_Form_Render::render($form_name, $render_args);
     }
 }

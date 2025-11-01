@@ -37,7 +37,8 @@
   var state = {
     currency: defaultCurrency,
     frequency: "monthly",
-    amountPresets: { single:DEFAULT_PRESETS.single.slice(0), monthly:DEFAULT_PRESETS.monthly.slice(0), annual:DEFAULT_PRESETS.annual.slice(0) },
+    allowedFrequencies: [], // Will be set after parsing data attributes
+    amountPresets: { single:[], monthly:[], annual:[] }, // Will be set after parsing data attributes
     amountSelected: null
   };
 
@@ -54,6 +55,68 @@
   var currencySelect = document.getElementById("wpbcd-currency-select");
   var nextBtn = document.getElementById("wpbcd-next");
 
+  // Parse custom URL parameters from data attribute
+  var customParams = {};
+  try {
+    var customParamsAttr = wrap.getAttribute('data-custom-params');
+    if (customParamsAttr) {
+      customParams = JSON.parse(customParamsAttr);
+    }
+  } catch(e) {
+    console.warn('WPBCD: Failed to parse custom params', e);
+  }
+
+  // Parse allowed frequencies from data attribute
+  var configuredFrequencies = ["single", "monthly", "annual"]; // Default
+  try {
+    var allowedFreqAttr = wrap.getAttribute('data-allowed-frequencies');
+    if (allowedFreqAttr) {
+      var parsed = JSON.parse(allowedFreqAttr);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        configuredFrequencies = parsed;
+      }
+    }
+  } catch(e) {
+    console.warn('WPBCD: Failed to parse allowed frequencies', e);
+  }
+
+  // Parse default presets from data attribute
+  var configuredPresets = { single:[10,20,30], monthly:[5,10,15], annual:[50,100,200] }; // Default
+  try {
+    var presetsAttr = wrap.getAttribute('data-default-presets');
+    if (presetsAttr) {
+      var parsed = JSON.parse(presetsAttr);
+      if (parsed && typeof parsed === 'object') {
+        configuredPresets = {
+          single: Array.isArray(parsed.single) && parsed.single.length > 0 ? parsed.single : DEFAULT_PRESETS.single,
+          monthly: Array.isArray(parsed.monthly) && parsed.monthly.length > 0 ? parsed.monthly : DEFAULT_PRESETS.monthly,
+          annual: Array.isArray(parsed.annual) && parsed.annual.length > 0 ? parsed.annual : DEFAULT_PRESETS.annual
+        };
+      }
+    }
+  } catch(e) {
+    console.warn('WPBCD: Failed to parse default presets', e);
+  }
+
+  // Initialize state with configured values
+  state.allowedFrequencies = configuredFrequencies;
+  state.amountPresets = {
+    single: configuredPresets.single.slice(0),
+    monthly: configuredPresets.monthly.slice(0),
+    annual: configuredPresets.annual.slice(0)
+  };
+
+  // Helper to get valid frequency
+  function getValidFrequency(preferredFreq){
+    // If preferred frequency is allowed, use it
+    if (state.allowedFrequencies.indexOf(preferredFreq) >= 0) return preferredFreq;
+    // Otherwise return first allowed frequency
+    return state.allowedFrequencies[0] || "monthly";
+  }
+
+  // Ensure initial frequency is valid
+  state.frequency = getValidFrequency(state.frequency);
+
   currencySelect.value = state.currency;
   currencySymbol.textContent = formsByCurrency[state.currency].symbol;
 
@@ -64,7 +127,17 @@
       b.setAttribute("aria-selected", v === value ? "true" : "false");
     });
   }
-  function renderFrequencyUI(){ setSelected(freqBtns, state.frequency, "frequency"); }
+  function renderFrequencyUI(){ 
+    setSelected(freqBtns, state.frequency, "frequency");
+    // Show/hide buttons based on allowed frequencies
+    freqBtns.forEach(function(btn){
+      var freq = btn.getAttribute("data-frequency");
+      var isAllowed = state.allowedFrequencies.indexOf(freq) >= 0;
+      btn.style.display = isAllowed ? "" : "none";
+      if (!isAllowed) btn.setAttribute("aria-hidden", "true");
+      else btn.removeAttribute("aria-hidden");
+    });
+  }
 
   function renderAmountPresets(){
     amountBtnsWrap.innerHTML = "";
@@ -103,6 +176,28 @@
     }
     return out;
   }
+  
+  function applyBrandColor(color){
+    if (!color) return;
+    // Update the CSS variable on the #wpbcd-donate element
+    if (wrap) {
+      wrap.style.setProperty('--wpbcd-brand', color);
+      // Optionally calculate a darker shade for hover states (simple darken by ~15%)
+      try {
+        var hex = color.replace('#', '');
+        var r = parseInt(hex.substr(0,2), 16);
+        var g = parseInt(hex.substr(2,2), 16);
+        var b = parseInt(hex.substr(4,2), 16);
+        var darker = '#' + 
+          Math.floor(r * 0.85).toString(16).padStart(2, '0') +
+          Math.floor(g * 0.85).toString(16).padStart(2, '0') +
+          Math.floor(b * 0.85).toString(16).padStart(2, '0');
+        wrap.style.setProperty('--wpbcd-brand-600', darker);
+      } catch(e) {
+        // If color parsing fails, just use the main color
+      }
+    }
+  }
 
   function fetchPresets(currency){
     var formId = formsByCurrency[currency].id;
@@ -116,13 +211,39 @@
         for (var i=0;i<sections.length;i++){
           if (sections[i] && sections[i].key === "donation_amount"){ donationSection = sections[i]; break; }
         }
+        
+        // Parse allowed frequencies
+        var allowedFreqs = (donationSection && donationSection.allowed_frequencies) || [];
+        var normalizedFreqs = [];
+        for (var j=0; j<allowedFreqs.length; j++){
+          var freq = String(allowedFreqs[j]).toLowerCase();
+          if (freq === "monthly" || freq === "annual" || freq === "single") {
+            normalizedFreqs.push(freq);
+          }
+        }
+        // Fallback to all if none specified
+        if (!normalizedFreqs.length) normalizedFreqs = ["single", "monthly", "annual"];
+        
+        // Extract brand color if available
+        var brandColor = data && data.color ? String(data.color) : null;
+        
         return {
           single:  parsePresetArray(donationSection && donationSection.preset_single_amounts),
           monthly: parsePresetArray(donationSection && donationSection.preset_monthly_amounts),
-          annual:  parsePresetArray(donationSection && donationSection.preset_annual_amounts)
+          annual:  parsePresetArray(donationSection && donationSection.preset_annual_amounts),
+          allowedFrequencies: normalizedFreqs,
+          brandColor: brandColor
         };
       })
-      .catch(function(){ return { single:DEFAULT_PRESETS.single, monthly:DEFAULT_PRESETS.monthly, annual:DEFAULT_PRESETS.annual }; });
+      .catch(function(){ 
+        return { 
+          single:DEFAULT_PRESETS.single, 
+          monthly:DEFAULT_PRESETS.monthly, 
+          annual:DEFAULT_PRESETS.annual,
+          allowedFrequencies: ["single", "monthly", "annual"],
+          brandColor: null
+        }; 
+      });
   }
 
   function onCurrencyChange(newCur){
@@ -135,11 +256,20 @@
     renderAmountPresets(); // default first
     fetchPresets(state.currency).then(function(p){
       state.amountPresets = p;
+      state.allowedFrequencies = p.allowedFrequencies || ["single", "monthly", "annual"];
+      // Ensure current frequency is valid, otherwise switch to first allowed
+      state.frequency = getValidFrequency(state.frequency);
+      // Apply brand color if available
+      if (p.brandColor) applyBrandColor(p.brandColor);
+      renderFrequencyUI();
       renderAmountPresets(); // update grid with live values
     });
   }
 
   function onFrequencyChange(newFreq){
+    // Only allow changing to frequencies that are allowed
+    if (state.allowedFrequencies.indexOf(newFreq) < 0) return;
+    
     state.frequency = newFreq;
     state.amountSelected = null;
     customAmountInput.value = "";
@@ -165,6 +295,16 @@
     params.set("bcn_donation_frequency", state.frequency);
     var amt = getChosenAmount();
     if(amt) params.set("bcn_donation_amount", String(amt));
+    
+    // Append custom URL parameters
+    if (customParams && typeof customParams === 'object') {
+      for (var key in customParams) {
+        if (customParams.hasOwnProperty(key) && customParams[key]) {
+          params.set(key, String(customParams[key]));
+        }
+      }
+    }
+    
     return baseURL + (baseURL.indexOf('?')>-1 ? '&' : '?') + params.toString();
   }
 
@@ -195,6 +335,16 @@
     updateNextButton();
   });
 
+  customAmountInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.keyCode === 13) {
+      e.preventDefault();
+      // Only submit if form is valid (button is enabled)
+      if (!nextBtn.disabled) {
+        window.location.href = buildNextURL();
+      }
+    }
+  });
+
   nextBtn.addEventListener("click", function(){
     window.location.href = buildNextURL();
   });
@@ -211,6 +361,12 @@
       } else {
         fetchPresets(state.currency).then(function(p){
           state.amountPresets = p;
+          state.allowedFrequencies = p.allowedFrequencies || ["single", "monthly", "annual"];
+          // Ensure initial frequency is valid
+          state.frequency = getValidFrequency(state.frequency);
+          // Apply brand color if available
+          if (p.brandColor) applyBrandColor(p.brandColor);
+          renderFrequencyUI();
           renderAmountPresets();
         });
       }
