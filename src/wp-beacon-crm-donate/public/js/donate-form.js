@@ -1,10 +1,10 @@
 (function(){
-  // Expect localized WBCD_FORM_DATA with: account, formsByCurrency, allowedCurrencies
-  if (typeof WBCD_FORM_DATA !== 'object') return;
+  // Expect localized WPBCD_FORM_DATA with: account, formsByCurrency, allowedCurrencies
+  if (typeof WPBCD_FORM_DATA !== 'object') return;
 
-  var ACCOUNT = WBCD_FORM_DATA.account || 'pangeatrust';
-  var formsByCurrency = WBCD_FORM_DATA.formsByCurrency || { GBP:'57085719', EUR:'694de004', USD:'17a36966' };
-  var ALLOWED = WBCD_FORM_DATA.allowedCurrencies || ['GBP','EUR','USD'];
+  var ACCOUNT = WPBCD_FORM_DATA.account;
+  var formsByCurrency = WPBCD_FORM_DATA.formsByCurrency || { GBP:'57085719', EUR:'694de004', USD:'17a36966' };
+  var ALLOWED = WPBCD_FORM_DATA.allowedCurrencies || ['GBP','EUR','USD'];
 
   // Inject Beacon SDK once
   (function(d,i){
@@ -17,8 +17,8 @@
   }(document,"beacon-js-sdk"));
 
   // Elements
-  var selectEl = document.getElementById("pgt-currency");
-  var slot = document.getElementById("pgt-beacon-slot");
+  var selectEl = document.getElementById("wpbcd-currency");
+  var slot = document.getElementById("wpbcd-beacon-slot");
   if(!selectEl || !slot) return;
 
   // Helpers

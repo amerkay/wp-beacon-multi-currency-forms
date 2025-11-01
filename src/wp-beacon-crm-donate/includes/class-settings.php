@@ -26,8 +26,15 @@ class Settings
             'EUR' => '694de004',
             'USD' => '17a36966',
         ];
+        add_option('wbcd_beacon_account', '');
         add_option('wbcd_currencies', $defaults);
         add_option('wbcd_target_page_id', 0);
+
+        register_setting('wbcd_group', 'wbcd_beacon_account', [
+            'type'              => 'string',
+            'sanitize_callback' => [__CLASS__, 'sanitize_account'],
+            'default'           => '',
+        ]);
 
         register_setting('wbcd_group', 'wbcd_currencies', [
             'type'              => 'array',
@@ -45,9 +52,17 @@ class Settings
             'wbcd_section_main',
             __('Donation Settings', 'wp-beacon-crm-donate'),
             function () {
-                echo '<p>' . esc_html__('Configure the Beacon form IDs per currency and select the page that hosts the full donation form.', 'wp-beacon-crm-donate') . '</p>';
+                echo '<p>' . esc_html__('Configure your Beacon account name, form IDs per currency, and select the page that hosts the full donation form.', 'wp-beacon-crm-donate') . '</p>';
             },
             'wbcd-settings'
+        );
+
+        add_settings_field(
+            'wbcd_field_beacon_account',
+            __('Beacon Account Name', 'wp-beacon-crm-donate'),
+            [__CLASS__, 'field_beacon_account'],
+            'wbcd-settings',
+            'wbcd_section_main'
         );
 
         add_settings_field(
@@ -67,6 +82,12 @@ class Settings
         );
     }
 
+    public static function sanitize_account($input)
+    {
+        // Account name should be alphanumeric/hyphen/underscore only
+        return preg_replace('/[^a-zA-Z0-9_-]/', '', trim($input));
+    }
+
     public static function sanitize_currencies($input)
     {
         $out = ['GBP' => '', 'EUR' => '', 'USD' => ''];
@@ -77,6 +98,19 @@ class Settings
             }
         }
         return $out;
+    }
+
+    public static function field_beacon_account()
+    {
+        $value = get_option('wbcd_beacon_account', '');
+        echo '<input type="text" id="wbcd_beacon_account" name="wbcd_beacon_account" value="' . esc_attr($value) . '" class="regular-text" required />';
+        echo '<p class="description">' . esc_html__('Enter your BeaconCRM account name (e.g., "yourorg"). This is required.', 'wp-beacon-crm-donate') . '</p>';
+        echo '<p class="description"><strong>' . esc_html__('How to find your account name:', 'wp-beacon-crm-donate') . '</strong></p>';
+        echo '<ol class="description" style="margin-left: 1.5em;">';
+        echo '<li>' . esc_html__('Navigate to any of your forms on BeaconCRM\'s interface.', 'wp-beacon-crm-donate') . '</li>';
+        echo '<li>' . esc_html__('Click it, then click "Embed".', 'wp-beacon-crm-donate') . '</li>';
+        echo '<li>' . wp_kses_post(__('The form code should look like <code>&lt;div class="beacon-form" data-account="yourorg" data-form="000000"&gt;&lt;/div&gt;</code>. In this example, the account name is <code>yourorg</code>.', 'wp-beacon-crm-donate')) . '</li>';
+        echo '</ol>';
     }
 
     public static function field_currencies()
@@ -128,6 +162,11 @@ class Settings
     }
 
     // Helpers used by other classes
+    public static function get_beacon_account()
+    {
+        return get_option('wbcd_beacon_account', '');
+    }
+
     public static function get_forms_by_currency()
     {
         $map = get_option('wbcd_currencies', []);

@@ -11,6 +11,21 @@ class GeoIP_Dependency
     {
         if (! current_user_can('manage_options')) return;
 
+        // Check if Beacon account is configured
+        $account = Settings::get_beacon_account();
+        if (empty($account)) {
+            $url = admin_url('options-general.php?page=wbcd-settings');
+            echo '<div class="notice notice-error"><p>';
+            echo wp_kses_post(sprintf(
+                /* translators: 1: open link, 2: close link */
+                __('Beacon Donate requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'wp-beacon-crm-donate'),
+                '<a href="' . esc_url($url) . '">',
+                '</a>'
+            ));
+            echo '</p></div>';
+            return;
+        }
+
         // Check if the plugin is active
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
         $is_active = function_exists('is_plugin_active') && is_plugin_active('geoip-detect/geoip-detect.php');

@@ -1,13 +1,13 @@
 (function(){
-  // Expect localized WBCD_CTA_DATA: { account, formsByCurrency:{GBP:{id,symbol},...}, baseURL }
-  if (typeof WBCD_CTA_DATA !== 'object') return;
+  // Expect localized WPBCD_CTA_DATA: { account, formsByCurrency:{GBP:{id,symbol},...}, baseURL }
+  if (typeof WPBCD_CTA_DATA !== 'object') return;
 
-  var formsByCurrency = WBCD_CTA_DATA.formsByCurrency || {
+  var formsByCurrency = WPBCD_CTA_DATA.formsByCurrency || {
     GBP:{id:"57085719",symbol:"£"},
     EUR:{id:"694de004",symbol:"€"},
     USD:{id:"17a36966",symbol:"$"}
   };
-  var baseURL = WBCD_CTA_DATA.baseURL || (location.origin + "/donation-form/");
+  var baseURL = WPBCD_CTA_DATA.baseURL || (location.origin + "/donation-form/");
 
   var DEFAULT_PRESETS = { single:[10,20,30], monthly:[5,10,15], annual:[50,100,200] };
 
@@ -32,17 +32,17 @@
   };
 
   // Elements
-  var wrap = document.getElementById("pangea-donate");
+  var wrap = document.getElementById("wpbcd-donate");
   if(!wrap) return;
 
-  var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".pgt-btn-frequency"));
-  var amountBtnsWrap = document.getElementById("pgt-amount-buttons");
-  var customWrap = document.getElementById("pgt-custom-wrap");
-  var customToggle = document.getElementById("pgt-toggle-custom");
-  var customAmountInput = document.getElementById("pgt-custom-amount");
-  var currencySymbol = document.getElementById("pgt-currency-symbol");
-  var currencySelect = document.getElementById("pgt-currency-select");
-  var nextBtn = document.getElementById("pgt-next");
+  var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".wpbcd-btn-frequency"));
+  var amountBtnsWrap = document.getElementById("wpbcd-amount-buttons");
+  var customWrap = document.getElementById("wpbcd-custom-wrap");
+  var customToggle = document.getElementById("wpbcd-toggle-custom");
+  var customAmountInput = document.getElementById("wpbcd-custom-amount");
+  var currencySymbol = document.getElementById("wpbcd-currency-symbol");
+  var currencySelect = document.getElementById("wpbcd-currency-select");
+  var nextBtn = document.getElementById("wpbcd-next");
 
   currencySelect.value = state.currency;
   currencySymbol.textContent = formsByCurrency[state.currency].symbol;
@@ -67,12 +67,12 @@
     safeGroup.forEach(function(v){
       var btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "pgt-tab pgt-btn-amount";
+      btn.className = "wpbcd-tab wpbcd-btn-amount";
       btn.textContent = formsByCurrency[state.currency].symbol + String(Number(v));
       btn.setAttribute("aria-pressed","false");
       btn.setAttribute("data-amount", String(v));
       btn.addEventListener("click", function(){
-        Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".pgt-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
+        Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbcd-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
         btn.setAttribute("aria-pressed","true");
         state.amountSelected = Number(v);
         customAmountInput.value = "";
@@ -96,7 +96,8 @@
 
   function fetchPresets(currency){
     var formId = formsByCurrency[currency].id;
-    var url = "https://portal.beaconproducts.co.uk/v1/account/pangeatrust/form/" + formId + "?fp=x";
+    var account = WPBCD_CTA_DATA.account;
+    var url = "https://portal.beaconproducts.co.uk/v1/account/" + account + "/form/" + formId + "?fp=x";
     return fetch(url, { credentials:"omit", cache:"no-store" })
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })
       .then(function(data){
@@ -179,7 +180,7 @@
   customToggle.addEventListener("click", function(){ setCustomVisible(!isCustomVisible()); });
 
   customAmountInput.addEventListener("input", function(){
-    Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".pgt-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
+    Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbcd-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
     state.amountSelected = null;
     updateNextButton();
   });
