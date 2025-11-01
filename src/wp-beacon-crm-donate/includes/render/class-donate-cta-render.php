@@ -7,8 +7,24 @@ if (! defined('ABSPATH')) exit;
 class Donate_CTA_Render
 {
 
-    public static function render()
+    public static function render($form_name = '')
     {
+        $currencies = \WBCD\Settings::get_forms_by_currency($form_name);
+        $symbols = \WBCD\Settings::get_currency_symbols();
+
+        // If no currencies configured, show a message
+        if (empty($currencies)) {
+            if (!empty($form_name)) {
+                return '<div class="wpbcd-wrap"><p>' .
+                    sprintf(
+                        esc_html__('Form "%s" not found or has no currencies configured.', 'wp-beacon-crm-donate'),
+                        esc_html($form_name)
+                    ) .
+                    '</p></div>';
+            }
+            return '<div class="wpbcd-wrap"><p>' . esc_html__('Please configure donation forms in the Beacon Donate settings.', 'wp-beacon-crm-donate') . '</p></div>';
+        }
+
         ob_start();
 ?>
         <div id="wpbcd-donate" class="wpbcd-wrap">
@@ -31,9 +47,12 @@ class Donate_CTA_Render
                         <div class="wpbcd-amount-label"><?php esc_html_e('Amount', 'wp-beacon-crm-donate'); ?></div>
                         <label class="wpbcd-currency-select-label" for="wpbcd-currency-select" aria-label="<?php esc_attr_e('Currency', 'wp-beacon-crm-donate'); ?>"></label>
                         <select id="wpbcd-currency-select" class="wpbcd-select" aria-label="<?php esc_attr_e('Currency', 'wp-beacon-crm-donate'); ?>">
-                            <option value="GBP">GBP £</option>
-                            <option value="EUR">EUR €</option>
-                            <option value="USD">USD $</option>
+                            <?php foreach ($currencies as $code => $form_id):
+                                $symbol = isset($symbols[$code]) ? $symbols[$code] : '';
+                                $display = $symbol ? sprintf('%s %s', $code, $symbol) : $code;
+                            ?>
+                                <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($display); ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
@@ -43,8 +62,12 @@ class Donate_CTA_Render
 
                     <div class="wpbcd-amount-custom">
                         <button id="wpbcd-toggle-custom" class="wpbcd-link" type="button" aria-expanded="false" aria-controls="wpbcd-custom-wrap"><?php esc_html_e('Custom amount', 'wp-beacon-crm-donate'); ?></button>
-                        <div id="wpbcd-custom-wrap" class="wpbcd-input-wrap" hidden style="display:none;">
-                            <span id="wpbcd-currency-symbol" aria-hidden="true">£</span>
+                        <div id="wpbcd-custom-wrap" class="wpbcd-input-wrap" hidden>
+                            <span id="wpbcd-currency-symbol" aria-hidden="true"><?php
+                                                                                // Use first currency's symbol as default
+                                                                                $first_code = array_key_first($currencies);
+                                                                                echo esc_html(isset($symbols[$first_code]) ? $symbols[$first_code] : $first_code);
+                                                                                ?></span>
                             <input id="wpbcd-custom-amount" type="number" min="1" step="1" inputmode="decimal" placeholder="0" />
                         </div>
                     </div>
@@ -52,7 +75,7 @@ class Donate_CTA_Render
 
                 <div class="wpbcd-actions">
                     <button id="wpbcd-next" class="wpbcd-btn wpbcd-btn-next" type="button" aria-label="<?php esc_attr_e('Continue to secure form', 'wp-beacon-crm-donate'); ?>" disabled><?php esc_html_e('Donate now →', 'wp-beacon-crm-donate'); ?></button>
-                    <div class="wpbcd-note"><?php esc_html_e('You’ll be taken to our secure donation form to complete your gift.', 'wp-beacon-crm-donate'); ?></div>
+                    <div class="wpbcd-note"><?php esc_html_e('You\'ll be taken to our secure donation form to complete your gift.', 'wp-beacon-crm-donate'); ?></div>
                 </div>
             </div>
         </div>

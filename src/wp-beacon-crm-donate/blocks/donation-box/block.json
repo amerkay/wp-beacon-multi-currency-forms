@@ -6,6 +6,12 @@
   "category": "widgets",
   "description": "CTA box that sends donors to the full BeaconCRM form with preselected currency/frequency/amount.",
   "textdomain": "wp-beacon-crm-donate",
+  "attributes": {
+    "formName": {
+      "type": "string",
+      "default": ""
+    }
+  },
   "supports": {
     "html": false,
     "anchor": false,

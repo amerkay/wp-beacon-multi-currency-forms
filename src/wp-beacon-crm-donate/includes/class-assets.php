@@ -19,10 +19,13 @@ class Assets
         wp_enqueue_style('wbcd-front');
     }
 
-    public static function enqueue_donation_form()
+    public static function enqueue_donation_form($form_name = '')
     {
-        $account = Settings::get_beacon_account();
-        $forms = Settings::get_forms_by_currency();
+        $beaconAccountName = Settings::get_beacon_account();
+        $forms = Settings::get_forms_by_currency($form_name);
+
+        // Get default currency for this specific form
+        $default_currency = Settings::get_default_currency($form_name);
 
         wp_register_script(
             'wbcd-donate-form',
@@ -33,20 +36,24 @@ class Assets
         );
 
         wp_localize_script('wbcd-donate-form', 'WPBCD_FORM_DATA', [
-            'account'          => $account,
+            'beaconAccountName' => $beaconAccountName,
             'formsByCurrency'  => $forms,
             'allowedCurrencies' => array_keys($forms),
-            // We don't enqueue Beacon SDK globally; it's injected once by the page script.
+            'defaultCurrency' => $default_currency,
         ]);
 
         wp_enqueue_script('wbcd-donate-form');
     }
 
-    public static function enqueue_donation_cta()
+    public static function enqueue_donation_cta($form_name = '')
     {
-        $account = Settings::get_beacon_account();
-        $forms = Settings::get_forms_by_currency();
-        $url   = Settings::get_target_page_url();
+        $beaconAccountName = Settings::get_beacon_account();
+        $forms = Settings::get_forms_by_currency($form_name);
+        $symbols = Settings::get_currency_symbols();
+        $url   = Settings::get_target_page_url($form_name);
+
+        // Get default currency for this specific form
+        $default_currency = Settings::get_default_currency($form_name);
 
         wp_register_script(
             'wbcd-donate-cta',
@@ -57,17 +64,17 @@ class Assets
         );
 
         // Build id+symbol structure expected by the CTA script
-        $symbols = ['GBP' => '£', 'EUR' => '€', 'USD' => '$'];
-        $byCur   = [];
+        $byCur = [];
         foreach ($forms as $code => $id) {
-            if (! isset($symbols[$code])) continue;
-            $byCur[$code] = ['id' => $id, 'symbol' => $symbols[$code]];
+            $symbol = isset($symbols[$code]) ? $symbols[$code] : $code;
+            $byCur[$code] = ['id' => $id, 'symbol' => $symbol];
         }
 
         wp_localize_script('wbcd-donate-cta', 'WPBCD_CTA_DATA', [
-            'account'         => $account,
+            'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $byCur,
             'baseURL'         => $url,
+            'defaultCurrency' => $default_currency,
         ]);
 
         wp_enqueue_script('wbcd-donate-cta');

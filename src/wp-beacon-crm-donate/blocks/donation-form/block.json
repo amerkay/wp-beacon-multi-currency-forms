@@ -6,6 +6,12 @@
     "category": "widgets",
     "description": "Full-page BeaconCRM form with currency switcher.",
     "textdomain": "wp-beacon-crm-donate",
+    "attributes": {
+        "formName": {
+            "type": "string",
+            "default": ""
+        }
+    },
     "supports": {
         "html": false,
         "anchor": false,

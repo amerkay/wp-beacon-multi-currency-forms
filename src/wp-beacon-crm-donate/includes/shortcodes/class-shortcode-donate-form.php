@@ -12,11 +12,19 @@ class Shortcode_Donate_Form
     {
         add_shortcode('beaconcrm_donate_form', [__CLASS__, 'handle']);
     }
+
     public static function handle($atts = [])
     {
+        $atts = shortcode_atts([
+            'form' => '', // Form name
+        ], $atts, 'beaconcrm_donate_form');
+
+        $form_name = $atts['form'];
+
         // Ensure assets on shortcode use
         \WBCD\Assets::enqueue_front_base();
-        \WBCD\Assets::enqueue_donation_form();
-        return Donate_Form_Render::render();
+        \WBCD\Assets::enqueue_donation_form($form_name);
+
+        return Donate_Form_Render::render($form_name);
     }
 }

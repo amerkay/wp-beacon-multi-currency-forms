@@ -1,0 +1,181 @@
+/**
+ * Beacon CRM Donate - Admin Settings Styles
+ * Styles for the plugin settings page
+ */
+
+/* Form item container */
+.wbcd-form-item {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    border-radius: 3px;
+}
+
+.wbcd-form-item h3 {
+    margin-top: 0;
+    color: #23282d;
+    font-size: 1.1em;
+}
+
+.wbcd-form-item h4 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #23282d;
+}
+
+/* Currency select dropdown */
+.wbcd-currency-select {
+    max-width: 100%;
+    min-width: 300px;
+}
+
+/* Currency ID input */
+.wbcd-currency-id {
+    width: 200px;
+}
+
+/* Currencies section */
+.wbcd-currencies-section {
+    margin-top: 15px;
+}
+
+.wbcd-currencies-section table.widefat {
+    margin-bottom: 10px;
+    border: 1px solid #ccd0d4;
+}
+
+.wbcd-currencies-section table.widefat.wbcd-currencies-table {
+    margin-bottom: 10px;
+}
+
+.wbcd-currencies-section table.widefat thead th {
+    background: #f3f4f5;
+    font-weight: 600;
+    padding: 8px 10px;
+}
+
+.wbcd-currencies-section table.widefat thead th.wbcd-col-default,
+.wbcd-currencies-section table.widefat thead th.wbcd-col-action {
+    width: 80px;
+}
+
+.wbcd-currencies-section table.widefat tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+}
+
+.wbcd-currencies-section table.widefat tbody tr {
+    background: #fff;
+}
+
+.wbcd-currencies-section table.widefat tbody tr:hover {
+    background: #f9f9f9;
+}
+
+/* Default currency radio button cell */
+.wbcd-currencies-section table.widefat td:first-child {
+    text-align: left;
+    padding-left: 15px;
+}
+
+/* Action buttons in table */
+.wbcd-currencies-section table.widefat .button {
+    padding: 2px 10px;
+    height: auto;
+    line-height: 1.5;
+}
+
+/* Add currency section */
+.wbcd-add-currency {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.wbcd-add-currency label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* Remove form button */
+.wbcd-remove-form-wrapper {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    margin-bottom: 0;
+}
+
+.wbcd-form-item>p:last-child {
+    margin-bottom: 0;
+}
+
+/* Forms container */
+#wbcd-forms-container {
+    margin-bottom: 10px;
+}
+
+/* Add form button spacing */
+#wbcd-add-form {
+    margin-top: 5px;
+}
+
+/* Description text styling */
+.wbcd-currencies-section .description {
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Instructions list for beacon account */
+ol.wbcd-instructions-list {
+    margin-left: 1.5em;
+}
+
+/* Validation error styles */
+.wbcd-validation-error {
+    display: block;
+    color: #dc3232;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: #fef7f7;
+    border-left: 4px solid #dc3232;
+    border-radius: 2px;
+}
+
+.wbcd-form-item.wbcd-has-error {
+    border-color: #dc3232;
+    border-width: 2px;
+    background: #fef7f7;
+}
+
+.wbcd-form-item.wbcd-has-error h3 {
+    color: #dc3232;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 782px) {
+    .wbcd-currency-select {
+        min-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .wbcd-currency-id {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .wbcd-add-currency-btn {
+        width: 100%;
+    }
+
+    .wbcd-currencies-section table.widefat {
+        font-size: 14px;
+    }
+
+    .wbcd-currencies-section table.widefat td,
+    .wbcd-currencies-section table.widefat th {
+        padding: 6px 8px;
+    }
+}

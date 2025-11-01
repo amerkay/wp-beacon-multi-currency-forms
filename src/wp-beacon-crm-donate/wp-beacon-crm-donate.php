@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:  Beacon CRM Donate (Ultra-Lean)
+ * Plugin Name:  Beacon CRM Donate
  * Description:  Two Beacon donation blocks (full page form + CTA box) with shortcodes and Elementor/Divi adapters. No bundlers; DRY PHP renderers; simple Settings.
  * Version:      0.1.0
  * Author:       Amer Kawar @ WildAmer.com
@@ -16,7 +16,7 @@ define('WPBCD_FILE',           __FILE__);
 define('WPBCD_PATH',           plugin_dir_path(__FILE__));
 define('WPBCD_URL',            plugin_dir_url(__FILE__));
 
-// --- Includes (manual, ultra-lean) ---
+// --- Includes ---
 require_once WPBCD_PATH . 'includes/class-settings.php';
 require_once WPBCD_PATH . 'includes/class-assets.php';
 require_once WPBCD_PATH . 'includes/class-geoip-dependency.php';
@@ -49,11 +49,15 @@ add_action('init', function () {
         WPBCD_PATH . 'blocks/donation-form',
         array(
             'render_callback' => function ($attrs, $content) {
+                // Get form name from block attributes
+                $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
+
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
-                WBCD\Assets::enqueue_donation_form();
+                WBCD\Assets::enqueue_donation_form($form_name);
+
                 // Call the render method
-                return WBCD\Render\Donate_Form_Render::render();
+                return WBCD\Render\Donate_Form_Render::render($form_name);
             },
         )
     );
@@ -62,11 +66,15 @@ add_action('init', function () {
         WPBCD_PATH . 'blocks/donation-box',
         array(
             'render_callback' => function ($attrs, $content) {
+                // Get form name from block attributes
+                $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
+
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
-                WBCD\Assets::enqueue_donation_cta();
+                WBCD\Assets::enqueue_donation_cta($form_name);
+
                 // Call the render method
-                return WBCD\Render\Donate_CTA_Render::render();
+                return WBCD\Render\Donate_CTA_Render::render($form_name);
             },
         )
     );
@@ -76,10 +84,25 @@ add_action('init', function () {
     WBCD\Shortcodes\Shortcode_Donate_Box::register();
 });
 
+// Localize forms data for Gutenberg block editor
+add_action('enqueue_block_editor_assets', function () {
+    $forms = WBCD\Settings::get_forms_for_dropdown();
+    $form_options = [['value' => '', 'label' => __('Default (First form)', 'wp-beacon-crm-donate')]];
+
+    foreach ($forms as $name => $label) {
+        $form_options[] = ['value' => $name, 'label' => $label];
+    }
+
+    wp_localize_script('wp-blocks', 'wbcdForms', $form_options);
+});
+
 // Settings page + admin notices
 add_action('admin_menu',  ['WBCD\\Settings', 'add_menu']);
 add_action('admin_init',  ['WBCD\\Settings', 'register']);
+add_action('admin_enqueue_scripts', ['WBCD\\Settings', 'enqueue_admin_assets']);
 add_action('admin_notices', ['WBCD\\GeoIP_Dependency', 'admin_notices']);
+add_action('admin_footer', ['WBCD\\GeoIP_Dependency', 'enqueue_dismiss_script']);
+add_action('wp_ajax_wbcd_dismiss_geoip_notice', ['WBCD\\GeoIP_Dependency', 'dismiss_notice']);
 
 // Elementor Widgets
 add_action('elementor/widgets/register', function ($widgets_manager) {

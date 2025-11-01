@@ -1,15 +1,24 @@
 (function(){
-  // Expect localized WPBCD_CTA_DATA: { account, formsByCurrency:{GBP:{id,symbol},...}, baseURL }
+  // Expect localized WPBCD_CTA_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
   if (typeof WPBCD_CTA_DATA !== 'object') return;
 
-  var formsByCurrency = WPBCD_CTA_DATA.formsByCurrency || {
-    GBP:{id:"57085719",symbol:"£"},
-    EUR:{id:"694de004",symbol:"€"},
-    USD:{id:"17a36966",symbol:"$"}
-  };
+  var formsByCurrency = WPBCD_CTA_DATA.formsByCurrency || {};
   var baseURL = WPBCD_CTA_DATA.baseURL || (location.origin + "/donation-form/");
+  var DEFAULT_CURRENCY = WPBCD_CTA_DATA.defaultCurrency || '';
+
+  // Check if we have any currencies configured
+  if (!Object.keys(formsByCurrency).length) {
+    console.warn('WPBCD: No currencies configured. Please configure donation forms in settings.');
+    return;
+  }
 
   var DEFAULT_PRESETS = { single:[10,20,30], monthly:[5,10,15], annual:[50,100,200] };
+
+  // Determine default currency from available ones
+  var availableCurrencies = Object.keys(formsByCurrency);
+  var defaultCurrency = DEFAULT_CURRENCY && availableCurrencies.indexOf(DEFAULT_CURRENCY) >= 0
+    ? DEFAULT_CURRENCY
+    : availableCurrencies[0]; // Fallback to first available
 
   // Geo currency via ajax endpoint (JS API must be enabled in the GeoIP plugin)
   function fetchGeoCurrency(){
@@ -18,14 +27,15 @@
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })
       .then(function(record){
         var code = String( (record && record.extra && (record.extra.currency_code || record.extra.currencyCode)) || "" ).toUpperCase();
-        return (code === "USD" || code === "EUR" || code === "GBP") ? code : "GBP";
+        // Return detected currency only if it's available in our forms
+        return formsByCurrency[code] ? code : defaultCurrency;
       })
-      .catch(function(){ return "GBP"; });
+      .catch(function(){ return defaultCurrency; });
   }
 
   // State
   var state = {
-    currency: "GBP",
+    currency: defaultCurrency,
     frequency: "monthly",
     amountPresets: { single:DEFAULT_PRESETS.single.slice(0), monthly:DEFAULT_PRESETS.monthly.slice(0), annual:DEFAULT_PRESETS.annual.slice(0) },
     amountSelected: null
@@ -96,8 +106,8 @@
 
   function fetchPresets(currency){
     var formId = formsByCurrency[currency].id;
-    var account = WPBCD_CTA_DATA.account;
-    var url = "https://portal.beaconproducts.co.uk/v1/account/" + account + "/form/" + formId + "?fp=x";
+    var beaconAccountName = WPBCD_CTA_DATA.beaconAccountName;
+    var url = "https://portal.beaconproducts.co.uk/v1/account/" + beaconAccountName + "/form/" + formId + "?fp=x";
     return fetch(url, { credentials:"omit", cache:"no-store" })
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })
       .then(function(data){
