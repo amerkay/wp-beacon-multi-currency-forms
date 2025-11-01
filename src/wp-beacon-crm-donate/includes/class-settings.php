@@ -137,6 +137,8 @@ class Settings
             'targetPageRequired' => __('A donation form page must be selected.', self::TEXT_DOMAIN),
             'currenciesRequired' => __('At least one currency with a form ID must be added.', self::TEXT_DOMAIN),
             'validationFailed' => __('Please fix the following errors before saving:', self::TEXT_DOMAIN),
+            'addMoreCurrencies' => __('Add more currencies', self::TEXT_DOMAIN),
+            'hideCurrencyForm' => __('Hide', self::TEXT_DOMAIN),
         ];
     }
 
@@ -393,13 +395,13 @@ class Settings
     public static function field_beacon_account()
     {
         $value = get_option(self::OPTION_BEACON_ACCOUNT, '');
-        echo '<input type="text" id="' . self::OPTION_BEACON_ACCOUNT . '" name="' . self::OPTION_BEACON_ACCOUNT . '" value="' . esc_attr($value) . '" class="regular-text" required pattern="[a-z0-9_-]+" title="' . esc_attr__('Must be lowercase with only letters, numbers, hyphens, and underscores (no spaces)', self::TEXT_DOMAIN) . '" />';
-        echo '<p class="description">' . esc_html__('Enter your BeaconCRM account name (e.g., "yourorg"). Must be lowercase with only letters, numbers, hyphens, and underscores. No spaces allowed.', self::TEXT_DOMAIN) . '</p>';
-        echo '<p class="description"><strong>' . esc_html__('How to find your account name:', self::TEXT_DOMAIN) . '</strong></p>';
-        echo '<ol class="description wbcd-instructions-list">';
+        echo '<input type="text" id="' . self::OPTION_BEACON_ACCOUNT . '" name="' . self::OPTION_BEACON_ACCOUNT . '" value="' . esc_attr($value) . '" class="regular-text" required pattern="[a-z0-9_\-]+" title="' . esc_attr__('Must be lowercase with only letters, numbers, hyphens, and underscores (no spaces)', self::TEXT_DOMAIN) . '" />';
+        echo '<p class="description">' . esc_html__('Enter your BeaconCRM account name (e.g., "yourorg").', self::TEXT_DOMAIN);
+        echo ' <a href="#" class="wbcd-toggle-instructions" id="wbcd-account-name-toggle"><strong>' . esc_html__('How to find your account name and form IDs?', self::TEXT_DOMAIN) . '</strong></a></p>';
+        echo '<ol class="description wbcd-instructions-list wbcd-collapsible" id="wbcd-account-name-instructions">';
         echo '<li>' . esc_html__('Navigate to any of your forms on BeaconCRM\'s interface.', self::TEXT_DOMAIN) . '</li>';
         echo '<li>' . esc_html__('Click it, then click "Embed".', self::TEXT_DOMAIN) . '</li>';
-        echo '<li>' . wp_kses_post(__('The form code should look like <code>&lt;div class="beacon-form" data-account="yourorg" data-form="000000"&gt;&lt;/div&gt;</code>. In this example, the account name is <code>yourorg</code>.', self::TEXT_DOMAIN)) . '</li>';
+        echo '<li>' . wp_kses_post(__('The form code should look like <code>&lt;div class="beacon-form" data-account="yourorg" data-form="f0rm1d"&gt;&lt;/div&gt;</code>. In this example, the account name is <code>yourorg</code> and the form ID (to fill below) is <code>f0rm1d</code>.', self::TEXT_DOMAIN)) . '</li>';
         echo '</ol>';
     }
 
@@ -428,12 +430,12 @@ class Settings
             $is_default = ($default_currency === $code);
 
             echo '<tr>';
-            echo '<td>';
+            echo '<td data-label="' . esc_attr__('Default', self::TEXT_DOMAIN) . '">';
             echo '<input type="radio" name="wbcd_forms[' . $form_index . '][default_currency]" value="' . esc_attr($code) . '" ' . checked($is_default, true, false) . ' title="' . esc_attr__('Set as default currency', self::TEXT_DOMAIN) . '" />';
             echo '</td>';
-            echo '<td><strong>' . esc_html($display_name) . '</strong></td>';
-            echo '<td><input type="text" name="wbcd_forms[' . $form_index . '][currencies][' . esc_attr($code) . ']" value="' . esc_attr($form_id) . '" class="regular-text" placeholder="' . esc_attr__('Beacon form ID', self::TEXT_DOMAIN) . '" /></td>';
-            echo '<td><button type="button" class="button wbcd-remove-currency" data-form="' . $form_index . '" data-currency="' . esc_attr($code) . '">' . esc_html__('Remove', self::TEXT_DOMAIN) . '</button></td>';
+            echo '<td data-label="' . esc_attr__('Currency', self::TEXT_DOMAIN) . '"><strong>' . esc_html($display_name) . '</strong></td>';
+            echo '<td data-label="' . esc_attr__('Beacon Form ID', self::TEXT_DOMAIN) . '"><input type="text" name="wbcd_forms[' . $form_index . '][currencies][' . esc_attr($code) . ']" value="' . esc_attr($form_id) . '" class="regular-text" placeholder="' . esc_attr__('Beacon form ID', self::TEXT_DOMAIN) . '" /></td>';
+            echo '<td data-label="' . esc_attr__('Action', self::TEXT_DOMAIN) . '"><button type="button" class="button wbcd-remove-currency" data-form="' . $form_index . '" data-currency="' . esc_attr($code) . '">' . esc_html__('Remove', self::TEXT_DOMAIN) . '</button></td>';
             echo '</tr>';
         }
 
@@ -450,7 +452,11 @@ class Settings
      */
     private static function render_add_currency_section($form_index, $form_currencies, $currencies_data)
     {
-        echo '<div class="wbcd-add-currency">';
+        // Button to show the add currency form
+        echo '<button type="button" class="button wbcd-show-add-currency" data-form-index="' . $form_index . '">' . esc_html__('Add more currencies', self::TEXT_DOMAIN) . '</button>';
+
+        // Add currency form (hidden by default)
+        echo '<div class="wbcd-add-currency" data-form-index="' . $form_index . '">';
         echo '<label for="wbcd_new_currency_' . $form_index . '"><strong>' . esc_html__('Add Currency:', self::TEXT_DOMAIN) . '</strong></label><br>';
         echo '<select id="wbcd_new_currency_' . $form_index . '" class="wbcd-currency-select" data-form-index="' . $form_index . '">';
         echo '<option value="">' . esc_html__('-- Select a currency --', self::TEXT_DOMAIN) . '</option>';
@@ -551,7 +557,7 @@ class Settings
         // Add new form button
         echo '<p><button type="button" id="wbcd-add-form" class="button">' . esc_html__('+ Add Another Form', self::TEXT_DOMAIN) . '</button></p>';
 
-        echo '<p class="description">' . esc_html__('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies, a default currency (used as fallback), and a dedicated target page. Multiple forms can use the same currency (useful for different campaigns or regions). Each currency can only appear once per form. Forms without any currencies will not appear on the frontend.', self::TEXT_DOMAIN) . '</p>';
+        echo '<p class="description">' . esc_html__('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies, a default currency (used as fallback), and a dedicated target page for the donate CTA box to redirect to. Each currency can only appear once per form.', self::TEXT_DOMAIN) . '</p>';
     }
 
     /**

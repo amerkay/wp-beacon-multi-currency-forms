@@ -14,6 +14,8 @@
         removeFormBtn: '.wbcd-remove-form',
         addCurrencyBtn: '.wbcd-add-currency-btn',
         removeCurrencyBtn: '.wbcd-remove-currency',
+        showAddCurrencyBtn: '.wbcd-show-add-currency',
+        addCurrencySection: '.wbcd-add-currency',
         currencySelect: '.wbcd-currency-select',
         currencyIdInput: '.wbcd-currency-id',
         currencyTable: 'table tbody',
@@ -37,6 +39,15 @@
         
         // Form counter for creating new forms
         var formCounter = wbcdAdminSettings.formCount;
+
+        /**
+         * Handle toggle for account name instructions
+         */
+        $('.wbcd-toggle-instructions').on('click', function(e) {
+            e.preventDefault();
+            var $instructions = $('#wbcd-account-name-instructions');
+            $instructions.slideToggle(300);
+        });
 
         /**
          * Get i18n string
@@ -163,6 +174,24 @@
         });
 
         /**
+         * Show add currency form when "Add more currencies" button is clicked
+         */
+        $(document).on('click', SELECTORS.showAddCurrencyBtn, function() {
+            var formIndex = $(this).data('form-index');
+            var $addSection = $(this).siblings(SELECTORS.addCurrencySection);
+            
+            // Toggle visibility
+            $addSection.toggleClass('visible');
+            
+            // Update button text
+            if ($addSection.hasClass('visible')) {
+                $(this).text(i18n('hideCurrencyForm') || 'Hide');
+            } else {
+                $(this).text(i18n('addMoreCurrencies') || 'Add more currencies');
+            }
+        });
+
+        /**
          * Validate Form ID
          * Must be alphanumeric only, 6-12 characters
          */
@@ -243,13 +272,13 @@
             // Create the new table row with ALL columns including Default radio button
             // Display the FULL currency info in the Currency column
             var row = '<tr>' +
-                '<td>' +
+                '<td data-label="' + i18n('default') + '">' +
                 '<input type="radio" name="wbcd_forms[' + formIndex + '][default_currency]" value="' + currency + '" ' + 
                 (isFirstCurrency ? 'checked' : '') + ' title="' + i18n('setAsDefault') + '" />' +
                 '</td>' +
-                '<td><strong>' + currencyFullText + '</strong></td>' +
-                '<td><input type="text" name="wbcd_forms[' + formIndex + '][currencies][' + currency + ']" value="' + formId + '" class="regular-text" placeholder="' + i18n('beaconFormIdPlaceholder') + '" /></td>' +
-                '<td><button type="button" class="button wbcd-remove-currency">' + i18n('remove') + '</button></td>' +
+                '<td data-label="' + i18n('currency') + '"><strong>' + currencyFullText + '</strong></td>' +
+                '<td data-label="' + i18n('beaconFormId') + '"><input type="text" name="wbcd_forms[' + formIndex + '][currencies][' + currency + ']" value="' + formId + '" class="regular-text" placeholder="' + i18n('beaconFormIdPlaceholder') + '" /></td>' +
+                '<td data-label="' + i18n('action') + '"><button type="button" class="button wbcd-remove-currency">' + i18n('remove') + '</button></td>' +
                 '</tr>';
 
             $table.append(row);
@@ -388,7 +417,8 @@
                 '<div class="' + SELECTORS.currenciesSection.substring(1) + '">' +
                 '<h4>' + i18n('supportedCurrencies') + '</h4>' +
                 '<p><em>' + i18n('noCurrencies') + '</em></p>' +
-                '<div class="wbcd-add-currency">' +
+                '<button type="button" class="button ' + SELECTORS.showAddCurrencyBtn.substring(1) + '" data-form-index="' + newIndex + '">' + (i18n('addMoreCurrencies') || 'Add more currencies') + '</button>' +
+                '<div class="' + SELECTORS.addCurrencySection.substring(1) + '" data-form-index="' + newIndex + '">' +
                 '<label for="wbcd_new_currency_' + newIndex + '"><strong>' + i18n('addCurrency') + '</strong></label><br>' +
                 '<select id="wbcd_new_currency_' + newIndex + '" class="' + SELECTORS.currencySelect.substring(1) + '" data-form-index="' + newIndex + '">' +
                 '<option value="">' + i18n('selectCurrencyOption') + '</option>' +

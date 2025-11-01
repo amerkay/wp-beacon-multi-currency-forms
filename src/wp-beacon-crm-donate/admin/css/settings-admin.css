@@ -3,6 +3,27 @@
  * Styles for the plugin settings page
  */
 
+/* Account name instructions toggle */
+.wbcd-toggle-instructions {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.wbcd-toggle-instructions:hover {
+    text-decoration: underline;
+}
+
+.wbcd-instructions-list.wbcd-collapsible {
+    display: none;
+    overflow: hidden;
+    margin-top: 10px;
+    list-style-type: decimal;
+    list-style-position: outside;
+    padding-left: 20px;
+    margin-left: -2px;
+    color: rgb(100, 105, 112);
+}
+
 /* Form item container */
 .wbcd-form-item {
     position: relative;
@@ -89,9 +110,14 @@
 
 /* Add currency section */
 .wbcd-add-currency {
-    margin-top: 10px;
     padding-top: 10px;
+    padding-bottom: 10px;
     border-top: 1px solid #e0e0e0;
+    display: none;
+}
+
+.wbcd-add-currency.visible {
+    display: block;
 }
 
 .wbcd-add-currency label {
@@ -99,9 +125,14 @@
     margin-bottom: 5px;
 }
 
+/* Show add currencies button */
+.wbcd-show-add-currency {
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+}
+
 /* Remove form button */
 .wbcd-remove-form-wrapper {
-    margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid #ddd;
     margin-bottom: 0;
@@ -116,6 +147,11 @@
     margin-bottom: 10px;
 }
 
+#wbcd-forms-container .wbcd-form-item label {
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
 /* Add form button spacing */
 #wbcd-add-form {
     margin-top: 5px;
@@ -125,11 +161,6 @@
 .wbcd-currencies-section .description {
     margin-top: 5px;
     font-style: italic;
-}
-
-/* Instructions list for beacon account */
-ol.wbcd-instructions-list {
-    margin-left: 1.5em;
 }
 
 /* Validation error styles */
@@ -177,5 +208,67 @@ ol.wbcd-instructions-list {
     .wbcd-currencies-section table.widefat td,
     .wbcd-currencies-section table.widefat th {
         padding: 6px 8px;
+    }
+
+    /* Hide table headers on mobile */
+    .wbcd-currencies-section table.widefat thead {
+        display: none;
+    }
+
+    /* Make table rows display as cards */
+    .wbcd-currencies-section table.widefat,
+    .wbcd-currencies-section table.widefat tbody,
+    .wbcd-currencies-section table.widefat tr {
+        display: block;
+        width: 100%;
+    }
+
+    .wbcd-currencies-section table.widefat tr {
+        /* margin-bottom: 15px; */
+        border: 1px solid #ccd0d4;
+        border-radius: 3px;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .wbcd-currencies-section table.widefat td {
+        display: block;
+        width: 100%;
+        text-align: left !important;
+        padding: 8px 0 !important;
+        border: none;
+        box-sizing: border-box;
+    }
+
+    /* Show labels before content on mobile using data attributes */
+    .wbcd-currencies-section table.widefat td[data-label]:before {
+        content: attr(data-label);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+        margin-right: 8px;
+        color: #23282d;
+    }
+
+    /* Special handling for first column (Default radio) - label on same line */
+    .wbcd-currencies-section table.widefat td:first-child {
+        padding-left: 0 !important;
+        display: flex;
+        align-items: center;
+    }
+
+    .wbcd-currencies-section table.widefat td:first-child:before {
+        margin-bottom: 0;
+    }
+
+    .wbcd-currencies-section table.widefat td:first-child input[type="radio"] {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Make form inputs responsive */
+    .wbcd-currencies-section table.widefat td input[type="text"] {
+        max-width: 100%;
+        box-sizing: border-box;
     }
 }

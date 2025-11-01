@@ -59,10 +59,8 @@ A lightweight, flexible WordPress plugin for integrating BeaconCRM donation form
 1. Log into your BeaconCRM account
 2. Navigate to any of your donation forms
 3. Click the form, then click **"Embed"**
-4. Look for the embed code: `<div class="beacon-form" data-account="yourorg" data-form="000000"></div>`
+4. Look for the embed code: `<div class="beacon-form" data-account="yourorg" data-form="f0rm1d"></div>`
 5. The value in `data-account` is your account name (e.g., `yourorg`)
-
-**Important:** Account name must be lowercase with only letters, numbers, hyphens, and underscores. No spaces allowed.
 
 ---
 
