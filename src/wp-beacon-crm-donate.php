@@ -52,12 +52,26 @@ add_action('init', function () {
                 // Get form name from block attributes
                 $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
 
+                // Build args array from block attributes
+                $render_args = [
+                    'customParams' => []
+                ];
+
+                // Parse custom params from block attributes
+                if (isset($attrs['customParams']) && is_array($attrs['customParams'])) {
+                    foreach ($attrs['customParams'] as $param) {
+                        if (isset($param['key']) && !empty($param['key']) && isset($param['value'])) {
+                            $render_args['customParams'][$param['key']] = $param['value'];
+                        }
+                    }
+                }
+
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
                 WBCD\Assets::enqueue_donation_form($form_name);
 
                 // Call the render method
-                return WBCD\Render\Donate_Form_Render::render($form_name);
+                return WBCD\Render\Donate_Form_Render::render($form_name, $render_args);
             },
         )
     );
@@ -76,7 +90,14 @@ add_action('init', function () {
                     'title' => isset($attrs['title']) ? $attrs['title'] : 'Make a donation',
                     'subtitle' => isset($attrs['subtitle']) ? $attrs['subtitle'] : 'Pick your currency, frequency, and amount',
                     'noticeText' => isset($attrs['noticeText']) ? $attrs['noticeText'] : "You'll be taken to our secure donation form to complete your gift.",
-                    'customParams' => []
+                    'buttonText' => isset($attrs['buttonText']) ? $attrs['buttonText'] : 'Donate now →',
+                    'customParams' => [],
+                    'allowedFrequencies' => isset($attrs['allowedFrequencies']) ? $attrs['allowedFrequencies'] : ['single', 'monthly', 'annual'],
+                    'defaultPresets' => isset($attrs['defaultPresets']) ? $attrs['defaultPresets'] : [
+                        'single' => [10, 20, 30],
+                        'monthly' => [5, 10, 15],
+                        'annual' => [50, 100, 200]
+                    ]
                 ];
 
                 // Parse custom params from block attributes

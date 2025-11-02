@@ -10,6 +10,8 @@ if (! defined('ABSPATH')) exit;
 
 class Donate_Box_Widget extends \Elementor\Widget_Base
 {
+    private $replace_notice = 'Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.';
+
     public function get_name()
     {
         return 'wbcd_donate_box';
@@ -164,7 +166,7 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             'frequencies_notice',
             [
                 'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.', 'wp-beacon-crm-donate') . '</p>',
+                'raw' => '<p style="font-size: 12px; color: #666;">' . $this->replace_notice . '</p>',
             ]
         );
 
@@ -222,7 +224,7 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             'presets_notice',
             [
                 'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Set default donation amounts per frequency. API settings will override these if configured. Enter numbers separated by commas.', 'wp-beacon-crm-donate') . '</p>',
+                'raw' => '<p style="font-size: 12px; color: #666;">' . $this->replace_notice . '</p>',
             ]
         );
 
@@ -274,7 +276,7 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             'colors_notice',
             [
                 'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.', 'wp-beacon-crm-donate') . '</p>',
+                'raw' => '<p style="font-size: 12px; color: #666;">' . $this->replace_notice . '</p>',
             ]
         );
 

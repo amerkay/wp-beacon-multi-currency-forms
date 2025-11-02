@@ -11,6 +11,8 @@
   var Button = wp.components.Button;
   var Fragment = wp.element.Fragment;
 
+  var REPLACE_NOTICE = 'Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.';
+
   wp.domReady(function () {
     registerBlockType('wbcd/donation-box', {
       title: 'Beacon Donation Box',
@@ -42,6 +44,10 @@
           type: 'string',
           default: "You'll be taken to our secure donation form to complete your gift."
         },
+        buttonText: {
+          type: 'string',
+          default: 'Donate now →'
+        },
         customParams: {
           type: 'array',
           default: []
@@ -49,6 +55,18 @@
         allowedFrequencies: {
           type: 'array',
           default: ['single', 'monthly', 'annual']
+        },
+        presetsSingleStr: {
+          type: 'string',
+          default: '10, 20, 30'
+        },
+        presetsMonthlyStr: {
+          type: 'string',
+          default: '5, 10, 15'
+        },
+        presetsAnnualStr: {
+          type: 'string',
+          default: '50, 100, 200'
         },
         defaultPresets: {
           type: 'object',
@@ -178,7 +196,7 @@
             ),
             el(PanelBody, { title: 'Frequencies', initialOpen: false },
               el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
-                'Show single donation frequency option. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+                REPLACE_NOTICE
               ),
               el(CheckboxControl, {
                 label: 'Show Single Frequency',
@@ -216,60 +234,69 @@
             ),
             el(PanelBody, { title: 'Default Preset Amounts', initialOpen: false },
               el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
-                'Set default donation amounts per frequency. API settings will override these if configured.'
+                REPLACE_NOTICE
               ),
               el(TextControl, {
                 label: 'Single Preset Amounts',
-                value: ((attrs.defaultPresets || {}).single || [10, 20, 30]).join(', '),
+                value: attrs.presetsSingleStr || '10, 20, 30',
                 onChange: function(value) {
+                  setAttributes({ presetsSingleStr: value });
                   var amounts = value.split(',').map(function(v) { 
                     return parseFloat(v.trim()); 
                   }).filter(function(n) { 
                     return !isNaN(n) && n > 0; 
                   });
-                  var newPresets = Object.assign({}, attrs.defaultPresets || {});
-                  newPresets.single = amounts.length > 0 ? amounts : [10, 20, 30];
-                  setAttributes({ defaultPresets: newPresets });
+                  if (amounts.length > 0) {
+                    var newPresets = Object.assign({}, attrs.defaultPresets || {});
+                    newPresets.single = amounts;
+                    setAttributes({ defaultPresets: newPresets });
+                  }
                 },
                 placeholder: '10, 20, 30',
-                help: 'Comma-separated amounts for single donations (e.g., 10, 20, 30). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+                help: 'Comma-separated amounts (e.g., 10, 20, 30, 40)'
               }),
               el(TextControl, {
                 label: 'Monthly Preset Amounts',
-                value: ((attrs.defaultPresets || {}).monthly || [5, 10, 15]).join(', '),
+                value: attrs.presetsMonthlyStr || '5, 10, 15',
                 onChange: function(value) {
+                  setAttributes({ presetsMonthlyStr: value });
                   var amounts = value.split(',').map(function(v) { 
                     return parseFloat(v.trim()); 
                   }).filter(function(n) { 
                     return !isNaN(n) && n > 0; 
                   });
-                  var newPresets = Object.assign({}, attrs.defaultPresets || {});
-                  newPresets.monthly = amounts.length > 0 ? amounts : [5, 10, 15];
-                  setAttributes({ defaultPresets: newPresets });
+                  if (amounts.length > 0) {
+                    var newPresets = Object.assign({}, attrs.defaultPresets || {});
+                    newPresets.monthly = amounts;
+                    setAttributes({ defaultPresets: newPresets });
+                  }
                 },
                 placeholder: '5, 10, 15',
-                help: 'Comma-separated amounts for monthly donations (e.g., 5, 10, 15). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+                help: 'Comma-separated amounts (e.g., 5, 10, 15, 20)'
               }),
               el(TextControl, {
                 label: 'Annual Preset Amounts',
-                value: ((attrs.defaultPresets || {}).annual || [50, 100, 200]).join(', '),
+                value: attrs.presetsAnnualStr || '50, 100, 200',
                 onChange: function(value) {
+                  setAttributes({ presetsAnnualStr: value });
                   var amounts = value.split(',').map(function(v) { 
                     return parseFloat(v.trim()); 
                   }).filter(function(n) { 
                     return !isNaN(n) && n > 0; 
                   });
-                  var newPresets = Object.assign({}, attrs.defaultPresets || {});
-                  newPresets.annual = amounts.length > 0 ? amounts : [50, 100, 200];
-                  setAttributes({ defaultPresets: newPresets });
+                  if (amounts.length > 0) {
+                    var newPresets = Object.assign({}, attrs.defaultPresets || {});
+                    newPresets.annual = amounts;
+                    setAttributes({ defaultPresets: newPresets });
+                  }
                 },
                 placeholder: '50, 100, 200',
-                help: 'Comma-separated amounts for annual donations (e.g., 50, 100, 200). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+                help: 'Comma-separated amounts (e.g., 50, 100, 200, 300)'
               })
             ),
             el(PanelBody, { title: 'Colors', initialOpen: false },
               el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
-                'Default primary color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+                REPLACE_NOTICE
               ),
               el('div', { style: { marginBottom: '12px' } },
                 el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Primary Color'),
@@ -288,14 +315,11 @@
                   style: { marginTop: '4px' }
                 }, 'Reset Primary')
               ),
-              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '4px' } }, 
-                'Default brand color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
-              ),
               el('div', { style: { marginBottom: '12px' } },
                 el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Brand Color'),
                 el('input', {
                   type: 'color',
-                  value: attrs.brandColor || '#354cb1',
+                  value: attrs.brandColor || '#676767',
                   onChange: function(e) {
                     setAttributes({ brandColor: e.target.value });
                   },

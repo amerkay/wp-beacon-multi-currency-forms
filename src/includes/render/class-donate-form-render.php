@@ -30,48 +30,12 @@ class Donate_Form_Render
             return '<div class="wpbcd-wrap"><p>' . esc_html__('Please configure donation forms in the Beacon Donate settings.', 'wp-beacon-crm-donate') . '</p></div>';
         }
 
-        // Prepare custom params for JavaScript redirect check
+        // Prepare custom params for JavaScript (handled by donate-form.js)
         $custom_params_json = !empty($args['customParams']) ? wp_json_encode($args['customParams']) : '{}';
 
         // Render a minimal, accessible shell; JS fills in the Beacon form and currency behavior.
         ob_start();
 ?>
-        <?php if (!empty($args['customParams'])): ?>
-            <script>
-                (function() {
-                    try {
-                        var requiredParams = <?php echo $custom_params_json; ?>;
-                        if (requiredParams && typeof requiredParams === 'object' && !Array.isArray(requiredParams)) {
-                            var currentUrl = new URL(window.location.href);
-                            var currentParams = new URLSearchParams(currentUrl.search);
-                            var missing = [];
-
-                            // Check each required parameter
-                            for (var key in requiredParams) {
-                                if (requiredParams.hasOwnProperty(key)) {
-                                    var currentValue = currentParams.get(key);
-                                    var requiredValue = String(requiredParams[key]);
-
-                                    // If parameter is missing or doesn't match required value
-                                    if (!currentValue || currentValue !== requiredValue) {
-                                        missing.push(key);
-                                        currentParams.set(key, requiredValue);
-                                    }
-                                }
-                            }
-
-                            // If any parameters are missing or incorrect, redirect
-                            if (missing.length > 0) {
-                                currentUrl.search = currentParams.toString();
-                                window.location.href = currentUrl.toString();
-                            }
-                        }
-                    } catch (e) {
-                        console.warn('WPBCD: Error checking required parameters', e);
-                    }
-                })();
-            </script>
-        <?php endif; ?>
         <div id="wpbcd-page" class="wpbcd-wrap" data-custom-params="<?php echo esc_attr($custom_params_json); ?>">
             <div class="wpbcd-toolbar" role="region" aria-label="<?php esc_attr_e('Donation settings', 'wp-beacon-crm-donate'); ?>">
                 <label for="wpbcd-currency" class="wpbcd-label"><?php esc_html_e('Currency', 'wp-beacon-crm-donate'); ?></label>

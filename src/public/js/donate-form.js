@@ -1,12 +1,55 @@
 (function(){
   // Expect localized WPBCD_FORM_DATA with: beaconAccountName, formsByCurrency, allowedCurrencies, defaultCurrency
-  // Note: Required URL parameters are validated via inline script in the render class before this executes
   if (typeof WPBCD_FORM_DATA !== 'object') return;
 
   var BEACON_ACCOUNT_NAME = WPBCD_FORM_DATA.beaconAccountName;
   var formsByCurrency = WPBCD_FORM_DATA.formsByCurrency || {};
   var ALLOWED = WPBCD_FORM_DATA.allowedCurrencies || [];
   var DEFAULT_CURRENCY = WPBCD_FORM_DATA.defaultCurrency || '';
+
+  // Handle required URL parameters from data attribute
+  // This must run before anything else to ensure params are in URL
+  (function validateRequiredParams(){
+    var pageEl = document.getElementById("wpbcd-page");
+    if (!pageEl) return;
+
+    var customParamsAttr = pageEl.getAttribute('data-custom-params');
+    if (!customParamsAttr) return;
+
+    try {
+      var requiredParams = JSON.parse(customParamsAttr);
+      if (!requiredParams || typeof requiredParams !== 'object' || Array.isArray(requiredParams)) {
+        return;
+      }
+
+      var currentUrl = new URL(window.location.href);
+      var currentParams = new URLSearchParams(currentUrl.search);
+      var missing = [];
+
+      // Check each required parameter
+      for (var key in requiredParams) {
+        if (requiredParams.hasOwnProperty(key)) {
+          var currentValue = currentParams.get(key);
+          var requiredValue = String(requiredParams[key]);
+
+          // If parameter is missing or doesn't match required value
+          if (!currentValue || currentValue !== requiredValue) {
+            missing.push(key);
+            currentParams.set(key, requiredValue);
+          }
+        }
+      }
+
+      // If any parameters are missing or incorrect, redirect
+      if (missing.length > 0) {
+        currentUrl.search = currentParams.toString();
+        window.location.href = currentUrl.toString();
+        return; // Stop execution after redirect
+      }
+    } catch (e) {
+      console.warn('WPBCD: Error checking required parameters', e);
+    }
+  }());
 
   // Check if we have any currencies configured
   if (!ALLOWED.length) {

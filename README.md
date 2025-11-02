@@ -397,7 +397,7 @@ The plugin can automatically detect your donor's currency based on their locatio
 
 ### Requirements
 
-Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip-detection/)** plugin for automatic currency detection.
+Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip-detection/)** plugin for automatic currency detection. Signup and get your [free Maxmind license key here](https://www.maxmind.com/en/geolite2/signup) for free accurate country/currency detection.
 
 ### How It Works
 
@@ -413,7 +413,7 @@ Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip
 
 1. Install **GeoIP Detection** plugin
 2. Activate it
-3. Go to **Settings → GeoIP Detection**
+3. Go to **Settings → Geolocation IP Detection** and choose `Maxmind GeoIP Lite City (Automatic download & update)`. Signup and get your [free Maxmind license key here](https://www.maxmind.com/en/geolite2/signup).
 4. Enable the **"JavaScript API"** option
 5. Save settings
 

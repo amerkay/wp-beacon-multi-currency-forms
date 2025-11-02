@@ -9,7 +9,7 @@ services:
 
   wordpress:
     image: wordpress:latest
-    # user: "1000:1000"
+    entrypoint: ["/bin/bash", "-c", "cp -r /tmp/duplicator_archive/* /var/www/html/; chown www-data:www-data /var/www/html/* && docker-entrypoint.sh apache2-foreground"]
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=wordpress
@@ -17,14 +17,14 @@ services:
       - WORDPRESS_DB_NAME=wordpress
     expose: ["80"]
     volumes:
+      - wp_html:/var/www/html
       - ../uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
-      - ./wp_html:/var/www/html
       # Mount the plugin source into the WP plugins directory for easy testing
       - ../../src/:/var/www/html/wp-content/plugins/wp-beacon-crm-donate:ro
-
+      # Used to setup site on first run, restore from backup
+      - ./duplicator_archive/:/tmp/duplicator_archive:ro
   db:
     image: mariadb:latest
-    # user: "1000:1000"
     command: "--default-authentication-plugin=mysql_native_password"
     environment:
       - MYSQL_ROOT_PASSWORD=somewordpress
@@ -32,5 +32,8 @@ services:
       - MYSQL_USER=wordpress
       - MYSQL_PASSWORD=wordpress
     volumes:
-      - ./db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
 
+volumes:
+  wp_html:
+  db_data:
