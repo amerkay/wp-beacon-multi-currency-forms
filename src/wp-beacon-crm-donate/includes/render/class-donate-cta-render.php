@@ -23,6 +23,7 @@ class Donate_CTA_Render
             'title' => __('Make a donation', 'wp-beacon-crm-donate'),
             'subtitle' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
             'noticeText' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
+            'buttonText' => __('Donate now →', 'wp-beacon-crm-donate'),
         ]);
 
         $currencies = \WBCD\Settings::get_forms_by_currency($form_name);
@@ -117,7 +118,7 @@ class Donate_CTA_Render
                 </div>
 
                 <div class="wpbcd-actions">
-                    <button id="wpbcd-next" class="wpbcd-btn wpbcd-btn-next" type="button" aria-label="<?php esc_attr_e('Continue to secure form', 'wp-beacon-crm-donate'); ?>" disabled><?php esc_html_e('Donate now →', 'wp-beacon-crm-donate'); ?></button>
+                    <button id="wpbcd-next" class="wpbcd-btn wpbcd-btn-next" type="button" aria-label="<?php esc_attr_e('Continue to secure form', 'wp-beacon-crm-donate'); ?>" disabled><?php echo esc_html($args['buttonText']); ?></button>
                     <div class="wpbcd-note"><?php echo esc_html($args['noticeText']); ?></div>
                 </div>
             </div>

@@ -101,42 +101,6 @@
                 help: 'Choose which donation form to use'
               })
             ),
-            el(PanelBody, { title: 'Colors', initialOpen: false },
-              el('div', { style: { marginBottom: '12px' } },
-                el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Primary Color'),
-                el('input', {
-                  type: 'color',
-                  value: attrs.primaryColor || '#FF7B1A',
-                  onChange: function(e) {
-                    setAttributes({ primaryColor: e.target.value });
-                  },
-                  style: { width: '100%', height: '40px', cursor: 'pointer' }
-                }),
-                el(Button, {
-                  isSmall: true,
-                  isDestructive: true,
-                  onClick: function() { setAttributes({ primaryColor: '' }); },
-                  style: { marginTop: '4px' }
-                }, 'Reset Primary')
-              ),
-              el('div', { style: { marginBottom: '12px' } },
-                el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Brand Color'),
-                el('input', {
-                  type: 'color',
-                  value: attrs.brandColor || '#354cb1',
-                  onChange: function(e) {
-                    setAttributes({ brandColor: e.target.value });
-                  },
-                  style: { width: '100%', height: '40px', cursor: 'pointer' }
-                }),
-                el(Button, {
-                  isSmall: true,
-                  isDestructive: true,
-                  onClick: function() { setAttributes({ brandColor: '' }); },
-                  style: { marginTop: '4px' }
-                }, 'Reset Brand')
-              )
-            ),
             el(PanelBody, { title: 'Text Content', initialOpen: false },
               el(TextControl, {
                 label: 'Title',
@@ -159,76 +123,20 @@
                   setAttributes({ noticeText: value });
                 },
                 rows: 3
-              })
-            ),
-            el(PanelBody, { title: 'Frequencies', initialOpen: false },
-              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
-                'Choose which donation frequencies to show. API settings will override these if configured.'
-              ),
-              el(CheckboxControl, {
-                label: 'Single',
-                checked: (attrs.allowedFrequencies || ['single', 'monthly', 'annual']).indexOf('single') >= 0,
-                onChange: function(checked) {
-                  var current = attrs.allowedFrequencies || ['single', 'monthly', 'annual'];
-                  var newFreqs = checked 
-                    ? current.concat(['single']).filter(function(v, i, a) { return a.indexOf(v) === i; })
-                    : current.filter(function(f) { return f !== 'single'; });
-                  setAttributes({ allowedFrequencies: newFreqs.length > 0 ? newFreqs : ['monthly'] });
-                }
               }),
-              el(CheckboxControl, {
-                label: 'Monthly',
-                checked: (attrs.allowedFrequencies || ['single', 'monthly', 'annual']).indexOf('monthly') >= 0,
-                onChange: function(checked) {
-                  var current = attrs.allowedFrequencies || ['single', 'monthly', 'annual'];
-                  var newFreqs = checked 
-                    ? current.concat(['monthly']).filter(function(v, i, a) { return a.indexOf(v) === i; })
-                    : current.filter(function(f) { return f !== 'monthly'; });
-                  setAttributes({ allowedFrequencies: newFreqs.length > 0 ? newFreqs : ['single'] });
-                }
-              }),
-              el(CheckboxControl, {
-                label: 'Annual',
-                checked: (attrs.allowedFrequencies || ['single', 'monthly', 'annual']).indexOf('annual') >= 0,
-                onChange: function(checked) {
-                  var current = attrs.allowedFrequencies || ['single', 'monthly', 'annual'];
-                  var newFreqs = checked 
-                    ? current.concat(['annual']).filter(function(v, i, a) { return a.indexOf(v) === i; })
-                    : current.filter(function(f) { return f !== 'annual'; });
-                  setAttributes({ allowedFrequencies: newFreqs.length > 0 ? newFreqs : ['monthly'] });
-                }
-              })
-            ),
-            el(PanelBody, { title: 'Default Preset Amounts', initialOpen: false },
-              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
-                'Set default donation amounts per frequency. API settings will override these if configured.'
-              ),
-              ['single', 'monthly', 'annual'].map(function(freq) {
-                var presets = (attrs.defaultPresets || {})[freq] || [];
-                return el('div', { key: freq, style: { marginBottom: '16px' } },
-                  el('strong', { style: { display: 'block', marginBottom: '8px', textTransform: 'capitalize' } }, freq),
-                  el(TextControl, {
-                    label: 'Amounts (comma-separated)',
-                    value: presets.join(', '),
-                    onChange: function(value) {
-                      var amounts = value.split(',').map(function(v) { 
-                        return parseFloat(v.trim()); 
-                      }).filter(function(n) { 
-                        return !isNaN(n) && n > 0; 
-                      });
-                      var newPresets = Object.assign({}, attrs.defaultPresets || {});
-                      newPresets[freq] = amounts.length > 0 ? amounts : [10, 20, 30];
-                      setAttributes({ defaultPresets: newPresets });
-                    },
-                    placeholder: 'e.g., 10, 20, 30',
-                    help: 'Enter positive numbers separated by commas'
-                  })
-                );
+              el(TextControl, {
+                label: 'Button Text',
+                value: attrs.buttonText,
+                onChange: function(value) {
+                  setAttributes({ buttonText: value });
+                },
+                placeholder: 'Donate now →',
+                help: 'Text shown on the donate button'
               })
             ),
             el(PanelBody, { title: 'Custom URL Parameters', initialOpen: false },
-              el('p', { style: { fontSize: '12px', color: '#666' } }, 
-                'Add custom parameters to pass to the donation form URL (e.g., bcn_c_adopted_animals).'
+              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
+                'Enter custom parameters in URL format: bcn_c_adopted_animals=elephant-123&key2=value2. This will be added to the URL of the full page form on redirect.'
               ),
               (attrs.customParams || []).map(function(param, index) {
                 return el('div', { 
@@ -267,6 +175,139 @@
                 isPrimary: true,
                 onClick: addParam
               }, 'Add Parameter')
+            ),
+            el(PanelBody, { title: 'Frequencies', initialOpen: false },
+              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
+                'Show single donation frequency option. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+              ),
+              el(CheckboxControl, {
+                label: 'Show Single Frequency',
+                checked: (attrs.allowedFrequencies || ['single', 'monthly', 'annual']).indexOf('single') >= 0,
+                onChange: function(checked) {
+                  var current = attrs.allowedFrequencies || ['single', 'monthly', 'annual'];
+                  var newFreqs = checked 
+                    ? current.concat(['single']).filter(function(v, i, a) { return a.indexOf(v) === i; })
+                    : current.filter(function(f) { return f !== 'single'; });
+                  setAttributes({ allowedFrequencies: newFreqs.length > 0 ? newFreqs : ['monthly'] });
+                }
+              }),
+              el(CheckboxControl, {
+                label: 'Show Monthly Frequency',
+                checked: (attrs.allowedFrequencies || ['single', 'monthly', 'annual']).indexOf('monthly') >= 0,
+                onChange: function(checked) {
+                  var current = attrs.allowedFrequencies || ['single', 'monthly', 'annual'];
+                  var newFreqs = checked 
+                    ? current.concat(['monthly']).filter(function(v, i, a) { return a.indexOf(v) === i; })
+                    : current.filter(function(f) { return f !== 'monthly'; });
+                  setAttributes({ allowedFrequencies: newFreqs.length > 0 ? newFreqs : ['single'] });
+                }
+              }),
+              el(CheckboxControl, {
+                label: 'Show Annual Frequency',
+                checked: (attrs.allowedFrequencies || ['single', 'monthly', 'annual']).indexOf('annual') >= 0,
+                onChange: function(checked) {
+                  var current = attrs.allowedFrequencies || ['single', 'monthly', 'annual'];
+                  var newFreqs = checked 
+                    ? current.concat(['annual']).filter(function(v, i, a) { return a.indexOf(v) === i; })
+                    : current.filter(function(f) { return f !== 'annual'; });
+                  setAttributes({ allowedFrequencies: newFreqs.length > 0 ? newFreqs : ['monthly'] });
+                }
+              })
+            ),
+            el(PanelBody, { title: 'Default Preset Amounts', initialOpen: false },
+              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
+                'Set default donation amounts per frequency. API settings will override these if configured.'
+              ),
+              el(TextControl, {
+                label: 'Single Preset Amounts',
+                value: ((attrs.defaultPresets || {}).single || [10, 20, 30]).join(', '),
+                onChange: function(value) {
+                  var amounts = value.split(',').map(function(v) { 
+                    return parseFloat(v.trim()); 
+                  }).filter(function(n) { 
+                    return !isNaN(n) && n > 0; 
+                  });
+                  var newPresets = Object.assign({}, attrs.defaultPresets || {});
+                  newPresets.single = amounts.length > 0 ? amounts : [10, 20, 30];
+                  setAttributes({ defaultPresets: newPresets });
+                },
+                placeholder: '10, 20, 30',
+                help: 'Comma-separated amounts for single donations (e.g., 10, 20, 30). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+              }),
+              el(TextControl, {
+                label: 'Monthly Preset Amounts',
+                value: ((attrs.defaultPresets || {}).monthly || [5, 10, 15]).join(', '),
+                onChange: function(value) {
+                  var amounts = value.split(',').map(function(v) { 
+                    return parseFloat(v.trim()); 
+                  }).filter(function(n) { 
+                    return !isNaN(n) && n > 0; 
+                  });
+                  var newPresets = Object.assign({}, attrs.defaultPresets || {});
+                  newPresets.monthly = amounts.length > 0 ? amounts : [5, 10, 15];
+                  setAttributes({ defaultPresets: newPresets });
+                },
+                placeholder: '5, 10, 15',
+                help: 'Comma-separated amounts for monthly donations (e.g., 5, 10, 15). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+              }),
+              el(TextControl, {
+                label: 'Annual Preset Amounts',
+                value: ((attrs.defaultPresets || {}).annual || [50, 100, 200]).join(', '),
+                onChange: function(value) {
+                  var amounts = value.split(',').map(function(v) { 
+                    return parseFloat(v.trim()); 
+                  }).filter(function(n) { 
+                    return !isNaN(n) && n > 0; 
+                  });
+                  var newPresets = Object.assign({}, attrs.defaultPresets || {});
+                  newPresets.annual = amounts.length > 0 ? amounts : [50, 100, 200];
+                  setAttributes({ defaultPresets: newPresets });
+                },
+                placeholder: '50, 100, 200',
+                help: 'Comma-separated amounts for annual donations (e.g., 50, 100, 200). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+              })
+            ),
+            el(PanelBody, { title: 'Colors', initialOpen: false },
+              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
+                'Default primary color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+              ),
+              el('div', { style: { marginBottom: '12px' } },
+                el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Primary Color'),
+                el('input', {
+                  type: 'color',
+                  value: attrs.primaryColor || '#FF7B1A',
+                  onChange: function(e) {
+                    setAttributes({ primaryColor: e.target.value });
+                  },
+                  style: { width: '100%', height: '40px', cursor: 'pointer' }
+                }),
+                el(Button, {
+                  isSmall: true,
+                  isDestructive: true,
+                  onClick: function() { setAttributes({ primaryColor: '' }); },
+                  style: { marginTop: '4px' }
+                }, 'Reset Primary')
+              ),
+              el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '4px' } }, 
+                'Default brand color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.'
+              ),
+              el('div', { style: { marginBottom: '12px' } },
+                el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Brand Color'),
+                el('input', {
+                  type: 'color',
+                  value: attrs.brandColor || '#354cb1',
+                  onChange: function(e) {
+                    setAttributes({ brandColor: e.target.value });
+                  },
+                  style: { width: '100%', height: '40px', cursor: 'pointer' }
+                }),
+                el(Button, {
+                  isSmall: true,
+                  isDestructive: true,
+                  onClick: function() { setAttributes({ brandColor: '' }); },
+                  style: { marginTop: '4px' }
+                }, 'Reset Brand')
+              )
             )
           ),
           el('div', blockProps,

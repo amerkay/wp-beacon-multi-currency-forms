@@ -31,6 +31,10 @@
       "type": "string",
       "default": "You'll be taken to our secure donation form to complete your gift."
     },
+    "buttonText": {
+      "type": "string",
+      "default": "Donate now →"
+    },
     "customParams": {
       "type": "array",
       "default": []

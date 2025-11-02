@@ -22,6 +22,7 @@ class Shortcode_Donate_Box
             'title' => 'Make a donation',
             'subtitle' => 'Pick your currency, frequency, and amount',
             'notice' => "You'll be taken to our secure donation form to complete your gift.",
+            'button_text' => 'Donate now →',
             'params' => '', // JSON string or serialized array of custom params
             'frequencies' => 'single,monthly,annual', // Comma-separated list
             'presets_single' => '10,20,30',
@@ -71,6 +72,7 @@ class Shortcode_Donate_Box
             'title' => $atts['title'],
             'subtitle' => $atts['subtitle'],
             'noticeText' => $atts['notice'],
+            'buttonText' => $atts['button_text'],
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
             'defaultPresets' => $default_presets

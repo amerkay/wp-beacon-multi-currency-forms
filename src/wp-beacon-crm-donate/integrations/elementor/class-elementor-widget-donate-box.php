@@ -29,6 +29,7 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
 
     protected function register_controls()
     {
+        // Form Settings Section
         $this->start_controls_section(
             'content_section',
             [
@@ -52,142 +53,6 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
                 'default' => '',
                 'options' => $options,
                 'description' => __('Choose which donation form to use', 'wp-beacon-crm-donate'),
-            ]
-        );
-
-        $this->end_controls_section();
-
-        // Frequencies Section
-        $this->start_controls_section(
-            'frequencies_section',
-            [
-                'label' => __('Frequencies', 'wp-beacon-crm-donate'),
-                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
-            ]
-        );
-
-        $this->add_control(
-            'frequencies_notice',
-            [
-                'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Choose which donation frequencies to show. API settings will override these if configured.', 'wp-beacon-crm-donate') . '</p>',
-            ]
-        );
-
-        $this->add_control(
-            'frequency_single',
-            [
-                'label' => __('Single', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'label_on' => __('Show', 'wp-beacon-crm-donate'),
-                'label_off' => __('Hide', 'wp-beacon-crm-donate'),
-                'return_value' => 'yes',
-                'default' => 'yes',
-            ]
-        );
-
-        $this->add_control(
-            'frequency_monthly',
-            [
-                'label' => __('Monthly', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'label_on' => __('Show', 'wp-beacon-crm-donate'),
-                'label_off' => __('Hide', 'wp-beacon-crm-donate'),
-                'return_value' => 'yes',
-                'default' => 'yes',
-            ]
-        );
-
-        $this->add_control(
-            'frequency_annual',
-            [
-                'label' => __('Annual', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'label_on' => __('Show', 'wp-beacon-crm-donate'),
-                'label_off' => __('Hide', 'wp-beacon-crm-donate'),
-                'return_value' => 'yes',
-                'default' => 'yes',
-            ]
-        );
-
-        $this->end_controls_section();
-
-        // Default Preset Amounts Section
-        $this->start_controls_section(
-            'presets_section',
-            [
-                'label' => __('Default Preset Amounts', 'wp-beacon-crm-donate'),
-                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
-            ]
-        );
-
-        $this->add_control(
-            'presets_notice',
-            [
-                'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Set default donation amounts per frequency. API settings will override these if configured. Enter numbers separated by commas.', 'wp-beacon-crm-donate') . '</p>',
-            ]
-        );
-
-        $this->add_control(
-            'presets_single',
-            [
-                'label' => __('Single Amounts', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::TEXT,
-                'default' => '10, 20, 30',
-                'placeholder' => '10, 20, 30',
-                'description' => __('Comma-separated amounts for single donations', 'wp-beacon-crm-donate'),
-            ]
-        );
-
-        $this->add_control(
-            'presets_monthly',
-            [
-                'label' => __('Monthly Amounts', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::TEXT,
-                'default' => '5, 10, 15',
-                'placeholder' => '5, 10, 15',
-                'description' => __('Comma-separated amounts for monthly donations', 'wp-beacon-crm-donate'),
-            ]
-        );
-
-        $this->add_control(
-            'presets_annual',
-            [
-                'label' => __('Annual Amounts', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::TEXT,
-                'default' => '50, 100, 200',
-                'placeholder' => '50, 100, 200',
-                'description' => __('Comma-separated amounts for annual donations', 'wp-beacon-crm-donate'),
-            ]
-        );
-
-        $this->end_controls_section();
-
-        // Colors Section
-        $this->start_controls_section(
-            'colors_section',
-            [
-                'label' => __('Colors', 'wp-beacon-crm-donate'),
-                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
-            ]
-        );
-
-        $this->add_control(
-            'primary_color',
-            [
-                'label' => __('Primary Color', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::COLOR,
-                'default' => '',
-            ]
-        );
-
-        $this->add_control(
-            'brand_color',
-            [
-                'label' => __('Brand Color', 'wp-beacon-crm-donate'),
-                'type' => \Elementor\Controls_Manager::COLOR,
-                'default' => '',
             ]
         );
 
@@ -230,6 +95,17 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             ]
         );
 
+        $this->add_control(
+            'button_text',
+            [
+                'label' => __('Button Text', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => __('Donate now →', 'wp-beacon-crm-donate'),
+                'placeholder' => __('Donate now →', 'wp-beacon-crm-donate'),
+                'description' => __('Text shown on the donate button', 'wp-beacon-crm-donate'),
+            ]
+        );
+
         $this->end_controls_section();
 
         // Custom Parameters Section
@@ -238,6 +114,14 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             [
                 'label' => __('Custom URL Parameters', 'wp-beacon-crm-donate'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'params_notice',
+            [
+                'type' => \Elementor\Controls_Manager::RAW_HTML,
+                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Enter custom parameters in URL format: bcn_c_adopted_animals=elephant-123&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate') . '</p>',
             ]
         );
 
@@ -262,6 +146,155 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
                 ],
                 'title_field' => '{{{ param_key }}}',
                 'default' => [],
+            ]
+        );
+
+        $this->end_controls_section();
+
+        // Frequencies Section
+        $this->start_controls_section(
+            'frequencies_section',
+            [
+                'label' => __('Frequencies', 'wp-beacon-crm-donate'),
+                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'frequencies_notice',
+            [
+                'type' => \Elementor\Controls_Manager::RAW_HTML,
+                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.', 'wp-beacon-crm-donate') . '</p>',
+            ]
+        );
+
+        $this->add_control(
+            'frequency_single',
+            [
+                'label' => __('Show Single Frequency', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'wp-beacon-crm-donate'),
+                'label_off' => __('No', 'wp-beacon-crm-donate'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+                'description' => __('Show single donation frequency option', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->add_control(
+            'frequency_monthly',
+            [
+                'label' => __('Show Monthly Frequency', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'wp-beacon-crm-donate'),
+                'label_off' => __('No', 'wp-beacon-crm-donate'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+                'description' => __('Show monthly donation frequency option', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->add_control(
+            'frequency_annual',
+            [
+                'label' => __('Show Annual Frequency', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'wp-beacon-crm-donate'),
+                'label_off' => __('No', 'wp-beacon-crm-donate'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+                'description' => __('Show annual donation frequency option', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->end_controls_section();
+
+        // Default Preset Amounts Section
+        $this->start_controls_section(
+            'presets_section',
+            [
+                'label' => __('Default Preset Amounts', 'wp-beacon-crm-donate'),
+                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'presets_notice',
+            [
+                'type' => \Elementor\Controls_Manager::RAW_HTML,
+                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Set default donation amounts per frequency. API settings will override these if configured. Enter numbers separated by commas.', 'wp-beacon-crm-donate') . '</p>',
+            ]
+        );
+
+        $this->add_control(
+            'presets_single',
+            [
+                'label' => __('Single Preset Amounts', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => '10, 20, 30',
+                'placeholder' => '10, 20, 30',
+                'description' => __('Comma-separated amounts for single donations (e.g., 10, 20, 30)', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->add_control(
+            'presets_monthly',
+            [
+                'label' => __('Monthly Preset Amounts', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => '5, 10, 15',
+                'placeholder' => '5, 10, 15',
+                'description' => __('Comma-separated amounts for monthly donations (e.g., 5, 10, 15)', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->add_control(
+            'presets_annual',
+            [
+                'label' => __('Annual Preset Amounts', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => '50, 100, 200',
+                'placeholder' => '50, 100, 200',
+                'description' => __('Comma-separated amounts for annual donations (e.g., 50, 100, 200)', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->end_controls_section();
+
+        // Colors Section
+        $this->start_controls_section(
+            'colors_section',
+            [
+                'label' => __('Colors', 'wp-beacon-crm-donate'),
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+        $this->add_control(
+            'colors_notice',
+            [
+                'type' => \Elementor\Controls_Manager::RAW_HTML,
+                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.', 'wp-beacon-crm-donate') . '</p>',
+            ]
+        );
+
+        $this->add_control(
+            'primary_color',
+            [
+                'label' => __('Primary Color', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '',
+                'description' => __('Default primary color', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->add_control(
+            'brand_color',
+            [
+                'label' => __('Brand Color', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '',
+                'description' => __('Default brand color', 'wp-beacon-crm-donate'),
             ]
         );
 
@@ -323,6 +356,7 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             'title' => isset($settings['title']) ? $settings['title'] : __('Make a donation', 'wp-beacon-crm-donate'),
             'subtitle' => isset($settings['subtitle']) ? $settings['subtitle'] : __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
             'noticeText' => isset($settings['notice_text']) ? $settings['notice_text'] : __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
+            'buttonText' => isset($settings['button_text']) ? $settings['button_text'] : __('Donate now →', 'wp-beacon-crm-donate'),
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
             'defaultPresets' => $default_presets

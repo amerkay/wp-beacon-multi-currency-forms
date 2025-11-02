@@ -169,21 +169,22 @@ Use this in content areas, sidebars, or any widget area.
 4. Insert the block
 5. In the block settings sidebar:
    - **Form Settings:** Select which form to use (or leave default)
-   - **Colors:** Customize primary and brand colors with color pickers
-   - **Text Content:** Override title, subtitle, and notice text
-   - **Frequencies:** Choose which donation frequencies to display (Single, Monthly, Annual)
-   - **Default Preset Amounts:** Set custom donation amounts for each frequency
-   - **Custom URL Parameters:** Add unlimited parameter rows with name/value pairs (user-friendly interface)
+   - **Text Content:** Override title, subtitle, notice text, and button text
+   - **Custom URL Parameters:** Add unlimited parameter rows with name/value pairs to pass to the donation form URL
+   - **Frequencies:** Choose which donation frequencies to display (Single, Monthly, Annual) - backup option replaced by BeaconCRM settings
+   - **Default Preset Amounts:** Set custom donation amounts for each frequency - backup option replaced by BeaconCRM settings
+   - **Colors:** Customize primary and brand colors - backup option replaced by BeaconCRM settings
 
 **Customization Options:**
-- **Primary Color:** Override the "Donate now" button color
-- **Brand Color:** Override the color used for frequency tabs and links
 - **Title:** Change "Make a donation" to your custom text
 - **Subtitle:** Change "Pick your currency, frequency, and amount"
 - **Notice Text:** Customize the security message
-- **Frequencies:** Control which frequencies are available (Single, Monthly, Annual) - API settings override these
-- **Default Preset Amounts:** Set initial donation amounts per frequency - API settings override these
-- **Custom Parameters:** Pass additional data to BeaconCRM forms (useful for tracking campaigns, pre-selecting options, or passing entity references)
+- **Button Text:** Change the donate button text (default: "Donate now →")
+- **Custom Parameters:** Pass additional data to BeaconCRM forms (e.g., bcn_c_adopted_animals=elephant-123&campaign=spring2025)
+- **Frequencies:** Control which frequencies are available (Single, Monthly, Annual) - Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load
+- **Default Preset Amounts:** Set initial donation amounts per frequency - Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load
+- **Primary Color:** Override the donate button color - Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load
+- **Brand Color:** Override the color used for frequency tabs and links - Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load
 
 **Best For:** 
 - Sidebar widgets
@@ -192,8 +193,8 @@ Use this in content areas, sidebars, or any widget area.
 - Homepage highlights
 
 **Important Notes:**
-- **Frequencies & Preset Amounts:** The settings you configure act as immediate defaults shown to visitors. When the BeaconCRM API loads (usually within a second), it will replace these with the values configured in your BeaconCRM account. This provides a seamless experience with instant display followed by API-synced accuracy.
-- **Custom Parameters:** These are appended to the donation form URL and passed to BeaconCRM, allowing you to pre-fill fields, track campaigns, or pass any data your form accepts.
+- **Frequencies, Preset Amounts & Colors:** The settings you configure act as immediate defaults shown to visitors. When the BeaconCRM API loads (usually within a second), it will replace these with the values configured in your BeaconCRM account. This provides a seamless experience with instant display followed by API-synced accuracy.
+- **Custom Parameters:** These are appended to the donation form URL and passed to BeaconCRM, allowing you to pre-fill fields, track campaigns, or pass any data your form accepts (e.g., bcn_c_adopted_animals=elephant-123&key2=value2).
 
 ---
 
@@ -287,17 +288,18 @@ If visitors access the page without these parameters in the URL, they will be au
 ```
 
 **Shortcode Parameters:**
-- `form` - Name of the donation form to use
-- `primary_color` - Hex color for the donate button (e.g., `#FF5733`)
-- `brand_color` - Hex color for tabs and links (e.g., `#2C3E50`)
+- `form` - Name of the donation form to use (Choose which donation form to use)
 - `title` - Custom heading text
 - `subtitle` - Custom subheading text
 - `notice` - Custom notice/security message
-- `frequencies` - Comma-separated list of allowed frequencies: `single`, `monthly`, `annual` (default: all three)
-- `presets_single` - Comma-separated amounts for single donations (e.g., `10,20,30`)
-- `presets_monthly` - Comma-separated amounts for monthly donations (e.g., `5,10,15`)
-- `presets_annual` - Comma-separated amounts for annual donations (e.g., `50,100,200`)
-- `params` - Custom URL parameters in URL-encoded format (e.g., `key1=value1&key2=value2`)
+- `button_text` - Text shown on the donate button (default: `Donate now →`)
+- `params` - Custom URL parameters in URL-encoded format (e.g., `bcn_c_adopted_animals=elephant-123&key2=value2`). This will be added to the URL of the full page form on redirect.
+- `frequencies` - Comma-separated list of allowed frequencies: `single`, `monthly`, `annual` (default: all three). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+- `presets_single` - Comma-separated amounts for single donations (e.g., `10,20,30`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+- `presets_monthly` - Comma-separated amounts for monthly donations (e.g., `5,10,15`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+- `presets_annual` - Comma-separated amounts for annual donations (e.g., `50,100,200`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+- `primary_color` - Hex color for the donate button (e.g., `#FF5733`). Default primary color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+- `brand_color` - Hex color for tabs and links (e.g., `#2C3E50`). Default brand color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
 
 **Usage in Theme Files:**
 ```php
@@ -319,15 +321,15 @@ If you use Elementor page builder, the plugin adds two widgets.
 3. Drag the widget to your desired location
 4. In the widget settings:
    - **Form Settings Tab:**
-     - **Form Name:** Select which form to display
-   - **Style Tab (Donation Box only):**
-     - **Primary Color:** Color picker for donate button
-     - **Brand Color:** Color picker for tabs and links
+     - **Form Name:** Select which form to display (Choose which donation form to use)
    - **Content Tab (Donation Box only):**
-     - **Frequencies:** Toggle switches for Single, Monthly, and Annual frequencies
-     - **Default Preset Amounts:** Text fields for custom amounts per frequency (comma-separated)
-     - **Text Content:** Edit title, subtitle, and notice text
-     - **Custom URL Parameters:** Add unlimited parameter rows with name/value pairs (user-friendly interface)
+     - **Text Content:** Edit title, subtitle, notice text, and button text
+     - **Custom URL Parameters:** Add parameter name/value pairs (e.g., bcn_c_adopted_animals=elephant-123). This will be added to the URL of the full page form on redirect.
+     - **Frequencies:** Toggle switches for Single, Monthly, and Annual frequencies. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+     - **Default Preset Amounts:** Text fields for custom amounts per frequency (comma-separated, e.g., 10, 20, 30). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Style Tab (Donation Box only):**
+     - **Primary Color:** Default primary color picker for donate button. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+     - **Brand Color:** Default brand color picker for tabs and links. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
 
 **Donation Form - Required URL Parameters:**
 The full-page donation form widget supports required URL parameters. Use the repeater control in the widget settings to add parameter name/value pairs. When the page loads, the form will check if those parameters exist in the URL with the correct values. If any parameter is missing or has a different value, the user will be automatically redirected to add them. This is perfect for tracking campaigns or ensuring specific data is present before a user can donate.
@@ -364,19 +366,20 @@ If you use Divi, the plugin adds two modules.
    - **"Beacon Donation Box"** (CTA box)
 4. Add the module to your layout
 5. In the module settings (Donation Box):
-   - **Form Name:** Select which form to display
-   - **Primary Color:** Color picker for donate button
-   - **Brand Color:** Color picker for tabs and links
+   - **Form Name:** Select which form to display (Choose which donation form to use)
    - **Title:** Custom heading text
    - **Subtitle:** Custom subheading text
    - **Notice Text:** Custom security message
-   - **Show Single Frequency:** Yes/No toggle for single donations
-   - **Show Monthly Frequency:** Yes/No toggle for monthly donations
-   - **Show Annual Frequency:** Yes/No toggle for annual donations
-   - **Single Preset Amounts:** Comma-separated amounts (e.g., `10, 20, 30`)
-   - **Monthly Preset Amounts:** Comma-separated amounts (e.g., `5, 10, 15`)
-   - **Annual Preset Amounts:** Comma-separated amounts (e.g., `50, 100, 200`)
-   - **Custom URL Parameters:** URL-encoded format (e.g., `bcn_c_adopted_animals=elephant-123&campaign=spring2025`)
+   - **Button Text:** Text shown on the donate button (default: `Donate now →`)
+   - **Custom URL Parameters:** URL-encoded format (e.g., `bcn_c_adopted_animals=elephant-123&campaign=spring2025`). This will be added to the URL of the full page form on redirect.
+   - **Show Single Frequency:** Yes/No toggle for single donation frequency option. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Show Monthly Frequency:** Yes/No toggle for monthly donation frequency option. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Show Annual Frequency:** Yes/No toggle for annual donation frequency option. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Single Preset Amounts:** Comma-separated amounts for single donations (e.g., `10, 20, 30`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Monthly Preset Amounts:** Comma-separated amounts for monthly donations (e.g., `5, 10, 15`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Annual Preset Amounts:** Comma-separated amounts for annual donations (e.g., `50, 100, 200`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Primary Color:** Default primary color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
+   - **Brand Color:** Default brand color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
 
 6. In the Donation Form module settings:
    - **Form Name:** Select which form to display
