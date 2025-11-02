@@ -23,9 +23,11 @@ require_once WPBCD_PATH . 'includes/class-geoip-dependency.php';
 
 require_once WPBCD_PATH . 'includes/render/class-donate-form-render.php';
 require_once WPBCD_PATH . 'includes/render/class-donate-cta-render.php';
+require_once WPBCD_PATH . 'includes/render/class-donate-button-render.php';
 
 require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-form.php';
 require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-box.php';
+require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-button.php';
 
 // Elementor & Divi adapters are loaded conditionally in their respective hooks below.
 
@@ -119,9 +121,46 @@ add_action('init', function () {
         )
     );
 
+    register_block_type_from_metadata(
+        WPBCD_PATH . 'blocks/donation-button',
+        array(
+            'render_callback' => function ($attrs, $content) {
+                // Get form name from block attributes
+                $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
+
+                // Build args array from block attributes
+                $render_args = [
+                    'color' => isset($attrs['color']) ? $attrs['color'] : '',
+                    'text' => isset($attrs['text']) ? $attrs['text'] : 'Donate',
+                    'size' => isset($attrs['size']) ? $attrs['size'] : 'md',
+                    'amount' => isset($attrs['amount']) ? $attrs['amount'] : '',
+                    'frequency' => isset($attrs['frequency']) ? $attrs['frequency'] : '',
+                    'currency' => isset($attrs['currency']) ? $attrs['currency'] : '',
+                    'customParams' => []
+                ];
+
+                // Parse custom params from block attributes
+                if (isset($attrs['customParams']) && is_array($attrs['customParams'])) {
+                    foreach ($attrs['customParams'] as $param) {
+                        if (isset($param['key']) && !empty($param['key']) && isset($param['value'])) {
+                            $render_args['customParams'][$param['key']] = $param['value'];
+                        }
+                    }
+                }
+
+                // Enqueue assets before rendering
+                wp_enqueue_style('wbcd-front');
+
+                // Call the render method
+                return WBCD\Render\Donate_Button_Render::render($form_name, $render_args);
+            },
+        )
+    );
+
     // Shortcodes
     WBCD\Shortcodes\Shortcode_Donate_Form::register();
     WBCD\Shortcodes\Shortcode_Donate_Box::register();
+    WBCD\Shortcodes\Shortcode_Donate_Button::register();
 
     // Pre-process content to normalize shortcodes with line breaks and tabs
     add_filter('the_content', function ($content) {
@@ -132,7 +171,7 @@ add_action('init', function () {
 
         // Normalize line breaks and tabs within our shortcodes
         $content = preg_replace_callback(
-            '/\[beaconcrm_donate_(box|form)\s+([^\]]*?)\]/s',
+            '/\[beaconcrm_donate_(box|form|button)\s+([^\]]*?)\]/s',
             function ($matches) {
                 $shortcode_name = $matches[1];
                 $attributes = $matches[2];
@@ -157,12 +196,27 @@ add_action('init', function () {
 add_action('enqueue_block_editor_assets', function () {
     $forms = WBCD\Settings::get_forms_for_dropdown();
     $form_options = [['value' => '', 'label' => __('Default (First form)', 'wp-beacon-crm-donate')]];
+    $forms_data = [];
 
     foreach ($forms as $name => $label) {
         $form_options[] = ['value' => $name, 'label' => $label];
+        // Get currencies for each form
+        $currencies = WBCD\Settings::get_forms_by_currency($name);
+        $forms_data[$name] = [
+            'label' => $label,
+            'currencies' => array_keys($currencies)
+        ];
     }
 
+    // Also get currencies for the default form (empty string)
+    $default_currencies = WBCD\Settings::get_forms_by_currency('');
+    $forms_data[''] = [
+        'label' => __('Default (First form)', 'wp-beacon-crm-donate'),
+        'currencies' => array_keys($default_currencies)
+    ];
+
     wp_localize_script('wp-blocks', 'wbcdForms', $form_options);
+    wp_localize_script('wp-blocks', 'wbcdFormsData', $forms_data);
 });
 
 // Settings page + admin notices
@@ -180,8 +234,10 @@ add_action('elementor/widgets/register', function ($widgets_manager) {
     }
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-form.php';
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-box.php';
+    require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-button.php';
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Form_Widget());
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Box_Widget());
+    $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Button_Widget());
 });
 
 // Divi Modules
@@ -191,6 +247,8 @@ add_action('et_builder_ready', function () {
     }
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-form.php';
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-box.php';
+    require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-button.php';
     new \WBCD\Integrations\Divi\Donate_Form_Module();
     new \WBCD\Integrations\Divi\Donate_Box_Module();
+    new \WBCD\Integrations\Divi\Donate_Button_Module();
 });

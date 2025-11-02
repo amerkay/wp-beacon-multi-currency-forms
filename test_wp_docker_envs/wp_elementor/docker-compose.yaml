@@ -9,7 +9,7 @@ services:
 
   wordpress:
     image: wordpress:latest
-    entrypoint: ["/bin/bash", "-c", "cp -r /tmp/duplicator_archive/* /var/www/html/; chown www-data:www-data /var/www/html/* && docker-entrypoint.sh apache2-foreground"]
+    entrypoint: ["/bin/bash","-c","a2enmod headers && a2enmod rewrite || true; cp -r /tmp/duplicator_archive/* /var/www/html/; chown www-data:www-data /var/www/html/* && docker-entrypoint.sh apache2-foreground"]    
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=wordpress

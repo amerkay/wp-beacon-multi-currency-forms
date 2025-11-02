@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "wbcd/donation-button",
+    "title": "Beacon Donation Button",
+    "category": "widgets",
+    "description": "A simple button that links to your BeaconCRM donation form with optional parameters.",
+    "textdomain": "wp-beacon-crm-donate",
+    "attributes": {
+        "formName": {
+            "type": "string",
+            "default": ""
+        },
+        "color": {
+            "type": "string",
+            "default": ""
+        },
+        "text": {
+            "type": "string",
+            "default": "Donate"
+        },
+        "size": {
+            "type": "string",
+            "default": "md",
+            "enum": [
+                "md",
+                "lg",
+                "xl"
+            ]
+        },
+        "amount": {
+            "type": "string",
+            "default": ""
+        },
+        "frequency": {
+            "type": "string",
+            "default": "",
+            "enum": [
+                "",
+                "single",
+                "monthly",
+                "annual"
+            ]
+        },
+        "currency": {
+            "type": "string",
+            "default": ""
+        },
+        "customParams": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "supports": {
+        "html": false,
+        "anchor": false,
+        "customClassName": false,
+        "reusable": true,
+        "multiple": true
+    },
+    "style": "wbcd-front",
+    "editorStyle": "wbcd-front",
+    "icon": "button",
+    "editorScript": "file:./editor.js"
+}

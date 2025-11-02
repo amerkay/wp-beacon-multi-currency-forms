@@ -37,11 +37,9 @@
 #wpbcd-donate {
     --wpbcd-text: #222;
     --wpbcd-brand: #676767;
-    --wpbcd-brand-600: color-mix(in srgb, var(--wpbcd-brand) 85%, black);
     --wpbcd-muted: #9ca3af;
     --wpbcd-focus: #1f2937;
     --wpbcd-primary: #FF7B1A;
-    --wpbcd-primary-600: color-mix(in srgb, var(--wpbcd-primary) 85%, black);
 }
 
 #wpbcd-donate .wpbcd-card {
@@ -228,8 +226,7 @@
 }
 
 #wpbcd-donate .wpbcd-btn-next:hover {
-    background: var(--wpbcd-primary-600);
-    border-color: var(--wpbcd-primary-600);
+    opacity: 85%;
 }
 
 #wpbcd-donate .wpbcd-btn-next[disabled] {
@@ -273,4 +270,54 @@
         display: block;
         box-sizing: border-box;
     }
+}
+
+/* ---- Donation Button styles ---- */
+.wpbcd-button-wrap {
+    --wpbcd-button-color: #FF7B1A;
+    display: block;
+    margin: 6px 0;
+}
+
+.wpbcd-button {
+    display: inline-block;
+    background: var(--wpbcd-button-color);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid var(--wpbcd-button-color);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.wpbcd-button:hover {
+    opacity: 85%;
+}
+
+.wpbcd-button:focus-visible {
+    outline: 2px solid var(--wpbcd-button-color);
+    outline-offset: 2px;
+}
+
+.wpbcd-button:active {
+    transform: translateY(0);
+}
+
+/* Button sizes */
+.wpbcd-button--md {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.wpbcd-button--lg {
+    padding: 14px 28px;
+    font-size: 18px;
+}
+
+.wpbcd-button--xl {
+    padding: 18px 36px;
+    font-size: 20px;
 }
