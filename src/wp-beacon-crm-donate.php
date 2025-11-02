@@ -122,6 +122,35 @@ add_action('init', function () {
     // Shortcodes
     WBCD\Shortcodes\Shortcode_Donate_Form::register();
     WBCD\Shortcodes\Shortcode_Donate_Box::register();
+
+    // Pre-process content to normalize shortcodes with line breaks and tabs
+    add_filter('the_content', function ($content) {
+        // Only process if content contains our shortcodes
+        if (strpos($content, '[beaconcrm_donate_') === false) {
+            return $content;
+        }
+
+        // Normalize line breaks and tabs within our shortcodes
+        $content = preg_replace_callback(
+            '/\[beaconcrm_donate_(box|form)\s+([^\]]*?)\]/s',
+            function ($matches) {
+                $shortcode_name = $matches[1];
+                $attributes = $matches[2];
+                
+                // Remove line breaks and tabs, but preserve spaces around = signs
+                $attributes = preg_replace('/[\r\n\t]+/', ' ', $attributes);
+                // Collapse multiple spaces into one
+                $attributes = preg_replace('/\s+/', ' ', $attributes);
+                // Trim leading/trailing spaces
+                $attributes = trim($attributes);
+                
+                return '[beaconcrm_donate_' . $shortcode_name . ' ' . $attributes . ']';
+            },
+            $content
+        );
+
+        return $content;
+    }, 8); // Priority 8 to run before do_shortcode (which is at 11)
 });
 
 // Localize forms data for Gutenberg block editor

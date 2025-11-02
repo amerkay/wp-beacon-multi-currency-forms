@@ -64,7 +64,7 @@ class Donate_Box_Module extends \ET_Builder_Module
                 'label' => __('Custom URL Parameters', 'wp-beacon-crm-donate'),
                 'type' => 'text',
                 'default' => '',
-                'description' => __('Enter custom parameters in URL format: bcn_c_adopted_animals=elephant-123&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate'),
+                'description' => __('Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate'),
             ],
 
             // Defaults that get replaced by the JSON XHR call

@@ -123,7 +123,7 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
             'params_notice',
             [
                 'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Enter custom parameters in URL format: bcn_c_adopted_animals=elephant-123&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate') . '</p>',
+                'raw' => '<p style="font-size: 12px; color: #666;">' . __('Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate') . '</p>',
             ]
         );
 
@@ -137,13 +137,13 @@ class Donate_Box_Widget extends \Elementor\Widget_Base
                         'name' => 'param_key',
                         'label' => __('Parameter Name', 'wp-beacon-crm-donate'),
                         'type' => \Elementor\Controls_Manager::TEXT,
-                        'placeholder' => 'e.g., bcn_c_adopted_animals',
+                        'placeholder' => 'e.g., bcn_c_adopted_animal',
                     ],
                     [
                         'name' => 'param_value',
                         'label' => __('Parameter Value', 'wp-beacon-crm-donate'),
                         'type' => \Elementor\Controls_Manager::TEXT,
-                        'placeholder' => 'e.g., elephant-123',
+                        'placeholder' => 'e.g., 12345',
                     ],
                 ],
                 'title_field' => '{{{ param_key }}}',

@@ -154,7 +154,7 @@
             ),
             el(PanelBody, { title: 'Custom URL Parameters', initialOpen: false },
               el('p', { style: { fontSize: '12px', color: '#666', marginBottom: '12px' } }, 
-                'Enter custom parameters in URL format: bcn_c_adopted_animals=elephant-123&key2=value2. This will be added to the URL of the full page form on redirect.'
+                'Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the full page form on redirect.'
               ),
               (attrs.customParams || []).map(function(param, index) {
                 return el('div', { 
@@ -172,7 +172,7 @@
                     onChange: function(value) {
                       updateParam(index, 'key', value);
                     },
-                    placeholder: 'e.g., bcn_c_adopted_animals'
+                    placeholder: 'e.g., bcn_c_adopted_animal'
                   }),
                   el(TextControl, {
                     label: 'Parameter Value',
@@ -180,7 +180,7 @@
                     onChange: function(value) {
                       updateParam(index, 'value', value);
                     },
-                    placeholder: 'e.g., elephant-123'
+                    placeholder: 'e.g., 12345'
                   }),
                   el(Button, {
                     isDestructive: true,

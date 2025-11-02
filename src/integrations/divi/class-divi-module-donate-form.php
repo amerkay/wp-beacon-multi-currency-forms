@@ -41,7 +41,7 @@ class Donate_Form_Module extends \ET_Builder_Module
                 'label' => __('Required URL Parameters', 'wp-beacon-crm-donate'),
                 'type' => 'textarea',
                 'default' => '',
-                'description' => __('Enter required parameters in URL format: campaign=spring2025&source=email. If missing, users will be redirected to include them.', 'wp-beacon-crm-donate'),
+                'description' => __('Enter required parameters in URL format: bcn_c_adopted_animal=12345&bcn_custom=abc. If missing, users will be redirected to include them.', 'wp-beacon-crm-donate'),
             ],
         ];
     }
