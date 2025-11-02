@@ -136,14 +136,14 @@ add_action('init', function () {
             function ($matches) {
                 $shortcode_name = $matches[1];
                 $attributes = $matches[2];
-                
+
                 // Remove line breaks and tabs, but preserve spaces around = signs
                 $attributes = preg_replace('/[\r\n\t]+/', ' ', $attributes);
                 // Collapse multiple spaces into one
                 $attributes = preg_replace('/\s+/', ' ', $attributes);
                 // Trim leading/trailing spaces
                 $attributes = trim($attributes);
-                
+
                 return '[beaconcrm_donate_' . $shortcode_name . ' ' . $attributes . ']';
             },
             $content
