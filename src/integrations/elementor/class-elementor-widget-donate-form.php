@@ -29,6 +29,11 @@ class Donate_Form_Widget extends \Elementor\Widget_Base
         return ['general'];
     }
 
+    public function show_in_panel()
+    {
+        return true;
+    }
+
     protected function register_controls()
     {
         $this->start_controls_section(
@@ -87,16 +92,22 @@ class Donate_Form_Widget extends \Elementor\Widget_Base
                         'label' => __('Parameter Name', 'wp-beacon-crm-donate'),
                         'type' => \Elementor\Controls_Manager::TEXT,
                         'placeholder' => 'e.g., campaign',
+                        'default' => '',
                     ],
                     [
                         'name' => 'param_value',
                         'label' => __('Parameter Value', 'wp-beacon-crm-donate'),
                         'type' => \Elementor\Controls_Manager::TEXT,
                         'placeholder' => 'e.g., spring2025',
+                        'default' => '',
                     ],
                 ],
-                'title_field' => '{{{ param_key }}}',
-                'default' => [],
+                'default' => [
+                    [
+                        'param_key' => '',
+                        'param_value' => '',
+                    ],
+                ],
             ]
         );
 
@@ -105,6 +116,19 @@ class Donate_Form_Widget extends \Elementor\Widget_Base
 
     protected function render()
     {
+        // Don't render in editor mode - just show a placeholder
+        if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
+            $settings = $this->get_settings_for_display();
+            $form_name = isset($settings['form_name']) ? $settings['form_name'] : __('Default', 'wp-beacon-crm-donate');
+
+            echo '<div style="padding: 40px; background: #f0f0f1; border: 2px dashed #8c8f94; border-radius: 4px; text-align: center;">';
+            echo '<p style="margin: 0 0 10px; font-size: 18px; font-weight: 600; color: #1e1e1e;">📋 ' . esc_html__('Beacon Donation Form', 'wp-beacon-crm-donate') . '</p>';
+            echo '<p style="margin: 0 0 5px; font-size: 14px; color: #50575e;"><strong>' . esc_html__('Form:', 'wp-beacon-crm-donate') . '</strong> ' . esc_html($form_name) . '</p>';
+            echo '<p style="margin: 10px 0 0; font-size: 12px; color: #8c8f94;">' . esc_html__('Preview on frontend', 'wp-beacon-crm-donate') . '</p>';
+            echo '</div>';
+            return;
+        }
+
         $settings = $this->get_settings_for_display();
         $form_name = isset($settings['form_name']) ? $settings['form_name'] : '';
 

@@ -179,23 +179,13 @@
   
   function applyBrandColor(color){
     if (!color) return;
-    // Update the CSS variable on the #wpbcd-donate element
+    // Don't override if a color is already set inline (e.g., from Elementor settings)
+    var existingColor = wrap && wrap.style.getPropertyValue('--wpbcd-brand');
+    if (existingColor && existingColor.trim()) return;
+    
+    // Update the CSS variable - color-mix in CSS handles the darker shade automatically
     if (wrap) {
       wrap.style.setProperty('--wpbcd-brand', color);
-      // Optionally calculate a darker shade for hover states (simple darken by ~15%)
-      try {
-        var hex = color.replace('#', '');
-        var r = parseInt(hex.substr(0,2), 16);
-        var g = parseInt(hex.substr(2,2), 16);
-        var b = parseInt(hex.substr(4,2), 16);
-        var darker = '#' + 
-          Math.floor(r * 0.85).toString(16).padStart(2, '0') +
-          Math.floor(g * 0.85).toString(16).padStart(2, '0') +
-          Math.floor(b * 0.85).toString(16).padStart(2, '0');
-        wrap.style.setProperty('--wpbcd-brand-600', darker);
-      } catch(e) {
-        // If color parsing fails, just use the main color
-      }
     }
   }
 
