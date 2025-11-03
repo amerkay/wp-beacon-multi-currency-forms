@@ -32,11 +32,9 @@ require_once WPBCD_PATH . 'includes/utils/class-block-attrs-parser.php';
 
 require_once WPBCD_PATH . 'includes/render/class-donate-form-render.php';
 require_once WPBCD_PATH . 'includes/render/class-donate-box-render.php';
-require_once WPBCD_PATH . 'includes/render/class-donate-button-render.php';
 
 require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-form.php';
 require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-box.php';
-require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-button.php';
 
 // Elementor & Divi adapters are loaded conditionally in their respective hooks below.
 
@@ -108,37 +106,9 @@ add_action('init', function () {
         )
     );
 
-    register_block_type_from_metadata(
-        WPBCD_PATH . 'blocks/donation-button',
-        array(
-            'render_callback' => function ($attrs, $content) {
-                // Get form name from block attributes
-                $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
-
-                // Build args array from block attributes using parser
-                $render_args = [
-                    'color' => isset($attrs['color']) ? $attrs['color'] : '',
-                    'text' => isset($attrs['text']) ? $attrs['text'] : 'Donate',
-                    'size' => isset($attrs['size']) ? $attrs['size'] : 'md',
-                    'amount' => isset($attrs['amount']) ? $attrs['amount'] : '',
-                    'frequency' => isset($attrs['frequency']) ? $attrs['frequency'] : '',
-                    'currency' => isset($attrs['currency']) ? $attrs['currency'] : '',
-                    'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs)
-                ];
-
-                // Enqueue assets before rendering
-                wp_enqueue_style('wbcd-front');
-
-                // Call the render method
-                return WBCD\Render\Donate_Button_Render::render($form_name, $render_args);
-            },
-        )
-    );
-
     // Shortcodes
     WBCD\Shortcodes\Shortcode_Donate_Form::register();
     WBCD\Shortcodes\Shortcode_Donate_Box::register();
-    WBCD\Shortcodes\Shortcode_Donate_Button::register();
 
     // Pre-process content to normalize shortcodes with line breaks and tabs
     add_filter('the_content', function ($content) {
@@ -225,11 +195,9 @@ add_action('elementor/widgets/register', function ($widgets_manager) {
     // Load widget classes
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-form.php';
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-box.php';
-    require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-button.php';
     // Register widgets
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Form_Widget());
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Box_Widget());
-    $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Button_Widget());
 });
 
 // Divi Modules
@@ -242,9 +210,7 @@ add_action('et_builder_ready', function () {
     // Load module classes
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-form.php';
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-box.php';
-    require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-button.php';
     // Instantiate modules
     new \WBCD\Integrations\Divi\Donate_Form_Module();
     new \WBCD\Integrations\Divi\Donate_Box_Module();
-    new \WBCD\Integrations\Divi\Donate_Button_Module();
 });

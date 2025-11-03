@@ -7,10 +7,9 @@ A lightweight, flexible WordPress plugin for integrating BeaconCRM donation form
 - **Multi-Currency Support** - Configure multiple donation forms, each supporting different currencies
 - **Geo-Location Currency Detection** - Automatically detect donor's currency based on location
 - **Default Currency Fallback** - Set a default currency for each form when geo-detection fails
-- **Three Display Modes**:
+- **Two Display Modes**:
   - **Full Donation Form** - Complete embedded form for dedicated donation pages
   - **Donation CTA Box** - Compact call-to-action box for sidebars and content areas
-  - **Donation Button** - Simple button with pre-configured donation parameters
 - **Multiple Integration Options**:
   - Gutenberg Blocks (WordPress Block Editor)
   - Shortcodes
@@ -199,47 +198,6 @@ Use this in content areas, sidebars, or any widget area.
 
 ---
 
-#### 3. Donation Button Block
-A simple, customizable button that links directly to your donation form with optional pre-configured parameters.
-
-**To Insert:**
-1. Edit a page or post in the Block Editor
-2. Click the **"+"** button to add a block
-3. Search for **"Beacon Donation Button"**
-4. Insert the block
-5. In the block settings sidebar:
-   - **Form Settings:** Select which form to link to (or leave default)
-   - **Donation Settings:**
-     - **Amount:** Pre-set donation amount (e.g., 50)
-     - **Frequency:** Choose Single, Monthly, or Annual
-     - **Currency:** Select from available currencies for the chosen form
-   - **Button Settings:**
-     - **Button Text:** Customize the button text (default: "Donate")
-     - **Button Size:** Choose Medium, Large, or Extra Large
-     - **Button Color:** Pick a custom color (or leave empty for default orange)
-   - **Custom URL Parameters:** Add additional parameters to pass to the donation form
-
-**Customization Options:**
-- **Pre-configured Donations:** Set amount, frequency, and currency to create quick-donate buttons
-- **Button Appearance:** Control text, size (md/lg/xl), and color
-- **Campaign Tracking:** Add custom parameters for tracking different campaigns or sources
-- **Dynamic Currency:** Currency dropdown automatically updates based on selected form
-
-**Example Use Cases:**
-- **Quick Donate Buttons:** "Donate $50 Monthly" button with pre-filled values
-- **Campaign-Specific:** Different buttons for different campaigns with tracking parameters
-- **Tiered Giving:** Multiple buttons with different preset amounts ($25, $50, $100)
-- **Call-to-Action:** Add donation buttons throughout your content
-
-**Best For:**
-- In-content donation calls-to-action
-- Header/footer quick donate buttons
-- Campaign landing pages with specific amounts
-- Email newsletter links (with tracking)
-- Multiple donation tiers on a single page
-
----
-
 ### Shortcodes
 
 Perfect for classic editor users or embedding in theme files.
@@ -350,74 +308,9 @@ If visitors access the page without these parameters in the URL, they will be au
 
 ---
 
-#### Donation Button Shortcode
-
-A simple button that links to your donation form with optional pre-configured parameters.
-
-```
-[beaconcrm_donate_button]
-```
-
-**With Pre-configured Donation:**
-```
-[beaconcrm_donate_button amount="50" frequency="monthly" currency="USD"]
-```
-
-**With Custom Button Appearance:**
-```
-[beaconcrm_donate_button text="Donate $25" size="lg" color="#34D399"]
-```
-
-**With Campaign Tracking:**
-```
-[beaconcrm_donate_button 
-    amount="100" 
-    frequency="single" 
-    currency="USD"
-    text="Support Our Emergency Fund"
-    params="campaign=emergency2025&source=website"
-]
-```
-
-**Complete Example:**
-```
-[beaconcrm_donate_button 
-    form="Emergency Relief"
-    amount="50"
-    frequency="monthly"
-    currency="USD"
-    text="Donate $50/month"
-    size="xl"
-    color="#FF5733"
-    params="bcn_c_adopted_animal=12345&campaign=elephants"
-]
-```
-
-**Shortcode Parameters:**
-- `form` - Name of the donation form to use (optional, uses default if not specified)
-- `amount` - Pre-set donation amount (e.g., `50`)
-- `frequency` - Pre-set frequency: `single`, `monthly`, or `annual`
-- `currency` - Pre-set currency code (e.g., `USD`, `EUR`, `GBP`)
-- `text` - Button text (default: `Donate`)
-- `size` - Button size: `md`, `lg`, or `xl` (default: `md`)
-- `color` - Button color as hex code (e.g., `#FF5733`)
-- `params` - Additional custom URL parameters in URL-encoded format (e.g., `campaign=spring2025&source=email`)
-
-**Button Sizes:**
-- `md` (Medium) - Standard button size
-- `lg` (Large) - Larger, more prominent button
-- `xl` (Extra Large) - Maximum visibility button
-
-**Usage in Theme Files:**
-```php
-<?php echo do_shortcode('[beaconcrm_donate_button amount="50" frequency="monthly"]'); ?>
-```
-
----
-
 ### Elementor
 
-If you use Elementor page builder, the plugin adds three widgets.
+If you use Elementor page builder, the plugin adds two widgets.
 
 #### Using the Widgets:
 
@@ -425,7 +318,6 @@ If you use Elementor page builder, the plugin adds three widgets.
 2. Search in the widgets panel for:
    - **"Beacon Donation Form"** (full form)
    - **"Beacon Donation Box"** (donate box)
-   - **"Beacon Donation Button"** (simple button)
 3. Drag the widget to your desired location
 4. Configure the widget settings as described below
 
@@ -471,32 +363,6 @@ The full-page donation form widget supports required URL parameters. Use the rep
 - Pre-select adopted animals: `bcn_c_adopted_animal` = `12345`
 - Track referral sources: `source` = `newsletter`
 
-#### Donation Button Widget
-
-A simple, customizable button that links directly to your donation form with pre-configured parameters.
-
-**Settings:**
-- **Form Settings:**
-  - **Select Form:** Choose which donation form to link to
-- **Donation Settings:**
-  - **Amount:** Pre-set donation amount (leave empty for user choice)
-  - **Frequency:** Select None, Single, Monthly, or Annual
-  - **Currency:** Select from available currencies (shows all currencies from all forms)
-- **Button Settings:**
-  - **Button Text:** Customize the button text (default: "Donate")
-  - **Button Size:** Choose Medium, Large, or Extra Large
-  - **Button Color:** Pick a custom color using the color picker
-- **Custom URL Parameters:**
-  - Use the repeater to add parameter name/value pairs for campaign tracking or pre-filling form fields
-
-**Example Use Cases:**
-- Quick donate buttons with preset amounts (e.g., "Donate $50 Monthly")
-- Campaign-specific buttons with tracking parameters
-- Multiple donation tier buttons on the same page
-- Call-to-action buttons throughout your content
-
-**Visual Editor:** The widget shows a placeholder in the Elementor editor. Preview the actual button on the frontend.
-
 **Styling:**
 - Both widgets inherit your theme's styling
 - Use Elementor's custom CSS for additional styling if needed
@@ -505,7 +371,7 @@ A simple, customizable button that links directly to your donation form with pre
 
 ### Divi Builder
 
-If you use Divi, the plugin adds three modules.
+If you use Divi, the plugin adds two modules.
 
 #### Using the Modules:
 
@@ -514,7 +380,6 @@ If you use Divi, the plugin adds three modules.
 3. Search for:
    - **"Beacon Donation Form"** (full form)
    - **"Beacon Donation Box"** (donate box)
-   - **"Beacon Donation Button"** (simple button)
 4. Add the module to your layout
 5. Configure the module settings as described below
 
@@ -541,30 +406,6 @@ If you use Divi, the plugin adds three modules.
    - **Annual Preset Amounts:** Comma-separated amounts for annual donations (e.g., `50, 100, 200`). Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
 - **Primary Color:** Default primary color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
 - **Brand Color:** Default brand color. Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.
-
-#### Donation Button Module
-
-A simple, customizable button that links to your donation form with pre-configured parameters.
-
-**Settings:**
-- **Form Name:** Select which form to link to
-- **Donation Settings:**
-  - **Amount:** Pre-set donation amount (leave empty for user choice)
-  - **Frequency:** Select from None, Single, Monthly, or Annual
-  - **Currency:** Select from dropdown of available currencies
-- **Button Settings:**
-  - **Button Text:** Customize the button text (default: "Donate")
-  - **Button Size:** Choose Medium, Large, or Extra Large
-  - **Button Color:** Pick a custom color using the color picker
-- **Custom URL Parameters:** Enter parameters in URL-encoded format (e.g., `campaign=spring2025&source=email`)
-
-**Example Use Cases:**
-- Quick donate buttons with specific amounts (e.g., "Donate $50 Monthly")
-- Campaign-specific buttons with tracking
-- Multiple donation tiers on a single page
-- Call-to-action buttons in your content
-
-**Visual Builder:** The button renders in the Divi visual builder, allowing you to see it while editing.
 
 #### Design Options for All Modules
 
