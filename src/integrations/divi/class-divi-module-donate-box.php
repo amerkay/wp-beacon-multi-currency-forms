@@ -24,6 +24,7 @@ class Donate_Box_Module extends Abstract_WBCD_Divi_Module
         return array_merge(
             [
                 'form_name' => $this->get_form_selection_field(),
+                'target_page_id' => $this->get_target_page_field(),
                 'title' => [
                     'label' => __('Title', 'wp-beacon-crm-donate'),
                     'type' => 'text',
@@ -60,6 +61,16 @@ class Donate_Box_Module extends Abstract_WBCD_Divi_Module
         $allowed_frequencies = $this->parse_frequencies_from_props();
         $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($this->props);
 
+        // Get target page URL
+        $target_page_url = '';
+        $target_page_id = isset($this->props['target_page_id']) ? absint($this->props['target_page_id']) : 0;
+        if ($target_page_id > 0) {
+            $permalink = get_permalink($target_page_id);
+            if ($permalink) {
+                $target_page_url = $permalink;
+            }
+        }
+
         $render_args = [
             'primaryColor' => isset($this->props['primary_color']) ? $this->props['primary_color'] : '',
             'brandColor' => isset($this->props['brand_color']) ? $this->props['brand_color'] : '',
@@ -69,11 +80,11 @@ class Donate_Box_Module extends Abstract_WBCD_Divi_Module
             'buttonText' => isset($this->props['button_text']) ? $this->props['button_text'] : __('Donate now →', 'wp-beacon-crm-donate'),
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
-            'defaultPresets' => $default_presets
+            'defaultPresets' => $default_presets,
+            'targetPageUrl' => $target_page_url
         ];
 
         $this->enqueue_base_assets();
-        \WBCD\Assets::enqueue_donation_box($form_name);
         return \WBCD\Render\Donate_Box_Render::render($form_name, $render_args);
     }
 }

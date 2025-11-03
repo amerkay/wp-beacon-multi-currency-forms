@@ -33,17 +33,6 @@ class Form_Sanitizer
     }
 
     /**
-     * Sanitize target page ID
-     * 
-     * @param mixed $target_page_id The target page ID to sanitize
-     * @return int Sanitized page ID
-     */
-    public static function sanitize_target_page_id($target_page_id)
-    {
-        return absint($target_page_id);
-    }
-
-    /**
      * Sanitize currencies array for a form
      * 
      * @param array $currencies Raw currencies data
@@ -161,22 +150,6 @@ class Form_Sanitizer
             $currencies
         );
 
-        // Sanitize target page ID
-        $target_page_id = self::sanitize_target_page_id(
-            isset($form['target_page_id']) ? $form['target_page_id'] : 0
-        );
-
-        // Validate target page
-        $page_validation = Form_Validator::validate_target_page($target_page_id);
-        if (!$page_validation['valid']) {
-            $errors[] = sprintf(
-                __('Form "%s": %s', self::TEXT_DOMAIN),
-                $form_name,
-                $page_validation['message']
-            );
-            $has_validation_errors = true;
-        }
-
         // Validate currencies
         $currency_validation = Form_Validator::validate_currencies($currencies);
         if (!$currency_validation['valid']) {
@@ -191,8 +164,7 @@ class Form_Sanitizer
         $sanitized_form = [
             'name' => $form_name,
             'currencies' => $currencies,
-            'default_currency' => $default_currency,
-            'target_page_id' => $target_page_id
+            'default_currency' => $default_currency
         ];
 
         return [

@@ -174,7 +174,6 @@ class Settings_Renderer
         $form_name = esc_attr(isset($form['name']) ? $form['name'] : '');
         $form_currencies = isset($form['currencies']) ? $form['currencies'] : [];
         $default_currency = isset($form['default_currency']) ? $form['default_currency'] : '';
-        $target_page_id = (int) (isset($form['target_page_id']) ? $form['target_page_id'] : 0);
     ?>
         <div class="wbcd-form-item">
             <h3><?php echo esc_html(sprintf(__('Form #%d', self::TEXT_DOMAIN), $form_index + 1)); ?></h3>
@@ -191,34 +190,6 @@ class Settings_Renderer
                     class="regular-text"
                     required
                     placeholder="<?php esc_attr_e('e.g., General Donations', self::TEXT_DOMAIN); ?>" />
-            </p>
-
-            <!-- Target page selection -->
-            <p>
-                <label for="wbcd_form_target_page_<?php echo esc_attr($form_index); ?>">
-                    <strong><?php esc_html_e('Donation Form Page:', self::TEXT_DOMAIN); ?></strong>
-                </label><br>
-                <select name="wbcd_forms[<?php echo esc_attr($form_index); ?>][target_page_id]"
-                    id="wbcd_form_target_page_<?php echo esc_attr($form_index); ?>"
-                    class="wbcd-page-select">
-                    <option value="0"><?php esc_html_e('— Select Page —', self::TEXT_DOMAIN); ?></option>
-                    <?php
-                    $pages = get_pages();
-                    foreach ($pages as $page) {
-                        printf(
-                            '<option value="%d" %s>%s</option>',
-                            $page->ID,
-                            selected($target_page_id, $page->ID, false),
-                            esc_html($page->post_title)
-                        );
-                    }
-                    ?>
-                    <option value="-1" style="font-style: italic;"><?php esc_html_e('+ Create New Page...', self::TEXT_DOMAIN); ?></option>
-                </select>
-                <br>
-                <span class="description">
-                    <?php esc_html_e('Page where the donate box will send donors (hosts the full donation form).', self::TEXT_DOMAIN); ?>
-                </span>
             </p>
 
             <!-- Currencies section -->
@@ -270,7 +241,7 @@ class Settings_Renderer
         </p>
 
         <p class="description">
-            <?php esc_html_e('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies, a default currency (used as fallback), and a dedicated target page for the donate donate box to redirect to. Each currency can only appear once per form.', self::TEXT_DOMAIN); ?>
+            <?php esc_html_e('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies and a default currency (used as fallback). Each currency can only appear once per form.', self::TEXT_DOMAIN); ?>
         </p>
 <?php
     }

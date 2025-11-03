@@ -416,4 +416,43 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
 
         $this->end_controls_section();
     }
+
+    /**
+     * Get page options for Elementor select control.
+     * Returns formatted array with page title and permalink.
+     * 
+     * @return array Page options with empty default.
+     */
+    protected function get_page_options()
+    {
+        $pages = get_pages();
+        $options = [0 => __('— Select Page —', 'wp-beacon-crm-donate')];
+
+        foreach ($pages as $page) {
+            $permalink = get_permalink($page->ID);
+            $path = str_replace(home_url(), '', $permalink);
+            $options[$page->ID] = $page->post_title . ' (' . $path . ')';
+        }
+
+        return $options;
+    }
+
+    /**
+     * Add target page control to widget.
+     * Common control for donation box widgets.
+     * Uses SELECT2 type for searchable dropdown.
+     */
+    protected function add_target_page_control()
+    {
+        $this->add_control(
+            'target_page_id',
+            [
+                'label' => __('Donation Form Page', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::SELECT2,
+                'default' => 0,
+                'options' => $this->get_page_options(),
+                'description' => __('Page where donors will be sent to complete the donation (optional). Start typing to search.', 'wp-beacon-crm-donate'),
+            ]
+        );
+    }
 }

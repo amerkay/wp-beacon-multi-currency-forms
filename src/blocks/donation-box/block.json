@@ -11,6 +11,10 @@
       "type": "string",
       "default": ""
     },
+    "targetPageId": {
+      "type": "number",
+      "default": 0
+    },
     "primaryColor": {
       "type": "string",
       "default": ""

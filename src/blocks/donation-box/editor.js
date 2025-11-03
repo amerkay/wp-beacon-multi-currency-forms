@@ -5,6 +5,7 @@
   var InspectorControls = wp.blockEditor.InspectorControls;
   var PanelBody = wp.components.PanelBody;
   var SelectControl = wp.components.SelectControl;
+  var ComboboxControl = wp.components.ComboboxControl;
   var TextControl = wp.components.TextControl;
   var TextareaControl = wp.components.TextareaControl;
   var CheckboxControl = wp.components.CheckboxControl;
@@ -23,6 +24,10 @@
         formName: {
           type: 'string',
           default: ''
+        },
+        targetPageId: {
+          type: 'number',
+          default: 0
         },
         primaryColor: {
           type: 'string',
@@ -89,6 +94,21 @@
         // Get forms from localized data
         var formOptions = window.wbcdForms || [{ value: '', label: 'Default (First form)' }];
         
+        // Get pages from localized data and format for ComboboxControl
+        var pageOptions = [{ value: '0', label: '— Select Page —' }];
+        if (window.wbcdPages && window.wbcdPages.length > 0) {
+          window.wbcdPages.forEach(function(page) {
+            var displayLabel = page.title + ' (' + page.path + ')';
+            pageOptions.push({ value: String(page.id), label: displayLabel });
+          });
+        }
+        
+        // Find current page label for ComboboxControl
+        var currentPageOption = pageOptions.find(function(opt) {
+          return opt.value === String(attrs.targetPageId);
+        });
+        var currentPageValue = currentPageOption ? currentPageOption.label : '';
+        
         // Helpers for custom params
         var addParam = function() {
           var newParams = (attrs.customParams || []).concat([{ key: '', value: '' }]);
@@ -118,6 +138,21 @@
                   setAttributes({ formName: value });
                 },
                 help: 'Choose which donation form to use'
+              }),
+              el(ComboboxControl, {
+                label: 'Donation Form Page',
+                value: currentPageValue,
+                options: pageOptions,
+                onChange: function(selectedLabel) {
+                  // Find the option that matches the selected label
+                  var selectedOption = pageOptions.find(function(opt) {
+                    return opt.label === selectedLabel;
+                  });
+                  if (selectedOption) {
+                    setAttributes({ targetPageId: parseInt(selectedOption.value, 10) });
+                  }
+                },
+                help: 'Page where donors will be sent to complete the donation (optional). Start typing to search.'
               })
             ),
             el(PanelBody, { title: 'Text Content', initialOpen: false },

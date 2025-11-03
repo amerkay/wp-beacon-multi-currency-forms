@@ -254,6 +254,56 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     }
 
     /**
+     * Get page options for Divi select field.
+     * Returns formatted array with page title and permalink.
+     * 
+     * @return array Page options.
+     */
+    protected function get_page_options()
+    {
+        $pages = get_pages();
+        // use an empty-string key for the placeholder and make all keys strings
+        $options = ['' => __('— Select Page —', 'wp-beacon-crm-donate')];
+
+        foreach ($pages as $page) {
+            $permalink = get_permalink($page->ID);
+            $path = str_replace(home_url(), '', $permalink);
+            // cast the ID to string to guarantee string keys
+            $key = (string) $page->ID;
+            $label = $page->post_title . ' (' . $path . ')';
+            // optional: sanitize label for safety
+            $options[$key] = wp_kses_post($label);
+        }
+
+        return $options;
+    }
+
+
+    /**
+     * Get target page field definition.
+     * Common field for donation box modules.
+     * Uses 'select' type with 'search' => true for searchable dropdown.
+     * 
+     * @param string|null $description Optional description override.
+     * @return array Field definition array.
+     */
+    protected function get_target_page_field($description = null)
+    {
+        if ($description === null) {
+            $description = __('Page where donors will be sent to complete the donation (optional). Start typing to search.', 'wp-beacon-crm-donate');
+        }
+
+        return [
+            'label' => __('Donation Form Page', 'wp-beacon-crm-donate'),
+            'type' => 'select',
+            'options' => $this->get_page_options(),
+            'default' => 0,
+            'description' => $description,
+            'search' => true, // Enable search functionality in Divi
+        ];
+    }
+
+    /**
      * Get color field definitions.
      * Common fields for donation box modules.
      * 

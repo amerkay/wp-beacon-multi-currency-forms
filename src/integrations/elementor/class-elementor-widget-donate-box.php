@@ -38,6 +38,8 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
 
         $this->add_form_selection_control();
 
+        $this->add_target_page_control();
+
         $this->end_controls_section();
 
         // Text Content Section
@@ -124,6 +126,16 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $allowed_frequencies = $this->parse_frequencies_from_settings($settings);
         $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($settings);
 
+        // Get target page URL
+        $target_page_url = '';
+        $target_page_id = isset($settings['target_page_id']) ? absint($settings['target_page_id']) : 0;
+        if ($target_page_id > 0) {
+            $permalink = get_permalink($target_page_id);
+            if ($permalink) {
+                $target_page_url = $permalink;
+            }
+        }
+
         $render_args = [
             'primaryColor' => isset($settings['primary_color']) ? $settings['primary_color'] : '',
             'brandColor' => isset($settings['brand_color']) ? $settings['brand_color'] : '',
@@ -133,11 +145,11 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
             'buttonText' => isset($settings['button_text']) ? $settings['button_text'] : __('Donate now →', 'wp-beacon-crm-donate'),
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
-            'defaultPresets' => $default_presets
+            'defaultPresets' => $default_presets,
+            'targetPageUrl' => $target_page_url
         ];
 
         $this->enqueue_base_assets();
-        \WBCD\Assets::enqueue_donation_box($form_name);
         echo \WBCD\Render\Donate_Box_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
     }
 }

@@ -83,6 +83,15 @@ add_action('init', function () {
                 // Get form name from block attributes
                 $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
 
+                // Get target page URL from block attributes
+                $target_page_url = '';
+                if (isset($attrs['targetPageId']) && $attrs['targetPageId'] > 0) {
+                    $permalink = get_permalink($attrs['targetPageId']);
+                    if ($permalink) {
+                        $target_page_url = $permalink;
+                    }
+                }
+
                 // Build args array from block attributes using parsers
                 $render_args = [
                     'primaryColor' => isset($attrs['primaryColor']) ? $attrs['primaryColor'] : '',
@@ -93,12 +102,13 @@ add_action('init', function () {
                     'buttonText' => isset($attrs['buttonText']) ? $attrs['buttonText'] : 'Donate now →',
                     'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs),
                     'allowedFrequencies' => isset($attrs['allowedFrequencies']) ? $attrs['allowedFrequencies'] : ['single', 'monthly', 'annual'],
-                    'defaultPresets' => isset($attrs['defaultPresets']) ? $attrs['defaultPresets'] : WBCD\Utils\Preset_Parser::get_all_defaults()
+                    'defaultPresets' => isset($attrs['defaultPresets']) ? $attrs['defaultPresets'] : WBCD\Utils\Preset_Parser::get_all_defaults(),
+                    'targetPageUrl' => $target_page_url
                 ];
 
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
-                WBCD\Assets::enqueue_donation_box($form_name);
+                // Note: enqueue_donation_box is called inside Donate_Box_Render::render with the target URL
 
                 // Call the render method
                 return WBCD\Render\Donate_Box_Render::render($form_name, $render_args);
@@ -147,24 +157,42 @@ add_action('enqueue_block_editor_assets', function () {
     $forms_data = [];
 
     foreach ($forms as $name => $label) {
-        $form_options[] = ['value' => $name, 'label' => $label];
-        // Get currencies for each form
-        $currencies = WBCD\Settings::get_forms_by_currency($name);
+        $form_options[] = [
+            'value' => $name,
+            'label' => $label
+        ];
+
         $forms_data[$name] = [
-            'label' => $label,
-            'currencies' => array_keys($currencies)
+            'name' => $name,
+            'label' => $label
         ];
     }
 
     // Also get currencies for the default form (empty string)
     $default_currencies = WBCD\Settings::get_forms_by_currency('');
     $forms_data[''] = [
+        'name' => '',
         'label' => __('Default (First form)', 'wp-beacon-crm-donate'),
         'currencies' => array_keys($default_currencies)
     ];
 
+    // Get all pages for dropdown with permalink
+    $pages = get_pages();
+    $pages_data = [];
+    foreach ($pages as $page) {
+        $permalink = get_permalink($page->ID);
+        $path = str_replace(home_url(), '', $permalink);
+        $pages_data[] = [
+            'id' => $page->ID,
+            'title' => $page->post_title,
+            'permalink' => $permalink,
+            'path' => $path
+        ];
+    }
+
     wp_localize_script('wp-blocks', 'wbcdForms', $form_options);
-    wp_localize_script('wp-blocks', 'wbcdFormsData', $forms_data);
+    wp_localize_script('wp-blocks', 'wbcdPages', $pages_data);
+    wp_localize_script('wp-blocks', 'wbcdPages', $pages_data);
 
     // Localize constants for block editor
     wp_localize_script('wp-blocks', 'WBCD_CONSTANTS', [
@@ -183,7 +211,6 @@ add_action('admin_enqueue_scripts', ['WBCD\\Settings', 'enqueue_admin_assets']);
 add_action('admin_notices', ['WBCD\\GeoIP_Dependency', 'admin_notices']);
 add_action('admin_footer', ['WBCD\\GeoIP_Dependency', 'enqueue_dismiss_script']);
 add_action('wp_ajax_wbcd_dismiss_geoip_notice', ['WBCD\\GeoIP_Dependency', 'dismiss_notice']);
-add_action('wp_ajax_wbcd_create_page', ['WBCD\\Settings', 'ajax_create_page']);
 
 // Elementor Widgets
 add_action('elementor/widgets/register', function ($widgets_manager) {

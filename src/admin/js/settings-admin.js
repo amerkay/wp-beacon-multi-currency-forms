@@ -20,7 +20,6 @@
         currencyIdInput: '.wbcd-currency-id',
         currencyTable: 'table tbody',
         currenciesSection: '.wbcd-currencies-section',
-        pageSelect: '.wbcd-page-select',
         validationError: '.wbcd-validation-error',
         hasErrorClass: 'wbcd-has-error'
     };
@@ -47,76 +46,6 @@
             e.preventDefault();
             var $instructions = $('#wbcd-account-name-instructions');
             $instructions.slideToggle(300);
-        });
-
-        /**
-         * Handle "Create New Page..." selection
-         */
-        $(document).on('change', SELECTORS.pageSelect, function() {
-            var $select = $(this);
-            var selectedValue = $select.val();
-            
-            // Check if "Create New Page..." was selected
-            if (selectedValue === '-1') {
-                var pageTitle = prompt(i18n('createPagePrompt'));
-                
-                if (pageTitle && pageTitle.trim() !== '') {
-                    // Disable the select while creating
-                    $select.prop('disabled', true);
-                    
-                    // Make AJAX request to create the page
-                    $.ajax({
-                        url: wbcdAdminSettings.ajax.url,
-                        type: 'POST',
-                        data: {
-                            action: 'wbcd_create_page',
-                            nonce: wbcdAdminSettings.ajax.createPageNonce,
-                            page_title: pageTitle.trim()
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                // Update global pages array
-                                wbcdAdminSettings.pages.push({
-                                    id: response.data.page_id,
-                                    title: response.data.page_title
-                                });
-
-                                // Add new page to ALL form dropdowns (before the "Create New Page..." option)
-                                $(SELECTORS.pageSelect).each(function() {
-                                    var $dropdown = $(this);
-                                    var newOption = $('<option>', {
-                                        value: response.data.page_id,
-                                        text: response.data.page_title
-                                    });
-                                    $dropdown.find('option[value="-1"]').before(newOption);
-                                });
-                                
-                                // Select the newly created page in the current dropdown
-                                $select.val(response.data.page_id);
-                                
-                                // Clear any validation errors
-                                clearFormErrors($select.closest(SELECTORS.formItem));
-                            } else {
-                                alert(response.data.message || i18n('createPageError'));
-                                $select.val('0'); // Reset to "Select Page"
-                            }
-                        },
-                        error: function() {
-                            alert(i18n('createPageError'));
-                            $select.val('0'); // Reset to "Select Page"
-                        },
-                        complete: function() {
-                            $select.prop('disabled', false);
-                        }
-                    });
-                } else {
-                    // User cancelled or entered empty string
-                    $select.val('0'); // Reset to "Select Page"
-                }
-            } else {
-                // For any other selection (including existing pages), clear validation errors
-                clearFormErrors($select.closest(SELECTORS.formItem));
-            }
         });
 
         /**
@@ -150,11 +79,10 @@
             $formItem.find(SELECTORS.validationError).remove();
             
             // Check if all errors are actually fixed
-            var hasTargetPage = $formItem.find(SELECTORS.pageSelect).val() !== '0';
             var hasCurrencies = $formItem.find(SELECTORS.currenciesSection + ' ' + SELECTORS.currencyTable + ' tr').length > 0;
             
-            // Always remove error state if both requirements are met
-            if (hasTargetPage && hasCurrencies) {
+            // Always remove error state if requirement is met
+            if (hasCurrencies) {
                 $formItem.removeClass(SELECTORS.hasErrorClass);
             }
         }
@@ -169,17 +97,6 @@
             // Clear previous errors for this form
             $formItem.find(SELECTORS.validationError).remove();
             $formItem.removeClass(SELECTORS.hasErrorClass);
-
-            // Check if target page is selected
-            var targetPageId = $formItem.find(SELECTORS.pageSelect).val();
-            if (!targetPageId || targetPageId === '0') {
-                isValid = false;
-                errors.push('Form #' + formNumber + ': ' + i18n('targetPageRequired'));
-                $formItem.addClass(SELECTORS.hasErrorClass);
-                $formItem.find(SELECTORS.pageSelect)
-                    .closest('p')
-                    .append('<span class="wbcd-validation-error">' + i18n('targetPageRequired') + '</span>');
-            }
 
             // Check if at least one currency is added
             var currencyCount = $formItem.find(SELECTORS.currenciesSection + ' ' + SELECTORS.currencyTable + ' tr').length;
@@ -449,20 +366,6 @@
         });
 
         /**
-         * Build page dropdown options HTML
-         */
-        function buildPageDropdownOptions() {
-            let html = `<option value="0">${i18n('selectPage')}</option>`;
-            if (wbcdAdminSettings.pages && wbcdAdminSettings.pages.length > 0) {
-                wbcdAdminSettings.pages.forEach(function(page) {
-                    html += `<option value="${page.id}">${page.title}</option>`;
-                });
-            }
-            html += `<option value="-1" style="font-style: italic;">${i18n('createNewPageOption') || '+ Create New Page...'}</option>`;
-            return html;
-        }
-
-        /**
          * Build new form HTML
          */
         function buildNewFormHtml(newIndex) {
@@ -474,20 +377,12 @@
             const addCurrencyBtnClass = SELECTORS.addCurrencyBtn.substring(1);
             const removeFormClass = SELECTORS.removeFormBtn.substring(1);
             const currenciesClass = SELECTORS.currenciesSection.substring(1);
-            const pageSelectClass = SELECTORS.pageSelect.substring(1);
             
             return `<div class="${formItemClass}">
                 <h3>${i18n('form')} #${newIndex + 1}</h3>
                 <p>
                 <label for="wbcd_form_name_${newIndex}"><strong>${i18n('formName')}</strong></label><br>
                 <input type="text" id="wbcd_form_name_${newIndex}" name="wbcd_forms[${newIndex}][name]" value="" class="regular-text" required placeholder="${i18n('formNamePlaceholder')}" />
-                </p>
-                <p>
-                <label for="wbcd_form_target_page_${newIndex}"><strong>${i18n('donationFormPage')}</strong></label><br>
-                <select name="wbcd_forms[${newIndex}][target_page_id]" id="wbcd_form_target_page_${newIndex}" class="${pageSelectClass}">
-                ${buildPageDropdownOptions()}
-                </select>
-                <br><span class="description">${i18n('targetPageDesc')}</span>
                 </p>
                 <div class="${currenciesClass}">
                 <h4>${i18n('supportedCurrencies')}</h4>

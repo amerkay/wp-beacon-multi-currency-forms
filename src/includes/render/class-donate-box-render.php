@@ -20,6 +20,7 @@ class Donate_Box_Render
             'subtitle' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
             'noticeText' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
             'buttonText' => __('Donate now →', 'wp-beacon-crm-donate'),
+            'targetPageUrl' => '', // Optional target page URL
         ]);
 
         $currencies = \WBCD\Settings::get_forms_by_currency($form_name);
@@ -57,6 +58,9 @@ class Donate_Box_Render
         // Prepare default presets for JavaScript
         $default_presets = !empty($args['defaultPresets']) ? $args['defaultPresets'] : \WBCD\Constants::get_all_presets();
         $default_presets_json = wp_json_encode($default_presets);
+
+        // Enqueue assets with target page URL
+        \WBCD\Assets::enqueue_donation_box($form_name, $args['targetPageUrl']);
 
         ob_start();
 ?>

@@ -26,8 +26,7 @@ class Settings
         return [
             'name' => 'Default Donation Form',
             'currencies' => [],
-            'default_currency' => '',
-            'target_page_id' => 0
+            'default_currency' => ''
         ];
     }
 
@@ -78,28 +77,17 @@ class Settings
         $forms = get_option(self::OPTION_FORMS, []);
         $currencies_data = self::load_currencies_data();
 
-        // Get all pages for dropdown
-        $pages = get_pages();
-        $pages_data = [];
-        foreach ($pages as $page) {
-            $pages_data[] = [
-                'id' => $page->ID,
-                'title' => $page->post_title,
-            ];
-        }
-
-        wp_localize_script('wbcd-admin-settings', 'wbcdAdminSettings', [
-            'formCount' => count($forms),
-            'currencies' => $currencies_data,
-            'pages' => $pages_data,
-            'i18n' => self::get_localized_strings(),
-            'validation' => Form_Validator::get_js_validation_rules(),
-            'validationMessages' => Form_Validator::get_js_validation_messages(),
-            'ajax' => [
-                'url' => admin_url('admin-ajax.php'),
-                'createPageNonce' => wp_create_nonce('wbcd_create_page'),
+        wp_localize_script(
+            'wbcd-admin-settings',
+            'wbcdAdminSettings',
+            [
+                'formCount' => count($forms),
+                'currencies' => $currencies_data,
+                'i18n' => self::get_localized_strings(),
+                'validation' => Form_Validator::get_js_validation_rules(),
+                'validationMessages' => Form_Validator::get_js_validation_messages(),
             ],
-        ]);
+        );
     }
 
     /**
@@ -125,25 +113,18 @@ class Settings
             'form' => __('Form', self::TEXT_DOMAIN),
             'formName' => __('Form Name:', self::TEXT_DOMAIN),
             'formNamePlaceholder' => __('e.g., General Donations', self::TEXT_DOMAIN),
-            'donationFormPage' => __('Donation Form Page:', self::TEXT_DOMAIN),
-            'targetPageDesc' => __('Page where the donate box will send donors (hosts the full donation form).', self::TEXT_DOMAIN),
             'supportedCurrencies' => __('Supported Currencies:', self::TEXT_DOMAIN),
             'addCurrency' => __('Add Currency:', self::TEXT_DOMAIN),
             'selectCurrencyOption' => __('-- Select a currency --', self::TEXT_DOMAIN),
             'beaconFormIdPlaceholder' => __('Beacon form ID', self::TEXT_DOMAIN),
             'addCurrencyBtn' => __('Add Currency', self::TEXT_DOMAIN),
             'removeForm' => __('Remove This Form', self::TEXT_DOMAIN),
-            'selectPage' => __('— Select Page —', self::TEXT_DOMAIN),
             'setAsDefault' => __('Set as default currency', self::TEXT_DOMAIN),
             'defaultCurrencyDesc' => __('Select a default currency by clicking the radio button. This currency will be used when geo-detection fails or detects an unsupported currency.', self::TEXT_DOMAIN),
-            'targetPageRequired' => __('A donation form page must be selected.', self::TEXT_DOMAIN),
             'currenciesRequired' => __('At least one currency with a form ID must be added.', self::TEXT_DOMAIN),
             'validationFailed' => __('Please fix the following errors before saving:', self::TEXT_DOMAIN),
             'addMoreCurrencies' => __('Add more currencies', self::TEXT_DOMAIN),
             'hideCurrencyForm' => __('Hide', self::TEXT_DOMAIN),
-            'createPagePrompt' => __('Enter the title for the new page:', self::TEXT_DOMAIN),
-            'createNewPageOption' => __('+ Create New Page...', self::TEXT_DOMAIN),
-            'createPageError' => __('Failed to create page. Please try again.', self::TEXT_DOMAIN),
         ];
     }
 
@@ -152,7 +133,7 @@ class Settings
      */
     public static function register()
     {
-        // New structure: array of forms, each with name, currency=>formId mappings, default_currency, and target_page_id
+        // New structure: array of forms, each with name, currency=>formId mappings, and default_currency
         $defaults = [self::get_default_form()];
 
         add_option(self::OPTION_BEACON_ACCOUNT, '');
@@ -454,40 +435,6 @@ class Settings
     }
 
     /**
-     * Get the target page URL for a specific form
-     * 
-     * @param string $form_name The form name to get the target page URL for
-     * @return string The target page URL
-     */
-    public static function get_target_page_url($form_name = '')
-    {
-        if (!empty($form_name)) {
-            $form = self::get_form_by_name($form_name);
-            if ($form) {
-                $target_page_id = self::get_form_property($form, 'target_page_id', 0);
-                if ($target_page_id > 0) {
-                    $url = get_permalink($target_page_id);
-                    if ($url) return $url;
-                }
-            }
-        }
-
-        // If no form name specified, or form not found, use the first form with a target page
-        $forms = self::get_all_forms();
-        foreach ($forms as $form) {
-            $target_page_id = self::get_form_property($form, 'target_page_id', 0);
-            if ($target_page_id > 0) {
-                $url = get_permalink($target_page_id);
-                if ($url) return $url;
-            }
-        }
-
-        // Reasonable fallback if not configured: look for /donation-form/; else home.
-        $maybe = home_url('/donation-form/');
-        return $maybe ?: home_url('/');
-    }
-
-    /**
      * Get the default currency for a specific form
      * 
      * @param string $form_name The form name to get the default currency for
@@ -510,46 +457,5 @@ class Settings
         }
 
         return '';
-    }
-
-    /**
-     * AJAX handler to create a new page
-     * Called when user selects "Create New Page..." option
-     */
-    public static function ajax_create_page()
-    {
-        // Security check
-        check_ajax_referer('wbcd_create_page', 'nonce');
-
-        // Permission check
-        if (!current_user_can('manage_options') || !current_user_can('publish_pages')) {
-            wp_send_json_error(['message' => __('Insufficient permissions.', self::TEXT_DOMAIN)]);
-        }
-
-        // Get and sanitize page title
-        $page_title = isset($_POST['page_title']) ? sanitize_text_field($_POST['page_title']) : '';
-
-        if (empty($page_title)) {
-            wp_send_json_error(['message' => __('Page title is required.', self::TEXT_DOMAIN)]);
-        }
-
-        // Create the page
-        $page_id = wp_insert_post([
-            'post_title'   => $page_title,
-            'post_content' => '',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-            'post_author'  => get_current_user_id(),
-        ]);
-
-        if (is_wp_error($page_id)) {
-            wp_send_json_error(['message' => $page_id->get_error_message()]);
-        }
-
-        // Return success with page ID and title
-        wp_send_json_success([
-            'page_id' => $page_id,
-            'page_title' => $page_title,
-        ]);
     }
 }

@@ -90,12 +90,16 @@ class Assets
         wp_enqueue_script('wbcd-donate-form');
     }
 
-    public static function enqueue_donation_box($form_name = '')
+    public static function enqueue_donation_box($form_name = '', $target_page_url = '')
     {
         $beaconAccountName = Settings::get_beacon_account();
         $forms = Settings::get_forms_by_currency($form_name);
         $symbols = Settings::get_currency_symbols();
-        $url   = Settings::get_target_page_url($form_name);
+
+        // Use provided target page URL or fallback to home/donation-form
+        if (empty($target_page_url)) {
+            $target_page_url = home_url('/donation-form/');
+        }
 
         // Get default currency for this specific form
         $default_currency = Settings::get_default_currency($form_name);
@@ -118,7 +122,7 @@ class Assets
         wp_localize_script('wbcd-donate-box', 'WPBCD_BOX_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $byCur,
-            'baseURL'         => $url,
+            'baseURL'         => $target_page_url,
             'defaultCurrency' => $default_currency,
         ]);
 

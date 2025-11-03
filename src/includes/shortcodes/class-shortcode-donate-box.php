@@ -19,6 +19,7 @@ class Shortcode_Donate_Box
 
         $atts = shortcode_atts([
             'form' => '', // Form name
+            'target_page_id' => 0, // Target page ID
             'primary_color' => '',
             'brand_color' => '',
             'title' => 'Make a donation',
@@ -33,6 +34,16 @@ class Shortcode_Donate_Box
         ], $atts, 'beaconcrm_donate_box');
 
         $form_name = $atts['form'];
+
+        // Get target page URL
+        $target_page_url = '';
+        $target_page_id = absint($atts['target_page_id']);
+        if ($target_page_id > 0) {
+            $permalink = get_permalink($target_page_id);
+            if ($permalink) {
+                $target_page_url = $permalink;
+            }
+        }
 
         // Parse custom params using utility
         $custom_params = \WBCD\Utils\Params_Parser::from_url_encoded($atts['params']);
@@ -52,11 +63,11 @@ class Shortcode_Donate_Box
             'buttonText' => $atts['button_text'],
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
-            'defaultPresets' => $default_presets
+            'defaultPresets' => $default_presets,
+            'targetPageUrl' => $target_page_url
         ];
 
         \WBCD\Assets::enqueue_front_base();
-        \WBCD\Assets::enqueue_donation_box($form_name);
 
         return Donate_Box_Render::render($form_name, $render_args);
     }
