@@ -20,7 +20,7 @@
         currencyIdInput: '.wbcd-currency-id',
         currencyTable: 'table tbody',
         currenciesSection: '.wbcd-currencies-section',
-        targetPageSelect: 'select[name^="wbcd_forms"][name$="[target_page_id]"]',
+        pageSelect: '.wbcd-page-select',
         validationError: '.wbcd-validation-error',
         hasErrorClass: 'wbcd-has-error'
     };
@@ -50,6 +50,76 @@
         });
 
         /**
+         * Handle "Create New Page..." selection
+         */
+        $(document).on('change', SELECTORS.pageSelect, function() {
+            var $select = $(this);
+            var selectedValue = $select.val();
+            
+            // Check if "Create New Page..." was selected
+            if (selectedValue === '-1') {
+                var pageTitle = prompt(i18n('createPagePrompt'));
+                
+                if (pageTitle && pageTitle.trim() !== '') {
+                    // Disable the select while creating
+                    $select.prop('disabled', true);
+                    
+                    // Make AJAX request to create the page
+                    $.ajax({
+                        url: wbcdAdminSettings.ajax.url,
+                        type: 'POST',
+                        data: {
+                            action: 'wbcd_create_page',
+                            nonce: wbcdAdminSettings.ajax.createPageNonce,
+                            page_title: pageTitle.trim()
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Update global pages array
+                                wbcdAdminSettings.pages.push({
+                                    id: response.data.page_id,
+                                    title: response.data.page_title
+                                });
+
+                                // Add new page to ALL form dropdowns (before the "Create New Page..." option)
+                                $(SELECTORS.pageSelect).each(function() {
+                                    var $dropdown = $(this);
+                                    var newOption = $('<option>', {
+                                        value: response.data.page_id,
+                                        text: response.data.page_title
+                                    });
+                                    $dropdown.find('option[value="-1"]').before(newOption);
+                                });
+                                
+                                // Select the newly created page in the current dropdown
+                                $select.val(response.data.page_id);
+                                
+                                // Clear any validation errors
+                                clearFormErrors($select.closest(SELECTORS.formItem));
+                            } else {
+                                alert(response.data.message || i18n('createPageError'));
+                                $select.val('0'); // Reset to "Select Page"
+                            }
+                        },
+                        error: function() {
+                            alert(i18n('createPageError'));
+                            $select.val('0'); // Reset to "Select Page"
+                        },
+                        complete: function() {
+                            $select.prop('disabled', false);
+                        }
+                    });
+                } else {
+                    // User cancelled or entered empty string
+                    $select.val('0'); // Reset to "Select Page"
+                }
+            } else {
+                // For any other selection (including existing pages), clear validation errors
+                clearFormErrors($select.closest(SELECTORS.formItem));
+            }
+        });
+
+        /**
          * Get i18n string
          */
         function i18n(key) {
@@ -60,16 +130,16 @@
          * Build currency table HTML
          */
         function buildCurrencyTableHtml() {
-            return '<table class="' + CSS_CLASSES.widefat + ' ' + CSS_CLASSES.currenciesTable + '">' +
-                '<thead><tr>' +
-                '<th class="' + CSS_CLASSES.colDefault + '">' + i18n('default') + '</th>' +
-                '<th>' + i18n('currency') + '</th>' +
-                '<th>' + i18n('beaconFormId') + '</th>' +
-                '<th class="' + CSS_CLASSES.colAction + '">' + i18n('action') + '</th>' +
-                '</tr></thead>' +
-                '<tbody></tbody>' +
-                '</table>' +
-                '<p class="description">' + i18n('defaultCurrencyDesc') + '</p>';
+            return `<table class="${CSS_CLASSES.widefat} ${CSS_CLASSES.currenciesTable}">
+                <thead><tr>
+                <th class="${CSS_CLASSES.colDefault}">${i18n('default')}</th>
+                <th>${i18n('currency')}</th>
+                <th>${i18n('beaconFormId')}</th>
+                <th class="${CSS_CLASSES.colAction}">${i18n('action')}</th>
+                </tr></thead>
+                <tbody></tbody>
+                </table>
+                <p class="description">${i18n('defaultCurrencyDesc')}</p>`;
         }
 
         /**
@@ -80,7 +150,7 @@
             $formItem.find(SELECTORS.validationError).remove();
             
             // Check if all errors are actually fixed
-            var hasTargetPage = $formItem.find(SELECTORS.targetPageSelect).val() !== '0';
+            var hasTargetPage = $formItem.find(SELECTORS.pageSelect).val() !== '0';
             var hasCurrencies = $formItem.find(SELECTORS.currenciesSection + ' ' + SELECTORS.currencyTable + ' tr').length > 0;
             
             // Always remove error state if both requirements are met
@@ -101,12 +171,12 @@
             $formItem.removeClass(SELECTORS.hasErrorClass);
 
             // Check if target page is selected
-            var targetPageId = $formItem.find(SELECTORS.targetPageSelect).val();
+            var targetPageId = $formItem.find(SELECTORS.pageSelect).val();
             if (!targetPageId || targetPageId === '0') {
                 isValid = false;
                 errors.push('Form #' + formNumber + ': ' + i18n('targetPageRequired'));
                 $formItem.addClass(SELECTORS.hasErrorClass);
-                $formItem.find(SELECTORS.targetPageSelect)
+                $formItem.find(SELECTORS.pageSelect)
                     .closest('p')
                     .append('<span class="wbcd-validation-error">' + i18n('targetPageRequired') + '</span>');
             }
@@ -166,14 +236,6 @@
         });
 
         /**
-         * Target page selection change handler - clear errors when page is selected
-         */
-        $(document).on('change', SELECTORS.targetPageSelect, function() {
-            var $formItem = $(this).closest(SELECTORS.formItem);
-            clearFormErrors($formItem);
-        });
-
-        /**
          * Show add currency form when "Add more currencies" button is clicked
          */
         $(document).on('click', SELECTORS.showAddCurrencyBtn, function() {
@@ -193,9 +255,12 @@
 
         /**
          * Validate Form ID
-         * Must be alphanumeric only, 6-12 characters
+         * Uses validation rules from PHP (single source of truth)
          */
         function validateFormId(formId) {
+            var validation = wbcdAdminSettings.validation;
+            var messages = wbcdAdminSettings.validationMessages;
+            
             // Remove whitespace
             formId = formId.trim();
             
@@ -203,23 +268,24 @@
             if (!formId) {
                 return {
                     valid: false,
-                    message: i18n('enterFormId')
+                    message: messages.enterFormId
                 };
             }
             
-            // Check length (6-12 characters)
-            if (formId.length < 6 || formId.length > 12) {
+            // Check length
+            if (formId.length < validation.formId.minLength || formId.length > validation.formId.maxLength) {
                 return {
                     valid: false,
-                    message: i18n('formIdLengthError')
+                    message: messages.formIdLengthError
                 };
             }
             
-            // Check alphanumeric only
-            if (!/^[a-zA-Z0-9]+$/.test(formId)) {
+            // Check pattern (alphanumeric only)
+            var pattern = new RegExp(validation.formId.pattern);
+            if (!pattern.test(formId)) {
                 return {
                     valid: false,
-                    message: i18n('formIdAlphanumericError')
+                    message: messages.formIdAlphanumericError
                 };
             }
             
@@ -271,15 +337,14 @@
 
             // Create the new table row with ALL columns including Default radio button
             // Display the FULL currency info in the Currency column
-            var row = '<tr>' +
-                '<td data-label="' + i18n('default') + '">' +
-                '<input type="radio" name="wbcd_forms[' + formIndex + '][default_currency]" value="' + currency + '" ' + 
-                (isFirstCurrency ? 'checked' : '') + ' title="' + i18n('setAsDefault') + '" />' +
-                '</td>' +
-                '<td data-label="' + i18n('currency') + '"><strong>' + currencyFullText + '</strong></td>' +
-                '<td data-label="' + i18n('beaconFormId') + '"><input type="text" name="wbcd_forms[' + formIndex + '][currencies][' + currency + ']" value="' + formId + '" class="regular-text" placeholder="' + i18n('beaconFormIdPlaceholder') + '" /></td>' +
-                '<td data-label="' + i18n('action') + '"><button type="button" class="button wbcd-remove-currency">' + i18n('remove') + '</button></td>' +
-                '</tr>';
+            const row = `<tr>
+                <td data-label="${i18n('default')}">
+                <input type="radio" name="wbcd_forms[${formIndex}][default_currency]" value="${currency}" ${isFirstCurrency ? 'checked' : ''} title="${i18n('setAsDefault')}" />
+                </td>
+                <td data-label="${i18n('currency')}"><strong>${currencyFullText}</strong></td>
+                <td data-label="${i18n('beaconFormId')}"><input type="text" name="wbcd_forms[${formIndex}][currencies][${currency}]" value="${formId}" class="regular-text" placeholder="${i18n('beaconFormIdPlaceholder')}" /></td>
+                <td data-label="${i18n('action')}"><button type="button" class="button wbcd-remove-currency">${i18n('remove')}</button></td>
+                </tr>`;
 
             $table.append(row);
 
@@ -387,13 +452,13 @@
          * Build page dropdown options HTML
          */
         function buildPageDropdownOptions() {
-            var html = '<option value="0">' + i18n('selectPage') + '</option>';
+            let html = `<option value="0">${i18n('selectPage')}</option>`;
             if (wbcdAdminSettings.pages && wbcdAdminSettings.pages.length > 0) {
-                for (var i = 0; i < wbcdAdminSettings.pages.length; i++) {
-                    var page = wbcdAdminSettings.pages[i];
-                    html += '<option value="' + page.id + '">' + page.title + '</option>';
-                }
+                wbcdAdminSettings.pages.forEach(function(page) {
+                    html += `<option value="${page.id}">${page.title}</option>`;
+                });
             }
+            html += `<option value="-1" style="font-style: italic;">${i18n('createNewPageOption') || '+ Create New Page...'}</option>`;
             return html;
         }
 
@@ -401,36 +466,46 @@
          * Build new form HTML
          */
         function buildNewFormHtml(newIndex) {
-            return '<div class="' + SELECTORS.formItem.substring(1) + '">' +
-                '<h3>' + i18n('form') + ' #' + (newIndex + 1) + '</h3>' +
-                '<p>' +
-                '<label for="wbcd_form_name_' + newIndex + '"><strong>' + i18n('formName') + '</strong></label><br>' +
-                '<input type="text" id="wbcd_form_name_' + newIndex + '" name="wbcd_forms[' + newIndex + '][name]" value="" class="regular-text" required placeholder="' + i18n('formNamePlaceholder') + '" />' +
-                '</p>' +
-                '<p>' +
-                '<label for="wbcd_form_target_page_' + newIndex + '"><strong>' + i18n('donationFormPage') + '</strong></label><br>' +
-                '<select name="wbcd_forms[' + newIndex + '][target_page_id]" id="wbcd_form_target_page_' + newIndex + '">' +
-                buildPageDropdownOptions() +
-                '</select>' +
-                '<br><span class="description">' + i18n('targetPageDesc') + '</span>' +
-                '</p>' +
-                '<div class="' + SELECTORS.currenciesSection.substring(1) + '">' +
-                '<h4>' + i18n('supportedCurrencies') + '</h4>' +
-                '<p><em>' + i18n('noCurrencies') + '</em></p>' +
-                '<button type="button" class="button ' + SELECTORS.showAddCurrencyBtn.substring(1) + '" data-form-index="' + newIndex + '">' + (i18n('addMoreCurrencies') || 'Add more currencies') + '</button>' +
-                '<div class="' + SELECTORS.addCurrencySection.substring(1) + '" data-form-index="' + newIndex + '">' +
-                '<label for="wbcd_new_currency_' + newIndex + '"><strong>' + i18n('addCurrency') + '</strong></label><br>' +
-                '<select id="wbcd_new_currency_' + newIndex + '" class="' + SELECTORS.currencySelect.substring(1) + '" data-form-index="' + newIndex + '">' +
-                '<option value="">' + i18n('selectCurrencyOption') + '</option>' +
-                '</select> ' +
-                '<input type="text" id="wbcd_new_currency_id_' + newIndex + '" class="' + SELECTORS.currencyIdInput.substring(1) + '" placeholder="' + i18n('beaconFormIdPlaceholder') + '" /> ' +
-                '<button type="button" class="button ' + SELECTORS.addCurrencyBtn.substring(1) + '" data-form-index="' + newIndex + '">' + i18n('addCurrencyBtn') + '</button>' +
-                '</div>' +
-                '</div>' +
-                '<p class="' + CSS_CLASSES.removeFormWrapper + '">' +
-                '<button type="button" class="button button-link-delete ' + SELECTORS.removeFormBtn.substring(1) + '" data-form-index="' + newIndex + '">' + i18n('removeForm') + '</button>' +
-                '</p>' +
-                '</div>';
+            const formItemClass = SELECTORS.formItem.substring(1);
+            const showAddCurrencyClass = SELECTORS.showAddCurrencyBtn.substring(1);
+            const addCurrencyClass = SELECTORS.addCurrencySection.substring(1);
+            const currencySelectClass = SELECTORS.currencySelect.substring(1);
+            const currencyIdClass = SELECTORS.currencyIdInput.substring(1);
+            const addCurrencyBtnClass = SELECTORS.addCurrencyBtn.substring(1);
+            const removeFormClass = SELECTORS.removeFormBtn.substring(1);
+            const currenciesClass = SELECTORS.currenciesSection.substring(1);
+            const pageSelectClass = SELECTORS.pageSelect.substring(1);
+            
+            return `<div class="${formItemClass}">
+                <h3>${i18n('form')} #${newIndex + 1}</h3>
+                <p>
+                <label for="wbcd_form_name_${newIndex}"><strong>${i18n('formName')}</strong></label><br>
+                <input type="text" id="wbcd_form_name_${newIndex}" name="wbcd_forms[${newIndex}][name]" value="" class="regular-text" required placeholder="${i18n('formNamePlaceholder')}" />
+                </p>
+                <p>
+                <label for="wbcd_form_target_page_${newIndex}"><strong>${i18n('donationFormPage')}</strong></label><br>
+                <select name="wbcd_forms[${newIndex}][target_page_id]" id="wbcd_form_target_page_${newIndex}" class="${pageSelectClass}">
+                ${buildPageDropdownOptions()}
+                </select>
+                <br><span class="description">${i18n('targetPageDesc')}</span>
+                </p>
+                <div class="${currenciesClass}">
+                <h4>${i18n('supportedCurrencies')}</h4>
+                <p><em>${i18n('noCurrencies')}</em></p>
+                <button type="button" class="button ${showAddCurrencyClass}" data-form-index="${newIndex}">${i18n('addMoreCurrencies') || 'Add more currencies'}</button>
+                <div class="${addCurrencyClass}" data-form-index="${newIndex}">
+                <label for="wbcd_new_currency_${newIndex}"><strong>${i18n('addCurrency')}</strong></label><br>
+                <select id="wbcd_new_currency_${newIndex}" class="${currencySelectClass}" data-form-index="${newIndex}">
+                <option value="">${i18n('selectCurrencyOption')}</option>
+                </select> 
+                <input type="text" id="wbcd_new_currency_id_${newIndex}" class="${currencyIdClass}" placeholder="${i18n('beaconFormIdPlaceholder')}" /> 
+                <button type="button" class="button ${addCurrencyBtnClass}" data-form-index="${newIndex}">${i18n('addCurrencyBtn')}</button>
+                </div>
+                </div>
+                <p class="${CSS_CLASSES.removeFormWrapper}">
+                <button type="button" class="button button-link-delete ${removeFormClass}" data-form-index="${newIndex}">${i18n('removeForm')}</button>
+                </p>
+                </div>`;
         }
 
         /**

@@ -18,6 +18,9 @@ define('WPBCD_URL',            plugin_dir_url(__FILE__));
 
 // --- Includes ---
 require_once WPBCD_PATH . 'includes/class-constants.php';
+require_once WPBCD_PATH . 'includes/class-form-validator.php';
+require_once WPBCD_PATH . 'includes/class-form-sanitizer.php';
+require_once WPBCD_PATH . 'includes/class-settings-renderer.php';
 require_once WPBCD_PATH . 'includes/class-settings.php';
 require_once WPBCD_PATH . 'includes/class-assets.php';
 require_once WPBCD_PATH . 'includes/class-geoip-dependency.php';
@@ -210,6 +213,7 @@ add_action('admin_enqueue_scripts', ['WBCD\\Settings', 'enqueue_admin_assets']);
 add_action('admin_notices', ['WBCD\\GeoIP_Dependency', 'admin_notices']);
 add_action('admin_footer', ['WBCD\\GeoIP_Dependency', 'enqueue_dismiss_script']);
 add_action('wp_ajax_wbcd_dismiss_geoip_notice', ['WBCD\\GeoIP_Dependency', 'dismiss_notice']);
+add_action('wp_ajax_wbcd_create_page', ['WBCD\\Settings', 'ajax_create_page']);
 
 // Elementor Widgets
 add_action('elementor/widgets/register', function ($widgets_manager) {
