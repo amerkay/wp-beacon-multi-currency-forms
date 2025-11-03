@@ -31,7 +31,7 @@
         },
         size: {
           type: 'string',
-          default: 'md'
+          default: 'md' // Must match WBCD\Constants::DEFAULT_BUTTON_SIZE
         },
         amount: {
           type: 'string',

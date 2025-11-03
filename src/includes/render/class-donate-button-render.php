@@ -13,7 +13,7 @@ class Donate_Button_Render
         $args = wp_parse_args($args, [
             'color' => '',
             'text' => __('Donate', 'wp-beacon-crm-donate'),
-            'size' => 'md',
+            'size' => \WBCD\Constants::get_default_button_size(),
             'amount' => '',
             'frequency' => '',
             'currency' => '',
@@ -21,8 +21,8 @@ class Donate_Button_Render
         ]);
 
         // Validate size
-        $valid_sizes = ['md', 'lg', 'xl'];
-        $size = in_array($args['size'], $valid_sizes, true) ? $args['size'] : 'md';
+        $valid_sizes = \WBCD\Constants::get_valid_button_sizes();
+        $size = in_array($args['size'], $valid_sizes, true) ? $args['size'] : \WBCD\Constants::get_default_button_size();
 
         // Get the target URL from settings
         $base_url = \WBCD\Settings::get_target_page_url($form_name);

@@ -15,6 +15,8 @@ class Shortcode_Donate_Box
 
     public static function handle($atts = [])
     {
+        $default_presets = \WBCD\Constants::get_all_presets();
+
         $atts = shortcode_atts([
             'form' => '', // Form name
             'primary_color' => '',
@@ -25,46 +27,21 @@ class Shortcode_Donate_Box
             'button_text' => 'Donate now →',
             'params' => '', // JSON string or serialized array of custom params
             'frequencies' => 'single,monthly,annual', // Comma-separated list
-            'presets_single' => '10,20,30',
-            'presets_monthly' => '5,10,15',
-            'presets_annual' => '50,100,200',
+            'presets_single' => implode(',', $default_presets['single']),
+            'presets_monthly' => implode(',', $default_presets['monthly']),
+            'presets_annual' => implode(',', $default_presets['annual']),
         ], $atts, 'beaconcrm_donate_box');
 
         $form_name = $atts['form'];
 
-        // Parse custom params from URL-encoded format
-        $custom_params = [];
-        if (!empty($atts['params'])) {
-            // Parse URL-encoded format like "key1=value1&key2=value2"
-            parse_str($atts['params'], $custom_params);
-        }
+        // Parse custom params using utility
+        $custom_params = \WBCD\Utils\Params_Parser::from_url_encoded($atts['params']);
 
-        // Parse allowed frequencies
-        $allowed_frequencies = array_map('trim', explode(',', $atts['frequencies']));
-        $allowed_frequencies = array_filter($allowed_frequencies, function ($f) {
-            return in_array($f, ['single', 'monthly', 'annual']);
-        });
-        if (empty($allowed_frequencies)) {
-            $allowed_frequencies = ['single', 'monthly', 'annual'];
-        }
+        // Parse allowed frequencies using utility
+        $allowed_frequencies = \WBCD\Utils\Frequency_Parser::from_csv($atts['frequencies']);
 
-        // Parse default presets
-        $default_presets = [];
-        foreach (['single', 'monthly', 'annual'] as $freq) {
-            $preset_key = 'presets_' . $freq;
-            if (!empty($atts[$preset_key])) {
-                $amounts = array_map('trim', explode(',', $atts[$preset_key]));
-                $amounts = array_map('floatval', $amounts);
-                $amounts = array_filter($amounts, function ($n) {
-                    return $n > 0;
-                });
-                $default_presets[$freq] = array_values($amounts);
-            }
-        }
-        // Set defaults if not specified
-        if (empty($default_presets['single'])) $default_presets['single'] = [10, 20, 30];
-        if (empty($default_presets['monthly'])) $default_presets['monthly'] = [5, 10, 15];
-        if (empty($default_presets['annual'])) $default_presets['annual'] = [50, 100, 200];
+        // Parse default presets using utility
+        $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($atts);
 
         $render_args = [
             'primaryColor' => $atts['primary_color'],

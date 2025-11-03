@@ -1,101 +1,157 @@
-/* ---- Shared tokens ---- */
-#wpbcd-page,
-#wpbcd-donate {
-    --wpbcd-border: #e5e7eb;
+/* Design Tokens - Colors injected via PHP from Constants class */
+:root {
+    /* Brand colors (synced with src/includes/class-constants.php) */
+    --wpbcd-brand: #676767;
+    --wpbcd-primary: #FF7B1A;
     --wpbcd-text: #111827;
+    --wpbcd-border: #e5e7eb;
     --wpbcd-sub: #6b7280;
     --wpbcd-bg: #fff;
+    --wpbcd-focus: #1f2937;
+
+    /* Additional colors */
+    --wpbcd-white: #fff;
+    --wpbcd-black: #111;
+    --wpbcd-gray-300: #d1d5db;
+    --wpbcd-gray-500: #6b7280;
+
+    /* Spacing scale */
+    --wpbcd-space-1: 4px;
+    --wpbcd-space-2: 6px;
+    --wpbcd-space-3: 8px;
+    --wpbcd-space-4: 10px;
+    --wpbcd-space-5: 12px;
+    --wpbcd-space-6: 24px;
+    --wpbcd-space-7: 28px;
+    --wpbcd-space-8: 36px;
+
+    /* Border radius */
+    --wpbcd-radius-sm: 8px;
+    --wpbcd-radius-lg: 16px;
+
+    /* Typography scale */
+    --wpbcd-text-xs: 13px;
+    --wpbcd-text-sm: 14px;
+    --wpbcd-text-base: 16px;
+    --wpbcd-text-lg: 18px;
+    --wpbcd-text-xl: 19px;
+    --wpbcd-text-2xl: 20px;
+    --wpbcd-text-3xl: 22px;
+
+    /* Transitions */
+    --wpbcd-transition-fast: 150ms;
+    --wpbcd-transition-base: 200ms;
+
+    /* Effects */
+    --wpbcd-hover-opacity: 0.85;
+    --wpbcd-focus-ring: 2px solid var(--wpbcd-focus);
+    --wpbcd-focus-offset: 2px;
+
+    /* Breakpoints (for reference - use in @media queries) */
+    /* mobile: 480px, tablet: 520px */
+}
+
+/* Base styles */
+#wpbcd-page,
+#wpbcd-donate {
     font-family: inherit;
 }
 
-/* ---- Donation Form Page styles ---- */
+/* Shared focus ring for all interactive elements */
+#wpbcd-donate .wpbcd-tab:focus-visible,
+#wpbcd-donate .wpbcd-link:focus-visible,
+#wpbcd-donate .wpbcd-select:focus-visible,
+#wpbcd-page .wpbcd-select:focus-visible,
+.wpbcd-button:focus-visible {
+    outline: var(--wpbcd-focus-ring);
+    outline-offset: var(--wpbcd-focus-offset);
+}
+
+.wpbcd-button:focus-visible {
+    outline-color: var(--wpbcd-button-color, var(--wpbcd-primary));
+}
+
+/* Donation Form Page */
 #wpbcd-page .wpbcd-toolbar {
     display: flex;
     align-items: center;
     justify-content: end;
-    gap: 10px;
-    padding: 0 0 0px 0;
+    gap: var(--wpbcd-space-4);
     width: 100%;
 }
 
 #wpbcd-page .wpbcd-label {
     font-weight: 600;
-    color: var(--wpbcd-text)
+    color: var(--wpbcd-text);
 }
 
 #wpbcd-page .wpbcd-form-wrap {
-    padding: 6px 0
+    padding: var(--wpbcd-space-2) 0;
 }
 
-@media (max-width:520px) {
+@media (max-width: 520px) {
     #wpbcd-page .wpbcd-toolbar {
-        flex-wrap: wrap
+        flex-wrap: wrap;
     }
 }
 
-/* ---- Donation CTA styles (from your snippet) ---- */
-#wpbcd-donate {
-    --wpbcd-text: #222;
-    --wpbcd-brand: #676767;
-    --wpbcd-muted: #9ca3af;
-    --wpbcd-focus: #1f2937;
-    --wpbcd-primary: #FF7B1A;
-}
-
+/* Donation CTA Box */
 #wpbcd-donate .wpbcd-card {
     background: var(--wpbcd-bg);
     border: 1px solid var(--wpbcd-border);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+    border-radius: var(--wpbcd-radius-lg);
+    padding: var(--wpbcd-space-6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 #wpbcd-donate .wpbcd-title {
     margin: 0 0 2px;
-    font-size: 22px;
+    font-size: var(--wpbcd-text-3xl);
     line-height: 1.2;
     color: var(--wpbcd-text);
 }
 
 #wpbcd-donate .wpbcd-sub {
-    margin: 0 0 12px;
+    margin: 0 0 var(--wpbcd-space-5);
     color: var(--wpbcd-sub);
 }
 
 #wpbcd-donate .wpbcd-section,
 #wpbcd-donate .wpbcd-amount {
-    margin-bottom: 12px;
+    margin-bottom: var(--wpbcd-space-5);
 }
 
 #wpbcd-donate .wpbcd-amount-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: var(--wpbcd-space-5);
+    margin-bottom: var(--wpbcd-space-3);
 }
 
 #wpbcd-donate .wpbcd-amount-label {
     font-weight: 600;
 }
 
-/* DRY tab system */
+/* Tab System */
 #wpbcd-donate .wpbcd-tabs {
     border: 1px solid var(--wpbcd-border);
-    border-radius: 8px;
+    border-radius: var(--wpbcd-radius-sm);
     overflow: hidden;
-    background: #fff;
+    background: var(--wpbcd-white);
 }
 
 #wpbcd-donate .wpbcd-tab {
     appearance: none;
-    background: #fff;
-    color: #111;
+    background: var(--wpbcd-white);
+    color: var(--wpbcd-black);
     font-weight: 600;
-    padding: 10px 12px;
+    padding: var(--wpbcd-space-4) var(--wpbcd-space-5);
     cursor: pointer;
     border: none;
-    transition: background .15s ease, color .15s ease, transform .15s ease;
+    transition: background var(--wpbcd-transition-fast) ease,
+        color var(--wpbcd-transition-fast) ease,
+        transform var(--wpbcd-transition-fast) ease;
     width: 100%;
 }
 
@@ -103,15 +159,10 @@
     transform: translateY(-1px);
 }
 
-#wpbcd-donate .wpbcd-tab:focus-visible {
-    outline: 2px solid var(--wpbcd-focus);
-    outline-offset: 2px;
-}
-
 #wpbcd-donate .wpbcd-tab[aria-selected="true"],
 #wpbcd-donate .wpbcd-tab[aria-pressed="true"] {
     background: var(--wpbcd-brand);
-    color: #fff;
+    color: var(--wpbcd-white);
     cursor: default;
 }
 
@@ -120,7 +171,7 @@
     transform: none;
 }
 
-/* Row variant (frequency) */
+/* Tab variants */
 #wpbcd-donate .wpbcd-tabs--row {
     display: flex;
     gap: 0;
@@ -131,7 +182,6 @@
     border-left: 1px solid var(--wpbcd-border);
 }
 
-/* Grid variant (amounts) - Desktop only */
 @media (min-width: 481px) {
     #wpbcd-donate .wpbcd-tabs--grid {
         display: grid;
@@ -148,25 +198,24 @@
     }
 }
 
-/* Select / dropdown */
+/* Form Controls */
 #wpbcd-page .wpbcd-select,
 #wpbcd-donate .wpbcd-select {
     border: 1px solid var(--wpbcd-border);
-    border-radius: 8px;
-    padding: 6px 10px;
-    background: #fff;
+    border-radius: var(--wpbcd-radius-sm);
+    padding: var(--wpbcd-space-2) var(--wpbcd-space-4);
+    background: var(--wpbcd-white);
     font-weight: 600;
     width: auto;
 }
 
-/* Custom amount */
 #wpbcd-donate .wpbcd-input-wrap {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: var(--wpbcd-space-2);
     border: 1px solid var(--wpbcd-border);
-    border-radius: 8px;
-    padding: 8px 10px;
+    border-radius: var(--wpbcd-radius-sm);
+    padding: var(--wpbcd-space-3) var(--wpbcd-space-4);
     max-width: 240px;
 }
 
@@ -180,71 +229,39 @@
     width: 100%;
     border: none;
     outline: none;
-    font-size: 16px;
-    padding: 4px;
+    font-size: var(--wpbcd-text-base);
+    padding: var(--wpbcd-space-1);
 }
 
 #wpbcd-donate .wpbcd-link {
     background: none;
     border: none;
     color: var(--wpbcd-brand);
-    padding: 0;
+    padding: var(--wpbcd-space-5) 0;
     font-weight: 600;
     cursor: pointer;
     border-radius: 0;
     text-decoration: underline;
-    padding: 12px 0;
 }
 
-#wpbcd-donate .wpbcd-link:focus-visible {
-    outline: 2px solid var(--wpbcd-focus);
-    outline-offset: 2px;
-}
-
-/* CTA */
+/* CTA Actions */
 #wpbcd-donate .wpbcd-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 10px;
+    gap: var(--wpbcd-space-4);
+    margin-top: var(--wpbcd-space-4);
     flex-wrap: wrap;
-}
-
-#wpbcd-donate .wpbcd-btn {
-    border: 1px solid var(--wpbcd-border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-weight: 600;
-    cursor: pointer;
-    background: #fff;
-}
-
-#wpbcd-donate .wpbcd-btn-next {
-    background: var(--wpbcd-primary);
-    color: #fff;
-    border-color: var(--wpbcd-primary);
-}
-
-#wpbcd-donate .wpbcd-btn-next:hover {
-    opacity: 85%;
-}
-
-#wpbcd-donate .wpbcd-btn-next[disabled] {
-    background: #d1d5db;
-    border-color: #d1d5db;
-    color: #6b7280;
-    cursor: not-allowed;
 }
 
 #wpbcd-donate .wpbcd-note {
     color: var(--wpbcd-sub);
-    font-size: 13px;
+    font-size: var(--wpbcd-text-xs);
 }
 
-/* Responsive */
-@media (max-width:480px) {
+/* Responsive Adjustments */
+@media (max-width: 480px) {
     #wpbcd-donate .wpbcd-title {
-        font-size: 19px
+        font-size: var(--wpbcd-text-xl);
     }
 
     #wpbcd-donate .wpbcd-tabs--grid {
@@ -272,52 +289,57 @@
     }
 }
 
-/* ---- Donation Button styles ---- */
+/* Button System */
 .wpbcd-button-wrap {
-    --wpbcd-button-color: #FF7B1A;
     display: block;
-    margin: 6px 0;
+    margin: var(--wpbcd-space-2) 0;
 }
 
 .wpbcd-button {
     display: inline-block;
-    background: var(--wpbcd-button-color);
-    color: #fff;
+    background: var(--wpbcd-button-color, var(--wpbcd-primary));
+    color: var(--wpbcd-white);
     font-weight: 600;
     text-decoration: none;
-    border-radius: 8px;
-    border: 1px solid var(--wpbcd-button-color);
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    border-radius: var(--wpbcd-radius-sm);
+    border: 1px solid var(--wpbcd-button-color, var(--wpbcd-primary));
+    transition: opacity var(--wpbcd-transition-base) ease,
+        transform var(--wpbcd-transition-fast) ease;
     cursor: pointer;
     text-align: center;
     line-height: 1.2;
+    padding: var(--wpbcd-space-4) 20px;
+    font-size: var(--wpbcd-text-base);
 }
 
 .wpbcd-button:hover {
-    opacity: 85%;
-}
-
-.wpbcd-button:focus-visible {
-    outline: 2px solid var(--wpbcd-button-color);
-    outline-offset: 2px;
+    opacity: var(--wpbcd-hover-opacity);
 }
 
 .wpbcd-button:active {
     transform: translateY(0);
 }
 
-/* Button sizes */
+.wpbcd-button[disabled] {
+    background: var(--wpbcd-gray-300);
+    border-color: var(--wpbcd-gray-300);
+    color: var(--wpbcd-gray-500);
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/* Button size variants (md is default, defined above) */
 .wpbcd-button--md {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: var(--wpbcd-space-4) 20px;
+    font-size: var(--wpbcd-text-base);
 }
 
 .wpbcd-button--lg {
-    padding: 14px 28px;
-    font-size: 18px;
+    padding: 14px var(--wpbcd-space-7);
+    font-size: var(--wpbcd-text-lg);
 }
 
 .wpbcd-button--xl {
-    padding: 18px 36px;
-    font-size: 20px;
+    padding: 18px var(--wpbcd-space-8);
+    font-size: var(--wpbcd-text-2xl);
 }

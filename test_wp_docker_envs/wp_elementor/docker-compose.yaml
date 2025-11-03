@@ -22,7 +22,7 @@ services:
       # Mount the plugin source into the WP plugins directory for easy testing
       - ../../src/:/var/www/html/wp-content/plugins/wp-beacon-crm-donate:ro
       # Used to setup site on first run, restore from backup
-      - ../wp_stock/duplicator_archive/:/tmp/duplicator_archive:ro
+      - ./duplicator_archive/:/tmp/duplicator_archive:ro
   db:
     image: mariadb:latest
     command: "--default-authentication-plugin=mysql_native_password"

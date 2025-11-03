@@ -12,7 +12,10 @@
     return;
   }
 
-  var DEFAULT_PRESETS = { single:[10,20,30], monthly:[5,10,15], annual:[50,100,200] };
+  // Get default presets from localized constants with fallback
+  var DEFAULT_PRESETS = (typeof WBCD_CONSTANTS !== 'undefined' && WBCD_CONSTANTS.presets) 
+    ? WBCD_CONSTANTS.presets 
+    : { single:[10,20,30], monthly:[5,10,15], annual:[50,100,200] };
 
   // Determine default currency from available ones
   var availableCurrencies = Object.keys(formsByCurrency);

@@ -14,12 +14,8 @@ class Donate_CTA_Render
             'primaryColor' => '',
             'brandColor' => '',
             'customParams' => [],
-            'allowedFrequencies' => ['single', 'monthly', 'annual'],
-            'defaultPresets' => [
-                'single' => [10, 20, 30],
-                'monthly' => [5, 10, 15],
-                'annual' => [50, 100, 200]
-            ],
+            'allowedFrequencies' => \WBCD\Constants::get_default_frequencies(),
+            'defaultPresets' => \WBCD\Constants::get_all_presets(),
             'title' => __('Make a donation', 'wp-beacon-crm-donate'),
             'subtitle' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
             'noticeText' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
@@ -59,11 +55,7 @@ class Donate_CTA_Render
         $allowed_frequencies_json = wp_json_encode($allowed_frequencies);
 
         // Prepare default presets for JavaScript
-        $default_presets = !empty($args['defaultPresets']) ? $args['defaultPresets'] : [
-            'single' => [10, 20, 30],
-            'monthly' => [5, 10, 15],
-            'annual' => [50, 100, 200]
-        ];
+        $default_presets = !empty($args['defaultPresets']) ? $args['defaultPresets'] : \WBCD\Constants::get_all_presets();
         $default_presets_json = wp_json_encode($default_presets);
 
         ob_start();
@@ -118,7 +110,7 @@ class Donate_CTA_Render
                 </div>
 
                 <div class="wpbcd-actions">
-                    <button id="wpbcd-next" class="wpbcd-btn wpbcd-btn-next" type="button" aria-label="<?php esc_attr_e('Continue to secure form', 'wp-beacon-crm-donate'); ?>" disabled><?php echo esc_html($args['buttonText']); ?></button>
+                    <button id="wpbcd-next" class="wpbcd-button wpbcd-button--md" type="button" aria-label="<?php esc_attr_e('Continue to secure form', 'wp-beacon-crm-donate'); ?>" disabled><?php echo esc_html($args['buttonText']); ?></button>
                     <div class="wpbcd-note"><?php echo esc_html($args['noticeText']); ?></div>
                 </div>
             </div>

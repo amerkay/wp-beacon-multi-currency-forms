@@ -28,12 +28,8 @@ class Shortcode_Donate_Button
 
         $form_name = $atts['form'];
 
-        // Parse custom params from URL-encoded format
-        $custom_params = [];
-        if (!empty($atts['params'])) {
-            // Parse URL-encoded format like "key1=value1&key2=value2"
-            parse_str($atts['params'], $custom_params);
-        }
+        // Parse custom params using utility
+        $custom_params = \WBCD\Utils\Params_Parser::from_url_encoded($atts['params']);
 
         $render_args = [
             'color' => $atts['color'],

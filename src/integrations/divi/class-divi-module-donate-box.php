@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WBCD\Integrations\Divi;
 
 if (! class_exists('ET_Builder_Module')) {
@@ -9,13 +8,11 @@ if (! class_exists('ET_Builder_Module')) {
 
 if (! defined('ABSPATH')) exit;
 
-class Donate_Box_Module extends \ET_Builder_Module
+class Donate_Box_Module extends Abstract_WBCD_Divi_Module
 {
     public $slug       = 'wbcd_divi_donate_box';
     public $vb_support = 'off';
     public $name       = '';
-
-    private $replace_notice = 'Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.';
 
     function init()
     {
@@ -24,157 +21,44 @@ class Donate_Box_Module extends \ET_Builder_Module
 
     public function get_fields()
     {
-        $forms = \WBCD\Settings::get_forms_for_dropdown();
-        $options = ['' => __('Default (First form)', 'wp-beacon-crm-donate')];
-
-        foreach ($forms as $name => $label) {
-            $options[$name] = $label;
-        }
-
-        return [
-            'form_name' => [
-                'label' => __('Select Form', 'wp-beacon-crm-donate'),
-                'type' => 'select',
-                'options' => $options,
-                'default' => '',
-                'description' => __('Choose which donation form to use', 'wp-beacon-crm-donate'),
-            ],
-            'title' => [
-                'label' => __('Title', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => __('Make a donation', 'wp-beacon-crm-donate'),
-            ],
-            'subtitle' => [
-                'label' => __('Subtitle', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
-            ],
-            'notice_text' => [
-                'label' => __('Notice Text', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
-            ],
-            'button_text' => [
-                'label' => __('Button Text', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => __('Donate now →', 'wp-beacon-crm-donate'),
-                'description' => __('Text shown on the donate button', 'wp-beacon-crm-donate'),
-            ],
-            'custom_params' => [
-                'label' => __('Custom URL Parameters', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => '',
-                'description' => __('Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate'),
-            ],
-
-            // Defaults that get replaced by the JSON XHR call
-            'frequency_single' => [
-                'label' => __('Show Single Frequency', 'wp-beacon-crm-donate'),
-                'type' => 'yes_no_button',
-                'options' => [
-                    'on' => __('Yes', 'wp-beacon-crm-donate'),
-                    'off' => __('No', 'wp-beacon-crm-donate'),
+        return array_merge(
+            [
+                'form_name' => $this->get_form_selection_field(),
+                'title' => [
+                    'label' => __('Title', 'wp-beacon-crm-donate'),
+                    'type' => 'text',
+                    'default' => __('Make a donation', 'wp-beacon-crm-donate'),
                 ],
-                'default' => 'on',
-                'description' => __('Show single donation frequency option. ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-            'frequency_monthly' => [
-                'label' => __('Show Monthly Frequency', 'wp-beacon-crm-donate'),
-                'type' => 'yes_no_button',
-                'options' => [
-                    'on' => __('Yes', 'wp-beacon-crm-donate'),
-                    'off' => __('No', 'wp-beacon-crm-donate'),
+                'subtitle' => [
+                    'label' => __('Subtitle', 'wp-beacon-crm-donate'),
+                    'type' => 'text',
+                    'default' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
                 ],
-                'default' => 'on',
-                'description' => __('Show monthly donation frequency option. ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-            'frequency_annual' => [
-                'label' => __('Show Annual Frequency', 'wp-beacon-crm-donate'),
-                'type' => 'yes_no_button',
-                'options' => [
-                    'on' => __('Yes', 'wp-beacon-crm-donate'),
-                    'off' => __('No', 'wp-beacon-crm-donate'),
+                'notice_text' => [
+                    'label' => __('Notice Text', 'wp-beacon-crm-donate'),
+                    'type' => 'text',
+                    'default' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
                 ],
-                'default' => 'on',
-                'description' => __('Show annual donation frequency option. ' . $this->replace_notice, 'wp-beacon-crm-donate'),
+                'button_text' => [
+                    'label' => __('Button Text', 'wp-beacon-crm-donate'),
+                    'type' => 'text',
+                    'default' => __('Donate now →', 'wp-beacon-crm-donate'),
+                    'description' => __('Text shown on the donate button', 'wp-beacon-crm-donate'),
+                ],
+                'custom_params' => $this->get_custom_params_field(__('Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the full page form on redirect.', 'wp-beacon-crm-donate')),
             ],
-            'presets_single' => [
-                'label' => __('Single Preset Amounts', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => '10, 20, 30',
-                'description' => __('Comma-separated amounts for single donations (e.g., 10, 20, 30). ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-            'presets_monthly' => [
-                'label' => __('Monthly Preset Amounts', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => '5, 10, 15',
-                'description' => __('Comma-separated amounts for monthly donations (e.g., 5, 10, 15). ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-            'presets_annual' => [
-                'label' => __('Annual Preset Amounts', 'wp-beacon-crm-donate'),
-                'type' => 'text',
-                'default' => '50, 100, 200',
-                'description' => __('Comma-separated amounts for annual donations (e.g., 50, 100, 200). ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-            'primary_color' => [
-                'label' => __('Primary Color', 'wp-beacon-crm-donate'),
-                'type' => 'color-alpha',
-                'default' => '',
-                'description' => __('Default primary color. ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-            'brand_color' => [
-                'label' => __('Brand Color', 'wp-beacon-crm-donate'),
-                'type' => 'color-alpha',
-                'default' => '',
-                'description' => __('Default brand color. ' . $this->replace_notice, 'wp-beacon-crm-donate'),
-            ],
-        ];
+            $this->get_frequency_fields(),
+            $this->get_preset_fields(),
+            $this->get_color_fields()
+        );
     }
 
     public function render($attrs = [], $content = null, $render_slug = '')
     {
-        $form_name = isset($this->props['form_name']) ? $this->props['form_name'] : '';
-
-        // Parse custom params from URL-encoded format
-        $custom_params = [];
-        if (!empty($this->props['custom_params'])) {
-            // Parse URL-encoded format
-            parse_str($this->props['custom_params'], $custom_params);
-        }
-
-        // Parse allowed frequencies
-        $allowed_frequencies = [];
-        if (isset($this->props['frequency_single']) && $this->props['frequency_single'] === 'on') {
-            $allowed_frequencies[] = 'single';
-        }
-        if (isset($this->props['frequency_monthly']) && $this->props['frequency_monthly'] === 'on') {
-            $allowed_frequencies[] = 'monthly';
-        }
-        if (isset($this->props['frequency_annual']) && $this->props['frequency_annual'] === 'on') {
-            $allowed_frequencies[] = 'annual';
-        }
-        // Fallback to all if none selected
-        if (empty($allowed_frequencies)) {
-            $allowed_frequencies = ['single', 'monthly', 'annual'];
-        }
-
-        // Parse default presets
-        $default_presets = [];
-        foreach (['single', 'monthly', 'annual'] as $freq) {
-            $preset_key = 'presets_' . $freq;
-            if (isset($this->props[$preset_key]) && !empty($this->props[$preset_key])) {
-                $amounts = array_map('trim', explode(',', $this->props[$preset_key]));
-                $amounts = array_map('floatval', $amounts);
-                $amounts = array_filter($amounts, function ($n) {
-                    return $n > 0;
-                });
-                $default_presets[$freq] = array_values($amounts);
-            }
-        }
-        // Set defaults if not specified
-        if (empty($default_presets['single'])) $default_presets['single'] = [10, 20, 30];
-        if (empty($default_presets['monthly'])) $default_presets['monthly'] = [5, 10, 15];
-        if (empty($default_presets['annual'])) $default_presets['annual'] = [50, 100, 200];
+        $form_name = $this->get_form_name_from_props();
+        $custom_params = $this->parse_custom_params_from_props();
+        $allowed_frequencies = $this->parse_frequencies_from_props();
+        $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($this->props);
 
         $render_args = [
             'primaryColor' => isset($this->props['primary_color']) ? $this->props['primary_color'] : '',
@@ -188,7 +72,7 @@ class Donate_Box_Module extends \ET_Builder_Module
             'defaultPresets' => $default_presets
         ];
 
-        \WBCD\Assets::enqueue_front_base();
+        $this->enqueue_base_assets();
         \WBCD\Assets::enqueue_donation_cta($form_name);
         return \WBCD\Render\Donate_CTA_Render::render($form_name, $render_args);
     }

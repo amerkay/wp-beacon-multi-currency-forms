@@ -54,26 +54,27 @@
         },
         allowedFrequencies: {
           type: 'array',
-          default: ['single', 'monthly', 'annual']
+          default: ['single', 'monthly', 'annual'] // Must match WBCD\Constants::DEFAULT_FREQUENCIES
         },
+        // NOTE: Preset defaults below must match WBCD\Constants preset values
         presetsSingleStr: {
           type: 'string',
-          default: '10, 20, 30'
+          default: '10, 20, 30' // Must match WBCD\Constants::PRESET_SINGLE
         },
         presetsMonthlyStr: {
           type: 'string',
-          default: '5, 10, 15'
+          default: '5, 10, 15' // Must match WBCD\Constants::PRESET_MONTHLY
         },
         presetsAnnualStr: {
           type: 'string',
-          default: '50, 100, 200'
+          default: '50, 100, 200' // Must match WBCD\Constants::PRESET_ANNUAL
         },
         defaultPresets: {
           type: 'object',
           default: {
-            single: [10, 20, 30],
-            monthly: [5, 10, 15],
-            annual: [50, 100, 200]
+            single: [10, 20, 30],    // Must match WBCD\Constants::PRESET_SINGLE
+            monthly: [5, 10, 15],    // Must match WBCD\Constants::PRESET_MONTHLY
+            annual: [50, 100, 200]   // Must match WBCD\Constants::PRESET_ANNUAL
           }
         }
       },
@@ -302,7 +303,7 @@
                 el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Primary Color'),
                 el('input', {
                   type: 'color',
-                  value: attrs.primaryColor || '#FF7B1A',
+                  value: attrs.primaryColor || (window.WBCD_CONSTANTS && window.WBCD_CONSTANTS.colors ? window.WBCD_CONSTANTS.colors.primary : '#FF7B1A'),
                   onChange: function(e) {
                     setAttributes({ primaryColor: e.target.value });
                   },
@@ -319,7 +320,7 @@
                 el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Brand Color'),
                 el('input', {
                   type: 'color',
-                  value: attrs.brandColor || '#676767',
+                  value: attrs.brandColor || (window.WBCD_CONSTANTS && window.WBCD_CONSTANTS.colors ? window.WBCD_CONSTANTS.colors.brand : '#676767'),
                   onChange: function(e) {
                     setAttributes({ brandColor: e.target.value });
                   },

@@ -6,6 +6,10 @@ if (! defined('ABSPATH')) exit;
 
 class Assets
 {
+    /**
+     * Track if constants have been localized to prevent duplicate output.
+     */
+    private static $constants_localized = false;
 
     public static function enqueue_front_base()
     {
@@ -17,6 +21,47 @@ class Assets
             WPBCD_VERSION
         );
         wp_enqueue_style('wbcd-front');
+
+        // Inject CSS variables from constants (AFTER enqueue)
+        self::inject_css_variables();
+
+        // Localize constants for JavaScript (output in wp_head) - only once
+        if (!self::$constants_localized) {
+            add_action('wp_head', [__CLASS__, 'localize_constants'], 1);
+            self::$constants_localized = true;
+        }
+    }
+
+    /**
+     * Localize constants for use in JavaScript.
+     * Makes default values available to all frontend JS scripts.
+     */
+    public static function localize_constants()
+    {
+        $constants_data = [
+            'colors' => Constants::get_all_colors(),
+            'presets' => Constants::get_all_presets(),
+            'frequencies' => Constants::get_default_frequencies(),
+            'buttonSizes' => Constants::get_valid_button_sizes(),
+            'version' => Constants::get_version(),
+        ];
+
+        // Output as inline script in head
+        echo '<script type="text/javascript">';
+        echo 'window.WBCD_CONSTANTS = ' . wp_json_encode($constants_data) . ';';
+        echo '</script>';
+    }
+
+    /**
+     * Inject CSS variables from constants into document head.
+     * Sets default values for CSS custom properties at :root level so all components can access them.
+     */
+    public static function inject_css_variables()
+    {
+        $colors = Constants::get_all_colors();
+        // Inject into :root so all WBCD components (buttons, boxes, forms) can access the variables
+        $inline_css = ":root{--wpbcd-brand:{$colors['brand']};--wpbcd-primary:{$colors['primary']};--wpbcd-text:{$colors['text']};--wpbcd-border:{$colors['border']};}";
+        wp_add_inline_style('wbcd-front', $inline_css);
     }
 
     public static function enqueue_donation_form($form_name = '')

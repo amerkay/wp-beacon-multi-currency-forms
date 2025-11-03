@@ -17,9 +17,15 @@ define('WPBCD_PATH',           plugin_dir_path(__FILE__));
 define('WPBCD_URL',            plugin_dir_url(__FILE__));
 
 // --- Includes ---
+require_once WPBCD_PATH . 'includes/class-constants.php';
 require_once WPBCD_PATH . 'includes/class-settings.php';
 require_once WPBCD_PATH . 'includes/class-assets.php';
 require_once WPBCD_PATH . 'includes/class-geoip-dependency.php';
+
+require_once WPBCD_PATH . 'includes/utils/class-params-parser.php';
+require_once WPBCD_PATH . 'includes/utils/class-preset-parser.php';
+require_once WPBCD_PATH . 'includes/utils/class-frequency-parser.php';
+require_once WPBCD_PATH . 'includes/utils/class-block-attrs-parser.php';
 
 require_once WPBCD_PATH . 'includes/render/class-donate-form-render.php';
 require_once WPBCD_PATH . 'includes/render/class-donate-cta-render.php';
@@ -54,19 +60,10 @@ add_action('init', function () {
                 // Get form name from block attributes
                 $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
 
-                // Build args array from block attributes
+                // Build args array from block attributes using parser
                 $render_args = [
-                    'customParams' => []
+                    'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs)
                 ];
-
-                // Parse custom params from block attributes
-                if (isset($attrs['customParams']) && is_array($attrs['customParams'])) {
-                    foreach ($attrs['customParams'] as $param) {
-                        if (isset($param['key']) && !empty($param['key']) && isset($param['value'])) {
-                            $render_args['customParams'][$param['key']] = $param['value'];
-                        }
-                    }
-                }
 
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
@@ -85,7 +82,7 @@ add_action('init', function () {
                 // Get form name from block attributes
                 $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
 
-                // Build args array from block attributes
+                // Build args array from block attributes using parsers
                 $render_args = [
                     'primaryColor' => isset($attrs['primaryColor']) ? $attrs['primaryColor'] : '',
                     'brandColor' => isset($attrs['brandColor']) ? $attrs['brandColor'] : '',
@@ -93,23 +90,10 @@ add_action('init', function () {
                     'subtitle' => isset($attrs['subtitle']) ? $attrs['subtitle'] : 'Pick your currency, frequency, and amount',
                     'noticeText' => isset($attrs['noticeText']) ? $attrs['noticeText'] : "You'll be taken to our secure donation form to complete your gift.",
                     'buttonText' => isset($attrs['buttonText']) ? $attrs['buttonText'] : 'Donate now →',
-                    'customParams' => [],
+                    'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs),
                     'allowedFrequencies' => isset($attrs['allowedFrequencies']) ? $attrs['allowedFrequencies'] : ['single', 'monthly', 'annual'],
-                    'defaultPresets' => isset($attrs['defaultPresets']) ? $attrs['defaultPresets'] : [
-                        'single' => [10, 20, 30],
-                        'monthly' => [5, 10, 15],
-                        'annual' => [50, 100, 200]
-                    ]
+                    'defaultPresets' => isset($attrs['defaultPresets']) ? $attrs['defaultPresets'] : WBCD\Utils\Preset_Parser::get_all_defaults()
                 ];
-
-                // Parse custom params from block attributes
-                if (isset($attrs['customParams']) && is_array($attrs['customParams'])) {
-                    foreach ($attrs['customParams'] as $param) {
-                        if (isset($param['key']) && !empty($param['key']) && isset($param['value'])) {
-                            $render_args['customParams'][$param['key']] = $param['value'];
-                        }
-                    }
-                }
 
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
@@ -128,7 +112,7 @@ add_action('init', function () {
                 // Get form name from block attributes
                 $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
 
-                // Build args array from block attributes
+                // Build args array from block attributes using parser
                 $render_args = [
                     'color' => isset($attrs['color']) ? $attrs['color'] : '',
                     'text' => isset($attrs['text']) ? $attrs['text'] : 'Donate',
@@ -136,17 +120,8 @@ add_action('init', function () {
                     'amount' => isset($attrs['amount']) ? $attrs['amount'] : '',
                     'frequency' => isset($attrs['frequency']) ? $attrs['frequency'] : '',
                     'currency' => isset($attrs['currency']) ? $attrs['currency'] : '',
-                    'customParams' => []
+                    'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs)
                 ];
-
-                // Parse custom params from block attributes
-                if (isset($attrs['customParams']) && is_array($attrs['customParams'])) {
-                    foreach ($attrs['customParams'] as $param) {
-                        if (isset($param['key']) && !empty($param['key']) && isset($param['value'])) {
-                            $render_args['customParams'][$param['key']] = $param['value'];
-                        }
-                    }
-                }
 
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
@@ -217,6 +192,15 @@ add_action('enqueue_block_editor_assets', function () {
 
     wp_localize_script('wp-blocks', 'wbcdForms', $form_options);
     wp_localize_script('wp-blocks', 'wbcdFormsData', $forms_data);
+
+    // Localize constants for block editor
+    wp_localize_script('wp-blocks', 'WBCD_CONSTANTS', [
+        'colors' => WBCD\Constants::get_all_colors(),
+        'presets' => WBCD\Constants::get_all_presets(),
+        'frequencies' => WBCD\Constants::get_default_frequencies(),
+        'buttonSizes' => WBCD\Constants::get_valid_button_sizes(),
+        'version' => WBCD\Constants::get_version(),
+    ]);
 });
 
 // Settings page + admin notices
@@ -232,9 +216,13 @@ add_action('elementor/widgets/register', function ($widgets_manager) {
     if (!class_exists('\Elementor\Widget_Base')) {
         return;
     }
+    // Load abstract base class first
+    require_once WPBCD_PATH . 'integrations/elementor/abstract-wbcd-elementor-widget.php';
+    // Load widget classes
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-form.php';
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-box.php';
     require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-button.php';
+    // Register widgets
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Form_Widget());
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Box_Widget());
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Button_Widget());
@@ -245,9 +233,13 @@ add_action('et_builder_ready', function () {
     if (!class_exists('ET_Builder_Module')) {
         return;
     }
+    // Load abstract base class first
+    require_once WPBCD_PATH . 'integrations/divi/abstract-wbcd-divi-module.php';
+    // Load module classes
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-form.php';
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-box.php';
     require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-button.php';
+    // Instantiate modules
     new \WBCD\Integrations\Divi\Donate_Form_Module();
     new \WBCD\Integrations\Divi\Donate_Box_Module();
     new \WBCD\Integrations\Divi\Donate_Button_Module();
