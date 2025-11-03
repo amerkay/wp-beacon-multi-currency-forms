@@ -217,7 +217,7 @@ class Settings_Renderer
                 </select>
                 <br>
                 <span class="description">
-                    <?php esc_html_e('Page where the CTA box will send donors (hosts the full donation form).', self::TEXT_DOMAIN); ?>
+                    <?php esc_html_e('Page where the donate box will send donors (hosts the full donation form).', self::TEXT_DOMAIN); ?>
                 </span>
             </p>
 
@@ -270,7 +270,7 @@ class Settings_Renderer
         </p>
 
         <p class="description">
-            <?php esc_html_e('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies, a default currency (used as fallback), and a dedicated target page for the donate CTA box to redirect to. Each currency can only appear once per form.', self::TEXT_DOMAIN); ?>
+            <?php esc_html_e('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies, a default currency (used as fallback), and a dedicated target page for the donate donate box to redirect to. Each currency can only appear once per form.', self::TEXT_DOMAIN); ?>
         </p>
 <?php
     }

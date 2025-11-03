@@ -4,7 +4,7 @@ namespace WBCD\Render;
 
 if (! defined('ABSPATH')) exit;
 
-class Donate_CTA_Render
+class Donate_Box_Render
 {
 
     public static function render($form_name = '', $args = [])

@@ -73,7 +73,7 @@ class Donate_Box_Module extends Abstract_WBCD_Divi_Module
         ];
 
         $this->enqueue_base_assets();
-        \WBCD\Assets::enqueue_donation_cta($form_name);
-        return \WBCD\Render\Donate_CTA_Render::render($form_name, $render_args);
+        \WBCD\Assets::enqueue_donation_box($form_name);
+        return \WBCD\Render\Donate_Box_Render::render($form_name, $render_args);
     }
 }

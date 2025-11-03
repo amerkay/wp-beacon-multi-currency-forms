@@ -83,7 +83,7 @@ The plugin allows you to create multiple donation forms, each with its own set o
 
 ##### Donation Form Page
 - Select the WordPress page where the full donation form will be displayed
-- When donors click "Donate now" in the CTA box, they'll be taken to this page
+- When donors click "Donate now" in the donate box, they'll be taken to this page
 - Each form can have its own dedicated page
 
 ##### Supported Currencies
@@ -126,7 +126,7 @@ Click **"+ Add Another Form"** to create additional donation forms for different
 2. Add all currencies you want to support
 3. Set your most common currency as default
 4. Create one page called "Donate" for the full form
-5. Use the CTA box in sidebars or content areas
+5. Use the donate box in sidebars or content areas
 
 #### For Multiple Campaigns:
 1. Create separate forms for each campaign
@@ -269,7 +269,7 @@ If visitors access the page without these parameters in the URL, they will be au
 
 ---
 
-#### Donation CTA Box Shortcode
+#### Donation Box Shortcode
 
 ```
 [beaconcrm_donate_box]
@@ -424,7 +424,7 @@ If you use Elementor page builder, the plugin adds three widgets.
 1. Edit a page with Elementor
 2. Search in the widgets panel for:
    - **"Beacon Donation Form"** (full form)
-   - **"Beacon Donation Box"** (CTA box)
+   - **"Beacon Donation Box"** (donate box)
    - **"Beacon Donation Button"** (simple button)
 3. Drag the widget to your desired location
 4. Configure the widget settings as described below
@@ -513,7 +513,7 @@ If you use Divi, the plugin adds three modules.
 2. Click **"+"** to add a module
 3. Search for:
    - **"Beacon Donation Form"** (full form)
-   - **"Beacon Donation Box"** (CTA box)
+   - **"Beacon Donation Box"** (donate box)
    - **"Beacon Donation Button"** (simple button)
 4. Add the module to your layout
 5. Configure the module settings as described below
@@ -658,7 +658,7 @@ Note: These are fallback defaults. When the BeaconCRM form loads, it will replac
 
 Main CSS classes for advanced styling:
 - `.wpbcd-wrap` - Main container
-- `.wpbcd-card` - CTA box card
+- `.wpbcd-card` - donate box card
 - `.wpbcd-btn` - Buttons
 - `.wpbcd-select` - Dropdowns
 - `.wpbcd-tab` - Frequency and amount buttons
@@ -728,28 +728,6 @@ This plugin is licensed under GPL v2 or later.
 ---
 
 ## 📝 Changelog
-
-### Version 0.3.0
-- **New:** Donation Button component - Simple, customizable button with pre-configured parameters
-- **New:** Pre-set donation amounts - Configure amount, frequency, and currency on buttons
-- **New:** Button size options - Choose from Medium, Large, or Extra Large
-- **New:** Dynamic currency selection - Currency dropdown updates based on selected form (Gutenberg)
-- **Enhancement:** All button features available in Gutenberg, Shortcode, Elementor, and Divi
-- **Enhancement:** Button renders in visual editors (Elementor placeholder, Divi live preview, Gutenberg ServerSideRender)
-- **Feature:** Campaign tracking via custom URL parameters on buttons
-- **Feature:** Flexible button styling with custom colors and sizes
-
-### Version 0.2.0
-- **New:** Color customization - Override primary and brand colors via UI
-- **New:** Custom URL parameters - Pass unlimited parameters to donation forms
-- **New:** Text customization - Override title, subtitle, and notice text
-- **New:** Frequency control - Choose which donation frequencies to display (Single, Monthly, Annual)
-- **New:** Default preset amounts - Set custom donation amounts per frequency as fallback defaults
-- **New:** Dynamic frequency detection - Show only allowed frequencies from BeaconCRM (overrides local settings)
-- **New:** Auto brand color sync - Automatically match form brand colors from BeaconCRM
-- **Enhancement:** Enter key support for custom amount input
-- **Enhancement:** All customization options available in Gutenberg, Shortcode, Elementor, and Divi
-- **Enhancement:** Smart fallbacks - Local settings used until API data loads, then seamlessly replaced
 
 ### Version 0.1.0
 - Initial release

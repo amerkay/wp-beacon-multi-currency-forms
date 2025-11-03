@@ -95,7 +95,7 @@
     }
 }
 
-/* Donation CTA Box */
+/* Donation Box */
 #wpbcd-donate .wpbcd-card {
     background: var(--wpbcd-bg);
     border: 1px solid var(--wpbcd-border);
@@ -244,7 +244,7 @@
     text-decoration: underline;
 }
 
-/* CTA Actions */
+/* Donation Box Actions */
 #wpbcd-donate .wpbcd-actions {
     display: flex;
     align-items: center;

@@ -126,7 +126,7 @@ class Settings
             'formName' => __('Form Name:', self::TEXT_DOMAIN),
             'formNamePlaceholder' => __('e.g., General Donations', self::TEXT_DOMAIN),
             'donationFormPage' => __('Donation Form Page:', self::TEXT_DOMAIN),
-            'targetPageDesc' => __('Page where the CTA box will send donors (hosts the full donation form).', self::TEXT_DOMAIN),
+            'targetPageDesc' => __('Page where the donate box will send donors (hosts the full donation form).', self::TEXT_DOMAIN),
             'supportedCurrencies' => __('Supported Currencies:', self::TEXT_DOMAIN),
             'addCurrency' => __('Add Currency:', self::TEXT_DOMAIN),
             'selectCurrencyOption' => __('-- Select a currency --', self::TEXT_DOMAIN),

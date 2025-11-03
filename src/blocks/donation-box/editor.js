@@ -16,7 +16,7 @@
   wp.domReady(function () {
     registerBlockType('wbcd/donation-box', {
       title: 'Beacon Donation Box',
-      description: 'CTA box that forwards to your donation form with the chosen options.',
+      description: 'donate box that forwards to your donation form with the chosen options.',
       icon: 'money',
       category: 'widgets',
       attributes: {

@@ -90,7 +90,7 @@ class Assets
         wp_enqueue_script('wbcd-donate-form');
     }
 
-    public static function enqueue_donation_cta($form_name = '')
+    public static function enqueue_donation_box($form_name = '')
     {
         $beaconAccountName = Settings::get_beacon_account();
         $forms = Settings::get_forms_by_currency($form_name);
@@ -101,27 +101,27 @@ class Assets
         $default_currency = Settings::get_default_currency($form_name);
 
         wp_register_script(
-            'wbcd-donate-cta',
-            WPBCD_URL . 'public/js/donate-cta.js',
+            'wbcd-donate-box',
+            WPBCD_URL . 'public/js/donate-box.js',
             [],
             WPBCD_VERSION,
             true
         );
 
-        // Build id+symbol structure expected by the CTA script
+        // Build id+symbol structure expected by the donate box script
         $byCur = [];
         foreach ($forms as $code => $id) {
             $symbol = isset($symbols[$code]) ? $symbols[$code] : $code;
             $byCur[$code] = ['id' => $id, 'symbol' => $symbol];
         }
 
-        wp_localize_script('wbcd-donate-cta', 'WPBCD_CTA_DATA', [
+        wp_localize_script('wbcd-donate-box', 'WPBCD_BOX_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $byCur,
             'baseURL'         => $url,
             'defaultCurrency' => $default_currency,
         ]);
 
-        wp_enqueue_script('wbcd-donate-cta');
+        wp_enqueue_script('wbcd-donate-box');
     }
 }

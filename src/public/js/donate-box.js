@@ -1,10 +1,10 @@
 (function(){
-  // Expect localized WPBCD_CTA_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
-  if (typeof WPBCD_CTA_DATA !== 'object') return;
+  // Expect localized WPBCD_BOX_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
+  if (typeof WPBCD_BOX_DATA !== 'object') return;
 
-  var formsByCurrency = WPBCD_CTA_DATA.formsByCurrency || {};
-  var baseURL = WPBCD_CTA_DATA.baseURL || (location.origin + "/donation-form/");
-  var DEFAULT_CURRENCY = WPBCD_CTA_DATA.defaultCurrency || '';
+  var formsByCurrency = WPBCD_BOX_DATA.formsByCurrency || {};
+  var baseURL = WPBCD_BOX_DATA.baseURL || (location.origin + "/donation-form/");
+  var DEFAULT_CURRENCY = WPBCD_BOX_DATA.defaultCurrency || '';
 
   // Check if we have any currencies configured
   if (!Object.keys(formsByCurrency).length) {
@@ -194,7 +194,7 @@
 
   function fetchPresets(currency){
     var formId = formsByCurrency[currency].id;
-    var beaconAccountName = WPBCD_CTA_DATA.beaconAccountName;
+    var beaconAccountName = WPBCD_BOX_DATA.beaconAccountName;
     var url = "https://portal.beaconproducts.co.uk/v1/account/" + beaconAccountName + "/form/" + formId + "?fp=x";
     return fetch(url, { credentials:"omit", cache:"no-store" })
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })

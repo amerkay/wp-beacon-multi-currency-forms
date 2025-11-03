@@ -2,7 +2,7 @@
 
 namespace WBCD\Shortcodes;
 
-use WBCD\Render\Donate_CTA_Render;
+use WBCD\Render\Donate_Box_Render;
 
 if (! defined('ABSPATH')) exit;
 
@@ -56,8 +56,8 @@ class Shortcode_Donate_Box
         ];
 
         \WBCD\Assets::enqueue_front_base();
-        \WBCD\Assets::enqueue_donation_cta($form_name);
+        \WBCD\Assets::enqueue_donation_box($form_name);
 
-        return Donate_CTA_Render::render($form_name, $render_args);
+        return Donate_Box_Render::render($form_name, $render_args);
     }
 }

@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:  Beacon CRM Donate
- * Description:  Two Beacon donation blocks (full page form + CTA box) with shortcodes and Elementor/Divi adapters. No bundlers; DRY PHP renderers; simple Settings.
+ * Description:  Two Beacon donation blocks (full page form + donate box) with shortcodes and Elementor/Divi adapters. No bundlers; DRY PHP renderers; simple Settings.
  * Version:      0.1.0
  * Author:       Amer Kawar @ WildAmer.com
  * Text Domain:  wp-beacon-crm-donate
@@ -31,7 +31,7 @@ require_once WPBCD_PATH . 'includes/utils/class-frequency-parser.php';
 require_once WPBCD_PATH . 'includes/utils/class-block-attrs-parser.php';
 
 require_once WPBCD_PATH . 'includes/render/class-donate-form-render.php';
-require_once WPBCD_PATH . 'includes/render/class-donate-cta-render.php';
+require_once WPBCD_PATH . 'includes/render/class-donate-box-render.php';
 require_once WPBCD_PATH . 'includes/render/class-donate-button-render.php';
 
 require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-form.php';
@@ -100,10 +100,10 @@ add_action('init', function () {
 
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
-                WBCD\Assets::enqueue_donation_cta($form_name);
+                WBCD\Assets::enqueue_donation_box($form_name);
 
                 // Call the render method
-                return WBCD\Render\Donate_CTA_Render::render($form_name, $render_args);
+                return WBCD\Render\Donate_Box_Render::render($form_name, $render_args);
             },
         )
     );

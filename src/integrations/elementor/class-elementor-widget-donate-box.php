@@ -137,7 +137,7 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         ];
 
         $this->enqueue_base_assets();
-        \WBCD\Assets::enqueue_donation_cta($form_name);
-        echo \WBCD\Render\Donate_CTA_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
+        \WBCD\Assets::enqueue_donation_box($form_name);
+        echo \WBCD\Render\Donate_Box_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
     }
 }

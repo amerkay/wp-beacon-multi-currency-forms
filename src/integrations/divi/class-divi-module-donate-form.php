@@ -25,7 +25,7 @@ class Donate_Form_Module extends Abstract_WBCD_Divi_Module
             'form_name' => $this->get_form_selection_field(__('Choose which donation form to display', 'wp-beacon-crm-donate')),
             'custom_params' => [
                 'label' => __('Required URL Parameters', 'wp-beacon-crm-donate'),
-                'type' => 'textarea',
+                'type' => 'text',
                 'default' => '',
                 'description' => __('Enter required parameters in URL format: bcn_c_adopted_animal=12345&bcn_custom=abc. If missing, users will be redirected to include them.', 'wp-beacon-crm-donate'),
             ],
