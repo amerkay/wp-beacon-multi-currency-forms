@@ -14,6 +14,14 @@
         "customParams": {
             "type": "array",
             "default": []
+        },
+        "defaultFrequency": {
+            "type": "string",
+            "default": ""
+        },
+        "defaultAmount": {
+            "type": "string",
+            "default": ""
         }
     },
     "supports": {

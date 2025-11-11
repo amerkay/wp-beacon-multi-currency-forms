@@ -23,6 +23,14 @@
         customParams: {
           type: 'array',
           default: []
+        },
+        defaultFrequency: {
+          type: 'string',
+          default: ''
+        },
+        defaultAmount: {
+          type: 'string',
+          default: ''
         }
       },
       edit: function (props) {
@@ -65,6 +73,29 @@
                   setAttributes({ formName: value });
                 },
                 help: 'Choose which donation form to display'
+              }),
+              el(SelectControl, {
+                label: 'Default Frequency',
+                value: attrs.defaultFrequency,
+                options: [
+                  { value: '', label: 'None (use default)' },
+                  { value: 'single', label: 'Single' },
+                  { value: 'monthly', label: 'Monthly' },
+                  { value: 'annual', label: 'Annual' }
+                ],
+                onChange: function(value) {
+                  setAttributes({ defaultFrequency: value });
+                },
+                help: 'Set a default donation frequency'
+              }),
+              el(TextControl, {
+                label: 'Default Amount',
+                value: attrs.defaultAmount,
+                onChange: function(value) {
+                  setAttributes({ defaultAmount: value });
+                },
+                placeholder: 'e.g., 50',
+                help: 'Set a default donation amount'
               })
             ),
             el(PanelBody, { title: 'Required URL Parameters', initialOpen: false },

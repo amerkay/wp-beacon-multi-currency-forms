@@ -39,6 +39,28 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
 
         $this->add_form_selection_control(__('Choose which donation form to display', 'wp-beacon-crm-donate'));
 
+        $this->add_control(
+            'default_frequency',
+            [
+                'label' => __('Default Frequency', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '',
+                'options' => $this->get_frequency_options(),
+                'description' => __('Set a default donation frequency', 'wp-beacon-crm-donate'),
+            ]
+        );
+
+        $this->add_control(
+            'default_amount',
+            [
+                'label' => __('Default Amount', 'wp-beacon-crm-donate'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => '',
+                'placeholder' => __('e.g., 50', 'wp-beacon-crm-donate'),
+                'description' => __('Set a default donation amount', 'wp-beacon-crm-donate'),
+            ]
+        );
+
         $this->end_controls_section();
 
         // Custom Parameters Section - with custom notice for required params
@@ -63,7 +85,9 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
         $custom_params = $this->parse_custom_params_from_settings($settings);
 
         $render_args = [
-            'customParams' => $custom_params
+            'customParams' => $custom_params,
+            'defaultFrequency' => isset($settings['default_frequency']) ? $settings['default_frequency'] : '',
+            'defaultAmount' => isset($settings['default_amount']) ? $settings['default_amount'] : ''
         ];
 
         $this->enqueue_base_assets();

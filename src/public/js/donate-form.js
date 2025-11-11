@@ -14,40 +14,56 @@
     if (!pageEl) return;
 
     var customParamsAttr = pageEl.getAttribute('data-custom-params');
-    if (!customParamsAttr) return;
+    var defaultFrequency = pageEl.getAttribute('data-default-frequency');
+    var defaultAmount = pageEl.getAttribute('data-default-amount');
 
-    try {
-      var requiredParams = JSON.parse(customParamsAttr);
-      if (!requiredParams || typeof requiredParams !== 'object' || Array.isArray(requiredParams)) {
-        return;
-      }
+    var currentUrl = new URL(window.location.href);
+    var currentParams = new URLSearchParams(currentUrl.search);
+    var missing = [];
+    var needsRedirect = false;
 
-      var currentUrl = new URL(window.location.href);
-      var currentParams = new URLSearchParams(currentUrl.search);
-      var missing = [];
+    // Check custom params
+    if (customParamsAttr) {
+      try {
+        var requiredParams = JSON.parse(customParamsAttr);
+        if (requiredParams && typeof requiredParams === 'object' && !Array.isArray(requiredParams)) {
+          // Check each required parameter
+          for (var key in requiredParams) {
+            if (requiredParams.hasOwnProperty(key)) {
+              var currentValue = currentParams.get(key);
+              var requiredValue = String(requiredParams[key]);
 
-      // Check each required parameter
-      for (var key in requiredParams) {
-        if (requiredParams.hasOwnProperty(key)) {
-          var currentValue = currentParams.get(key);
-          var requiredValue = String(requiredParams[key]);
-
-          // If parameter is missing or doesn't match required value
-          if (!currentValue || currentValue !== requiredValue) {
-            missing.push(key);
-            currentParams.set(key, requiredValue);
+              // If parameter is missing or doesn't match required value
+              if (!currentValue || currentValue !== requiredValue) {
+                missing.push(key);
+                currentParams.set(key, requiredValue);
+                needsRedirect = true;
+              }
+            }
           }
         }
+      } catch (e) {
+        console.warn('WPBCD: Error checking required parameters', e);
       }
+    }
 
-      // If any parameters are missing or incorrect, redirect
-      if (missing.length > 0) {
-        currentUrl.search = currentParams.toString();
-        window.location.href = currentUrl.toString();
-        return; // Stop execution after redirect
-      }
-    } catch (e) {
-      console.warn('WPBCD: Error checking required parameters', e);
+    // Add default frequency to URL if specified and not already present
+    if (defaultFrequency && !currentParams.get('bcn_donation_frequency')) {
+      currentParams.set('bcn_donation_frequency', defaultFrequency);
+      needsRedirect = true;
+    }
+
+    // Add default amount to URL if specified and not already present
+    if (defaultAmount && !currentParams.get('bcn_donation_amount')) {
+      currentParams.set('bcn_donation_amount', defaultAmount);
+      needsRedirect = true;
+    }
+
+    // If any parameters need to be added, redirect
+    if (needsRedirect) {
+      currentUrl.search = currentParams.toString();
+      window.location.href = currentUrl.toString();
+      return; // Stop execution after redirect
     }
   }());
 

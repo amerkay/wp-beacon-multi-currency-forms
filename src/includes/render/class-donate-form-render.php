@@ -12,6 +12,8 @@ class Donate_Form_Render
         // Parse arguments with defaults
         $args = wp_parse_args($args, [
             'customParams' => [],
+            'defaultFrequency' => '',
+            'defaultAmount' => '',
         ]);
 
         $currencies = \WBCD\Settings::get_forms_by_currency($form_name);
@@ -36,7 +38,10 @@ class Donate_Form_Render
         // Render a minimal, accessible shell; JS fills in the Beacon form and currency behavior.
         ob_start();
 ?>
-        <div id="wpbcd-page" class="wpbcd-wrap" data-custom-params="<?php echo esc_attr($custom_params_json); ?>">
+        <div id="wpbcd-page" class="wpbcd-wrap"
+            data-custom-params="<?php echo esc_attr($custom_params_json); ?>"
+            data-default-frequency="<?php echo esc_attr($args['defaultFrequency']); ?>"
+            data-default-amount="<?php echo esc_attr($args['defaultAmount']); ?>">
             <div class="wpbcd-toolbar" role="region" aria-label="<?php esc_attr_e('Donation settings', 'wp-beacon-crm-donate'); ?>">
                 <label for="wpbcd-currency" class="wpbcd-label"><?php esc_html_e('Currency', 'wp-beacon-crm-donate'); ?></label>
                 <select id="wpbcd-currency" class="wpbcd-select" aria-label="<?php esc_attr_e('Currency', 'wp-beacon-crm-donate'); ?>">

@@ -29,6 +29,19 @@ class Donate_Form_Module extends Abstract_WBCD_Divi_Module
                 'default' => '',
                 'description' => __('Enter required parameters in URL format: bcn_c_adopted_animal=12345&bcn_custom=abc. If missing, users will be redirected to include them.', 'wp-beacon-crm-donate'),
             ],
+            'default_frequency' => [
+                'label' => __('Default Frequency', 'wp-beacon-crm-donate'),
+                'type' => 'select',
+                'options' => $this->get_frequency_options(),
+                'default' => '',
+                'description' => __('Set a default donation frequency', 'wp-beacon-crm-donate'),
+            ],
+            'default_amount' => [
+                'label' => __('Default Amount', 'wp-beacon-crm-donate'),
+                'type' => 'text',
+                'default' => '',
+                'description' => __('Set a default donation amount (e.g., 50)', 'wp-beacon-crm-donate'),
+            ],
         ];
     }
 
@@ -38,7 +51,9 @@ class Donate_Form_Module extends Abstract_WBCD_Divi_Module
         $custom_params = $this->parse_custom_params_from_props();
 
         $render_args = [
-            'customParams' => $custom_params
+            'customParams' => $custom_params,
+            'defaultFrequency' => isset($this->props['default_frequency']) ? $this->props['default_frequency'] : '',
+            'defaultAmount' => isset($this->props['default_amount']) ? $this->props['default_amount'] : ''
         ];
 
         $this->enqueue_base_assets();

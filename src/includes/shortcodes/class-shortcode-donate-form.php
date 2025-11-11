@@ -18,6 +18,8 @@ class Shortcode_Donate_Form
         $atts = shortcode_atts([
             'form' => '', // Form name
             'params' => '', // URL-encoded string of custom params
+            'default_frequency' => '', // Default frequency: single, monthly, annual
+            'default_amount' => '', // Default amount
         ], $atts, 'beaconcrm_donate_form');
 
         $form_name = $atts['form'];
@@ -26,7 +28,9 @@ class Shortcode_Donate_Form
         $custom_params = \WBCD\Utils\Params_Parser::from_url_encoded($atts['params']);
 
         $render_args = [
-            'customParams' => $custom_params
+            'customParams' => $custom_params,
+            'defaultFrequency' => $atts['default_frequency'],
+            'defaultAmount' => $atts['default_amount']
         ];
 
         // Ensure assets on shortcode use

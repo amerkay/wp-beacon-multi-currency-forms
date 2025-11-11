@@ -63,7 +63,9 @@ add_action('init', function () {
 
                 // Build args array from block attributes using parser
                 $render_args = [
-                    'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs)
+                    'customParams' => WBCD\Utils\Block_Attrs_Parser::parse_custom_params($attrs),
+                    'defaultFrequency' => isset($attrs['defaultFrequency']) ? $attrs['defaultFrequency'] : '',
+                    'defaultAmount' => isset($attrs['defaultAmount']) ? $attrs['defaultAmount'] : ''
                 ];
 
                 // Enqueue assets before rendering
