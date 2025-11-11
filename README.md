@@ -17,6 +17,7 @@ A lightweight, flexible WordPress plugin for integrating BeaconCRM donation form
   - Divi Modules
 - **Per-Form Target Pages** - Each donation form can redirect to its own dedicated page
 - **Preset Amount Sync** - Automatically syncs preset donation amounts from BeaconCRM
+- **UTM Parameter Tracking** - Automatically tracks `utm_source`, `utm_medium`, and `utm_campaign` across all pages and passes them to donation forms (180-day cookie)
 
 ---
 
@@ -33,6 +34,7 @@ A lightweight, flexible WordPress plugin for integrating BeaconCRM donation form
   - [Elementor](#elementor)
   - [Divi Builder](#divi-builder)
 - [Geo-Location Detection](#geo-location-detection)
+- [UTM Parameter Tracking](#utm-parameter-tracking)
 - [FAQ](#faq)
 - [Support](#support)
 
@@ -445,6 +447,41 @@ Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip
 
 ---
 
+## 📊 UTM Parameter Tracking
+
+The plugin automatically tracks UTM parameters (`utm_source`, `utm_medium`, `utm_campaign`) across your entire website and passes them to donation forms.
+
+### How It Works
+
+1. **Enabled by default** in Settings → Beacon Donate
+2. When a visitor lands with UTM parameters (e.g., from an ad campaign), they are stored in a cookie for 180 days
+3. When the visitor reaches a donation form page, the stored UTM parameters are passed to BeaconCRM via data attributes
+4. Only `utm_source`, `utm_medium`, and `utm_campaign` are tracked (utm_id, utm_term, and utm_content are excluded)
+
+### Cookie Behavior
+
+- **Atomic replacement**: UTM values only update when `utm_source` is present in the URL (prevents partial data)
+- **180-day expiry**: Cookie persists across sessions for 180 days
+- **Works with caching**: JavaScript-based tracking runs on every page load, even on fully cached pages
+
+### Example Flow
+
+```
+User clicks ad with: ?utm_source=facebook&utm_medium=social&utm_campaign=march-2025
+↓
+Cookie stored: {utm_source: "facebook", utm_medium: "social", utm_campaign: "march-2025"}
+↓
+User navigates to donation form (even 30 days later)
+↓
+Form receives data attributes and passes to BeaconCRM
+```
+
+### Disabling UTM Tracking
+
+To disable this feature, go to **Settings → Beacon Donate** and uncheck **"Enable UTM parameter tracking"**.
+
+---
+
 ## ❓ FAQ
 
 ### Q: Can I customize the colors of the donation box?
@@ -569,6 +606,15 @@ This plugin is licensed under GPL v2 or later.
 ---
 
 ## 📝 Changelog
+
+### Version 0.1.1
+feat(utm): add UTM parameter tracking functionality
+- Add UTM tracking enable/disable setting in admin
+- Implement JavaScript-based UTM cookie storage (180 days)
+- Pass UTM parameters to BeaconCRM forms via data attributes
+- Add admin UI for UTM tracking toggle with description
+- Enqueue utm-tracker.js globally when feature enabled
+- Track utm_source, utm_medium, and utm_campaign only
 
 ### Version 0.1.0
 - Initial release

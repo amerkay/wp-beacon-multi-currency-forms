@@ -2,7 +2,8 @@
 
 namespace WBCD;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Assets
 {
@@ -72,6 +73,10 @@ class Assets
         // Get default currency for this specific form
         $default_currency = Settings::get_default_currency($form_name);
 
+        // Get UTM parameter mappings and field names
+        $utm_params = Settings::get_utm_params();
+        $utm_field_names = Settings::get_utm_field_names();
+
         wp_register_script(
             'wbcd-donate-form',
             WPBCD_URL . 'public/js/donate-form.js',
@@ -82,9 +87,11 @@ class Assets
 
         wp_localize_script('wbcd-donate-form', 'WPBCD_FORM_DATA', [
             'beaconAccountName' => $beaconAccountName,
-            'formsByCurrency'  => $forms,
+            'formsByCurrency' => $forms,
             'allowedCurrencies' => array_keys($forms),
             'defaultCurrency' => $default_currency,
+            'utmParams' => $utm_params,
+            'utmFieldNames' => $utm_field_names,
         ]);
 
         wp_enqueue_script('wbcd-donate-form');
@@ -122,7 +129,7 @@ class Assets
         wp_localize_script('wbcd-donate-box', 'WPBCD_BOX_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $byCur,
-            'baseURL'         => $target_page_url,
+            'baseURL' => $target_page_url,
             'defaultCurrency' => $default_currency,
         ]);
 

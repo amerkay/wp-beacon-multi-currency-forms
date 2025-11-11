@@ -2,13 +2,16 @@
 
 namespace WBCD;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Settings
 {
     // Option names
     const OPTION_BEACON_ACCOUNT = 'wbcd_beacon_account';
     const OPTION_FORMS = 'wbcd_forms';
+    const OPTION_TRACK_UTM = 'wbcd_track_utm';
+    const OPTION_UTM_PARAMS = 'wbcd_utm_params';
 
     // Text domain
     const TEXT_DOMAIN = 'wp-beacon-crm-donate';
@@ -125,6 +128,8 @@ class Settings
             'validationFailed' => __('Please fix the following errors before saving:', self::TEXT_DOMAIN),
             'addMoreCurrencies' => __('Add more currencies', self::TEXT_DOMAIN),
             'hideCurrencyForm' => __('Hide', self::TEXT_DOMAIN),
+            'utmTracking' => __('UTM Tracking', self::TEXT_DOMAIN),
+            'enableUtmTracking' => __('Enable UTM parameter tracking', self::TEXT_DOMAIN),
         ];
     }
 
@@ -135,20 +140,34 @@ class Settings
     {
         // New structure: array of forms, each with name, currency=>formId mappings, and default_currency
         $defaults = [self::get_default_form()];
+        $default_utm_params = self::get_default_utm_params();
 
         add_option(self::OPTION_BEACON_ACCOUNT, '');
         add_option(self::OPTION_FORMS, $defaults);
+        add_option(self::OPTION_TRACK_UTM, true);
+        add_option(self::OPTION_UTM_PARAMS, $default_utm_params);
 
         register_setting('wbcd_group', self::OPTION_BEACON_ACCOUNT, [
-            'type'              => 'string',
+            'type' => 'string',
             'sanitize_callback' => [__CLASS__, 'sanitize_account'],
-            'default'           => '',
+            'default' => '',
         ]);
 
         register_setting('wbcd_group', self::OPTION_FORMS, [
-            'type'              => 'array',
+            'type' => 'array',
             'sanitize_callback' => [__CLASS__, 'sanitize_forms'],
-            'default'           => $defaults,
+            'default' => $defaults,
+        ]);
+
+        register_setting('wbcd_group', self::OPTION_TRACK_UTM, [
+            'type' => 'boolean',
+            'default' => true,
+        ]);
+
+        register_setting('wbcd_group', self::OPTION_UTM_PARAMS, [
+            'type' => 'array',
+            'sanitize_callback' => [__CLASS__, 'sanitize_utm_params'],
+            'default' => $default_utm_params,
         ]);
 
         add_settings_section(
@@ -172,6 +191,14 @@ class Settings
             'wbcd_field_forms',
             __('Donation Forms', self::TEXT_DOMAIN),
             [__CLASS__, 'field_forms'],
+            'wbcd-settings',
+            'wbcd_section_main'
+        );
+
+        add_settings_field(
+            'wbcd_field_track_utm',
+            __('UTM Tracking', self::TEXT_DOMAIN),
+            [__CLASS__, 'field_track_utm'],
             'wbcd-settings',
             'wbcd_section_main'
         );
@@ -230,6 +257,96 @@ class Settings
     }
 
     /**
+     * Sanitize and validate UTM parameters
+     * 
+     * @param array|mixed $input User input
+     * @return array Sanitized UTM params array
+     */
+    public static function sanitize_utm_params($input)
+    {
+        if (!is_array($input)) {
+            return self::get_default_utm_params();
+        }
+
+        $sanitized = [];
+        $utm_fields = self::get_utm_field_names();
+        $has_error = false;
+
+        foreach ($utm_fields as $utm_field) {
+            if (isset($input[$utm_field]) && is_array($input[$utm_field])) {
+                $payment = sanitize_text_field($input[$utm_field]['payment'] ?? '');
+                $subscription = sanitize_text_field($input[$utm_field]['subscription'] ?? '');
+
+                // Validate that parameter names start with 'bcn_'
+                if (!empty($payment) && strpos($payment, 'bcn_') !== 0) {
+                    add_settings_error(
+                        self::OPTION_UTM_PARAMS,
+                        'invalid_payment_param_' . $utm_field,
+                        sprintf(__('Payment parameter for %s must start with "bcn_".', self::TEXT_DOMAIN), $utm_field),
+                        'error'
+                    );
+                    $has_error = true;
+                    $payment = '';
+                }
+
+                if (!empty($subscription) && strpos($subscription, 'bcn_') !== 0) {
+                    add_settings_error(
+                        self::OPTION_UTM_PARAMS,
+                        'invalid_subscription_param_' . $utm_field,
+                        sprintf(__('Subscription parameter for %s must start with "bcn_".', self::TEXT_DOMAIN), $utm_field),
+                        'error'
+                    );
+                    $has_error = true;
+                    $subscription = '';
+                }
+
+                $sanitized[$utm_field] = [
+                    'payment' => $payment,
+                    'subscription' => $subscription,
+                ];
+            } else {
+                // Use defaults if not provided
+                $defaults = self::get_default_utm_params();
+                $sanitized[$utm_field] = $defaults[$utm_field];
+            }
+        }
+
+        // If there were errors, return the previous valid values
+        if ($has_error) {
+            return get_option(self::OPTION_UTM_PARAMS, self::get_default_utm_params());
+        }
+
+        return $sanitized;
+    }
+
+    /**
+     * Get default UTM parameter mappings
+     * 
+     * @return array Default UTM params
+     */
+    private static function get_default_utm_params()
+    {
+        $defaults = [];
+        foreach (self::get_utm_field_names() as $field) {
+            $defaults[$field] = [
+                'payment' => 'bcn_pay_c_' . $field,
+                'subscription' => 'bcn_sub_c_' . $field,
+            ];
+        }
+        return $defaults;
+    }
+
+    /**
+     * Get list of supported UTM field names
+     * 
+     * @return array List of UTM field names
+     */
+    public static function get_utm_field_names()
+    {
+        return ['utm_source', 'utm_medium', 'utm_campaign'];
+    }
+
+    /**
      * Render the beacon account field
      */
     public static function field_beacon_account()
@@ -246,6 +363,16 @@ class Settings
         $forms = get_option(self::OPTION_FORMS, []);
         $currencies_data = self::load_currencies_data();
         Settings_Renderer::render_forms_field($forms, $currencies_data);
+    }
+
+    /**
+     * Render the UTM tracking field
+     */
+    public static function field_track_utm()
+    {
+        $value = get_option(self::OPTION_TRACK_UTM, true);
+        $utm_params = get_option(self::OPTION_UTM_PARAMS, self::get_default_utm_params());
+        Settings_Renderer::render_utm_tracking_field($value, $utm_params);
     }
 
     /**
@@ -277,8 +404,9 @@ class Settings
      */
     public static function render_page()
     {
-        if (! current_user_can('manage_options')) return;
-?>
+        if (!current_user_can('manage_options'))
+            return;
+        ?>
         <div class="wrap">
             <h1><?php esc_html_e('Beacon Donate', self::TEXT_DOMAIN); ?></h1>
             <form action="options.php" method="post">
@@ -289,7 +417,7 @@ class Settings
                 ?>
             </form>
         </div>
-<?php
+        <?php
     }
 
     // ========================================
@@ -457,5 +585,25 @@ class Settings
         }
 
         return '';
+    }
+
+    /**
+     * Check if UTM tracking is enabled
+     * 
+     * @return bool Whether UTM tracking is enabled
+     */
+    public static function get_utm_tracking_enabled()
+    {
+        return (bool) get_option(self::OPTION_TRACK_UTM, true);
+    }
+
+    /**
+     * Get UTM parameter mappings
+     * 
+     * @return array UTM parameter mappings with payment and subscription fields
+     */
+    public static function get_utm_params()
+    {
+        return get_option(self::OPTION_UTM_PARAMS, self::get_default_utm_params());
     }
 }

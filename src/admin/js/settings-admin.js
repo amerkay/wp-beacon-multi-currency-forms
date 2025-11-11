@@ -26,8 +26,7 @@
 
     // CSS Classes
     const CSS_CLASSES = {
-        widefat: 'widefat',
-        currenciesTable: 'wbcd-currencies-table',
+        settingsTable: 'wbcd-settings-table',
         colDefault: 'wbcd-col-default',
         colAction: 'wbcd-col-action',
         removeFormWrapper: 'wbcd-remove-form-wrapper'
@@ -49,6 +48,18 @@
         });
 
         /**
+         * Handle toggle for UTM parameters section
+         */
+        $('#wbcd_track_utm').on('change', function() {
+            var $utmParamsSection = $('#wbcd-utm-params-section');
+            if ($(this).is(':checked')) {
+                $utmParamsSection.slideDown(300);
+            } else {
+                $utmParamsSection.slideUp(300);
+            }
+        });
+
+        /**
          * Get i18n string
          */
         function i18n(key) {
@@ -59,7 +70,7 @@
          * Build currency table HTML
          */
         function buildCurrencyTableHtml() {
-            return `<table class="${CSS_CLASSES.widefat} ${CSS_CLASSES.currenciesTable}">
+            return `<table class="${CSS_CLASSES.settingsTable}">
                 <thead><tr>
                 <th class="${CSS_CLASSES.colDefault}">${i18n('default')}</th>
                 <th>${i18n('currency')}</th>

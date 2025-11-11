@@ -114,6 +114,34 @@
     div.className = "beacon-form";
     div.setAttribute("data-account", BEACON_ACCOUNT_NAME);
     div.setAttribute("data-form", formsByCurrency[cur]);
+    
+    // Add stored UTM parameters as data attributes (only if utm_source is NOT in URL)
+    var currentParams = new URLSearchParams(window.location.search);
+    if (!currentParams.has('utm_source')) {
+      var storedUtm = window.WBCD_getStoredUtm && window.WBCD_getStoredUtm();
+      if (storedUtm) {
+        // Get UTM parameter mappings and field names from localized data
+        var utmParams = WPBCD_FORM_DATA.utmParams || {};
+        var utmFields = WPBCD_FORM_DATA.utmFieldNames || ['utm_source', 'utm_medium', 'utm_campaign'];
+        
+        // Loop through each UTM parameter and set data attributes
+        for (var i = 0; i < utmFields.length; i++) {
+          var field = utmFields[i];
+          var storedValue = storedUtm[field];
+          var fieldConfig = utmParams[field];
+          
+          if (storedValue && fieldConfig) {
+            if (fieldConfig.payment) {
+              div.setAttribute("data-" + fieldConfig.payment, storedValue);
+            }
+            if (fieldConfig.subscription) {
+              div.setAttribute("data-" + fieldConfig.subscription, storedValue);
+            }
+          }
+        }
+      }
+    }
+    
     slot.appendChild(div);
     if(window.BeaconCRM && typeof window.BeaconCRM.render === "function"){
       window.BeaconCRM.render();

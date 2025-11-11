@@ -24,6 +24,11 @@
     color: rgb(100, 105, 112);
 }
 
+.form-table td p {
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
 /* Form item container */
 .wbcd-form-item {
     position: relative;
@@ -62,47 +67,49 @@
     margin-top: 15px;
 }
 
-.wbcd-currencies-section table.widefat {
+/* Settings tables - generic styling for all admin tables */
+.wbcd-settings-table {
+    width: 100%;
     margin-bottom: 10px;
     border: 1px solid #ccd0d4;
+    border-collapse: collapse;
 }
 
-.wbcd-currencies-section table.widefat.wbcd-currencies-table {
-    margin-bottom: 10px;
-}
-
-.wbcd-currencies-section table.widefat thead th {
+.wbcd-settings-table thead th {
     background: #f3f4f5;
     font-weight: 600;
     padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccd0d4;
 }
 
-.wbcd-currencies-section table.widefat thead th.wbcd-col-default,
-.wbcd-currencies-section table.widefat thead th.wbcd-col-action {
+.wbcd-settings-table thead th.wbcd-col-default,
+.wbcd-settings-table thead th.wbcd-col-action {
     width: 80px;
 }
 
-.wbcd-currencies-section table.widefat tbody td {
+.wbcd-settings-table tbody td {
     padding: 8px 10px;
     vertical-align: middle;
+    border-bottom: 1px solid #f0f0f1;
 }
 
-.wbcd-currencies-section table.widefat tbody tr {
+.wbcd-settings-table tbody tr {
     background: #fff;
 }
 
-.wbcd-currencies-section table.widefat tbody tr:hover {
+.wbcd-settings-table tbody tr:hover {
     background: #f9f9f9;
 }
 
 /* Default currency radio button cell */
-.wbcd-currencies-section table.widefat td:first-child {
+.wbcd-settings-table td:first-child {
     text-align: left;
     padding-left: 15px;
 }
 
 /* Action buttons in table */
-.wbcd-currencies-section table.widefat .button {
+.wbcd-settings-table .button {
     padding: 2px 10px;
     height: auto;
     line-height: 1.5;
@@ -158,9 +165,8 @@
 }
 
 /* Description text styling */
-.wbcd-currencies-section .description {
-    margin-top: 5px;
-    font-style: italic;
+.form-table .description {
+    margin-bottom: 12px;
 }
 
 /* Validation error styles */
@@ -201,37 +207,37 @@
         width: 100%;
     }
 
-    .wbcd-currencies-section table.widefat {
+    .wbcd-settings-table {
         font-size: 14px;
     }
 
-    .wbcd-currencies-section table.widefat td,
-    .wbcd-currencies-section table.widefat th {
+    .wbcd-settings-table td,
+    .wbcd-settings-table th {
         padding: 6px 8px;
     }
 
     /* Hide table headers on mobile */
-    .wbcd-currencies-section table.widefat thead {
+    .wbcd-settings-table thead {
         display: none;
     }
 
     /* Make table rows display as cards */
-    .wbcd-currencies-section table.widefat,
-    .wbcd-currencies-section table.widefat tbody,
-    .wbcd-currencies-section table.widefat tr {
+    .wbcd-settings-table,
+    .wbcd-settings-table tbody,
+    .wbcd-settings-table tr {
         display: block;
         width: 100%;
     }
 
-    .wbcd-currencies-section table.widefat tr {
-        /* margin-bottom: 15px; */
+    .wbcd-settings-table tr {
         border: 1px solid #ccd0d4;
         border-radius: 3px;
         padding: 10px;
         box-sizing: border-box;
+        margin-bottom: 10px;
     }
 
-    .wbcd-currencies-section table.widefat td {
+    .wbcd-settings-table td {
         display: block;
         width: 100%;
         text-align: left !important;
@@ -241,7 +247,7 @@
     }
 
     /* Show labels before content on mobile using data attributes */
-    .wbcd-currencies-section table.widefat td[data-label]:before {
+    .wbcd-settings-table td[data-label]:before {
         content: attr(data-label);
         font-weight: 600;
         display: block;
@@ -251,23 +257,23 @@
     }
 
     /* Special handling for first column (Default radio) - label on same line */
-    .wbcd-currencies-section table.widefat td:first-child {
+    .wbcd-settings-table td:first-child {
         padding-left: 0 !important;
         display: flex;
         align-items: center;
     }
 
-    .wbcd-currencies-section table.widefat td:first-child:before {
+    .wbcd-settings-table td:first-child:before {
         margin-bottom: 0;
     }
 
-    .wbcd-currencies-section table.widefat td:first-child input[type="radio"] {
+    .wbcd-settings-table td:first-child input[type="radio"] {
         margin: 0;
         flex-shrink: 0;
     }
 
     /* Make form inputs responsive */
-    .wbcd-currencies-section table.widefat td input[type="text"] {
+    .wbcd-settings-table td input[type="text"] {
         max-width: 100%;
         box-sizing: border-box;
     }

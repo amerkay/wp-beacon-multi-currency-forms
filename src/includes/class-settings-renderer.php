@@ -2,7 +2,8 @@
 
 namespace WBCD;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Settings Renderer Class
@@ -22,14 +23,10 @@ class Settings_Renderer
      */
     public static function render_beacon_account_field($value)
     {
-?>
-        <input type="text"
-            id="<?php echo esc_attr(Settings::OPTION_BEACON_ACCOUNT); ?>"
-            name="<?php echo esc_attr(Settings::OPTION_BEACON_ACCOUNT); ?>"
-            value="<?php echo esc_attr($value); ?>"
-            class="regular-text"
-            required
-            pattern="[a-z0-9_\-]+"
+        ?>
+        <input type="text" id="<?php echo esc_attr(Settings::OPTION_BEACON_ACCOUNT); ?>"
+            name="<?php echo esc_attr(Settings::OPTION_BEACON_ACCOUNT); ?>" value="<?php echo esc_attr($value); ?>"
+            class="regular-text" required pattern="[a-z0-9_\-]+"
             title="<?php esc_attr_e('Must be lowercase with only letters, numbers, hyphens, and underscores (no spaces)', self::TEXT_DOMAIN); ?>" />
 
         <p class="description">
@@ -42,9 +39,10 @@ class Settings_Renderer
         <ol class="description wbcd-instructions-list wbcd-collapsible" id="wbcd-account-name-instructions">
             <li><?php esc_html_e('Navigate to any of your forms on BeaconCRM\'s interface.', self::TEXT_DOMAIN); ?></li>
             <li><?php esc_html_e('Click it, then click "Embed".', self::TEXT_DOMAIN); ?></li>
-            <li><?php echo wp_kses_post(__('The form code should look like <code>&lt;div class="beacon-form" data-account="yourorg" data-form="f0rm1d"&gt;&lt;/div&gt;</code>. In this example, the account name is <code>yourorg</code> and the form ID (to fill below) is <code>f0rm1d</code>.', self::TEXT_DOMAIN)); ?></li>
+            <li><?php echo wp_kses_post(__('The form code should look like <code>&lt;div class="beacon-form" data-account="yourorg" data-form="f0rm1d"&gt;&lt;/div&gt;</code>. In this example, the account name is <code>yourorg</code> and the form ID (to fill below) is <code>f0rm1d</code>.', self::TEXT_DOMAIN)); ?>
+            </li>
         </ol>
-    <?php
+        <?php
     }
 
     /**
@@ -57,8 +55,8 @@ class Settings_Renderer
      */
     public static function render_currency_table($form_index, $form_currencies, $default_currency, $currencies_data)
     {
-    ?>
-        <table class="widefat wbcd-currencies-table">
+        ?>
+        <table class="wbcd-settings-table">
             <thead>
                 <tr>
                     <th class="wbcd-col-default"><?php esc_html_e('Default', self::TEXT_DOMAIN); ?></th>
@@ -68,19 +66,17 @@ class Settings_Renderer
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($form_currencies as $code => $form_id) :
+                <?php foreach ($form_currencies as $code => $form_id):
                     $currency_info = isset($currencies_data[$code]) ? $currencies_data[$code] : null;
                     $display_name = $currency_info
                         ? sprintf('%s (%s) %s', $code, $currency_info['name'], $currency_info['symbol'])
                         : $code;
                     $is_default = ($default_currency === $code);
-                ?>
+                    ?>
                     <tr>
                         <td data-label="<?php esc_attr_e('Default', self::TEXT_DOMAIN); ?>">
-                            <input type="radio"
-                                name="wbcd_forms[<?php echo esc_attr($form_index); ?>][default_currency]"
-                                value="<?php echo esc_attr($code); ?>"
-                                <?php checked($is_default, true); ?>
+                            <input type="radio" name="wbcd_forms[<?php echo esc_attr($form_index); ?>][default_currency]"
+                                value="<?php echo esc_attr($code); ?>" <?php checked($is_default, true); ?>
                                 title="<?php esc_attr_e('Set as default currency', self::TEXT_DOMAIN); ?>" />
                         </td>
                         <td data-label="<?php esc_attr_e('Currency', self::TEXT_DOMAIN); ?>">
@@ -89,15 +85,12 @@ class Settings_Renderer
                         <td data-label="<?php esc_attr_e('Beacon Form ID', self::TEXT_DOMAIN); ?>">
                             <input type="text"
                                 name="wbcd_forms[<?php echo esc_attr($form_index); ?>][currencies][<?php echo esc_attr($code); ?>]"
-                                value="<?php echo esc_attr($form_id); ?>"
-                                class="regular-text"
+                                value="<?php echo esc_attr($form_id); ?>" class="regular-text"
                                 placeholder="<?php esc_attr_e('Beacon form ID', self::TEXT_DOMAIN); ?>" />
                         </td>
                         <td data-label="<?php esc_attr_e('Action', self::TEXT_DOMAIN); ?>">
-                            <button type="button"
-                                class="button wbcd-remove-currency"
-                                data-form="<?php echo esc_attr($form_index); ?>"
-                                data-currency="<?php echo esc_attr($code); ?>">
+                            <button type="button" class="button wbcd-remove-currency"
+                                data-form="<?php echo esc_attr($form_index); ?>" data-currency="<?php echo esc_attr($code); ?>">
                                 <?php esc_html_e('Remove', self::TEXT_DOMAIN); ?>
                             </button>
                         </td>
@@ -108,7 +101,7 @@ class Settings_Renderer
         <p class="description">
             <?php esc_html_e('Select a default currency by clicking the radio button. This currency will be used when geo-detection fails or detects an unsupported currency.', self::TEXT_DOMAIN); ?>
         </p>
-    <?php
+        <?php
     }
 
     /**
@@ -122,7 +115,7 @@ class Settings_Renderer
     {
         // Get currencies already used in THIS form only
         $current_form_currencies = array_keys($form_currencies);
-    ?>
+        ?>
         <button type="button" class="button wbcd-show-add-currency" data-form-index="<?php echo esc_attr($form_index); ?>">
             <?php esc_html_e('Add more currencies', self::TEXT_DOMAIN); ?>
         </button>
@@ -132,33 +125,28 @@ class Settings_Renderer
                 <strong><?php esc_html_e('Add Currency:', self::TEXT_DOMAIN); ?></strong>
             </label><br>
 
-            <select id="wbcd_new_currency_<?php echo esc_attr($form_index); ?>"
-                class="wbcd-currency-select"
+            <select id="wbcd_new_currency_<?php echo esc_attr($form_index); ?>" class="wbcd-currency-select"
                 data-form-index="<?php echo esc_attr($form_index); ?>">
                 <option value=""><?php esc_html_e('-- Select a currency --', self::TEXT_DOMAIN); ?></option>
-                <?php foreach ($currencies_data as $code => $info) :
+                <?php foreach ($currencies_data as $code => $info):
                     // Only show currencies not already used in THIS specific form
-                    if (!in_array($code, $current_form_currencies)) :
+                    if (!in_array($code, $current_form_currencies)):
                         $display = sprintf('%s - %s (%s)', $code, $info['name'], $info['symbol']);
-                ?>
+                        ?>
                         <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($display); ?></option>
-                <?php
+                        <?php
                     endif;
                 endforeach; ?>
             </select>
 
-            <input type="text"
-                id="wbcd_new_currency_id_<?php echo esc_attr($form_index); ?>"
-                class="wbcd-currency-id"
+            <input type="text" id="wbcd_new_currency_id_<?php echo esc_attr($form_index); ?>" class="wbcd-currency-id"
                 placeholder="<?php esc_attr_e('Beacon form ID', self::TEXT_DOMAIN); ?>" />
 
-            <button type="button"
-                class="button wbcd-add-currency-btn"
-                data-form-index="<?php echo esc_attr($form_index); ?>">
+            <button type="button" class="button wbcd-add-currency-btn" data-form-index="<?php echo esc_attr($form_index); ?>">
                 <?php esc_html_e('Add Currency', self::TEXT_DOMAIN); ?>
             </button>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -174,7 +162,7 @@ class Settings_Renderer
         $form_name = esc_attr(isset($form['name']) ? $form['name'] : '');
         $form_currencies = isset($form['currencies']) ? $form['currencies'] : [];
         $default_currency = isset($form['default_currency']) ? $form['default_currency'] : '';
-    ?>
+        ?>
         <div class="wbcd-form-item">
             <h3><?php echo esc_html(sprintf(__('Form #%d', self::TEXT_DOMAIN), $form_index + 1)); ?></h3>
 
@@ -183,12 +171,9 @@ class Settings_Renderer
                 <label for="wbcd_form_name_<?php echo esc_attr($form_index); ?>">
                     <strong><?php esc_html_e('Form Name:', self::TEXT_DOMAIN); ?></strong>
                 </label><br>
-                <input type="text"
-                    id="wbcd_form_name_<?php echo esc_attr($form_index); ?>"
-                    name="wbcd_forms[<?php echo esc_attr($form_index); ?>][name]"
-                    value="<?php echo $form_name; ?>"
-                    class="regular-text"
-                    required
+                <input type="text" id="wbcd_form_name_<?php echo esc_attr($form_index); ?>"
+                    name="wbcd_forms[<?php echo esc_attr($form_index); ?>][name]" value="<?php echo $form_name; ?>"
+                    class="regular-text" required
                     placeholder="<?php esc_attr_e('e.g., General Donations', self::TEXT_DOMAIN); ?>" />
             </p>
 
@@ -196,9 +181,9 @@ class Settings_Renderer
             <div class="wbcd-currencies-section">
                 <h4><?php esc_html_e('Supported Currencies:', self::TEXT_DOMAIN); ?></h4>
 
-                <?php if (!empty($form_currencies)) : ?>
+                <?php if (!empty($form_currencies)): ?>
                     <?php self::render_currency_table($form_index, $form_currencies, $default_currency, $currencies_data); ?>
-                <?php else : ?>
+                <?php else: ?>
                     <p><em><?php esc_html_e('No currencies added yet.', self::TEXT_DOMAIN); ?></em></p>
                 <?php endif; ?>
 
@@ -206,17 +191,16 @@ class Settings_Renderer
             </div>
 
             <!-- Remove form button -->
-            <?php if ($total_forms > 1) : ?>
+            <?php if ($total_forms > 1): ?>
                 <p class="wbcd-remove-form-wrapper">
-                    <button type="button"
-                        class="button button-link-delete wbcd-remove-form"
+                    <button type="button" class="button button-link-delete wbcd-remove-form"
                         data-form-index="<?php echo esc_attr($form_index); ?>">
                         <?php esc_html_e('Remove This Form', self::TEXT_DOMAIN); ?>
                     </button>
                 </p>
             <?php endif; ?>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -227,9 +211,9 @@ class Settings_Renderer
      */
     public static function render_forms_field($forms, $currencies_data)
     {
-    ?>
+        ?>
         <div id="wbcd-forms-container">
-            <?php foreach ($forms as $form_index => $form) : ?>
+            <?php foreach ($forms as $form_index => $form): ?>
                 <?php self::render_form_item($form_index, $form, count($forms), $currencies_data); ?>
             <?php endforeach; ?>
         </div>
@@ -243,6 +227,74 @@ class Settings_Renderer
         <p class="description">
             <?php esc_html_e('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies and a default currency (used as fallback). Each currency can only appear once per form.', self::TEXT_DOMAIN); ?>
         </p>
-<?php
+        <?php
+    }
+
+    /**
+     * Render the UTM tracking field
+     * 
+     * @param bool $value Current value
+     * @param array $utm_params UTM parameter mappings
+     */
+    public static function render_utm_tracking_field($value, $utm_params)
+    {
+        ?>
+        <label>
+            <input type="checkbox" id="<?php echo esc_attr(Settings::OPTION_TRACK_UTM); ?>"
+                name="<?php echo esc_attr(Settings::OPTION_TRACK_UTM); ?>" value="1" <?php checked($value, true); ?> />
+            <?php esc_html_e('Enable UTM parameter tracking', self::TEXT_DOMAIN); ?>
+        </label>
+
+        <p class="description">
+            <?php esc_html_e('When enabled, UTM parameters (utm_source, utm_medium, utm_campaign) are automatically tracked across all pages and stored in a cookie for 180 days. These parameters are then passed to donation forms via data attributes.', self::TEXT_DOMAIN); ?>
+        </p>
+
+        <div id="wbcd-utm-params-section" <?php echo $value ? '' : 'style="display:none;"'; ?>>
+            <h4><?php esc_html_e('Parameter Configuration', self::TEXT_DOMAIN); ?></h4>
+            <p class="description">
+                <?php esc_html_e('Choose the URL Data parameters as configured under "URL Data" in your forms. All parameter names must start with "bcn_".', self::TEXT_DOMAIN); ?>
+            </p>
+
+            <table class="wbcd-settings-table">
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e('UTM Parameter', self::TEXT_DOMAIN); ?></th>
+                        <th><?php esc_html_e('Payment Parameter', self::TEXT_DOMAIN); ?></th>
+                        <th><?php esc_html_e('Subscription Parameter', self::TEXT_DOMAIN); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $utm_fields = Settings::get_utm_field_names();
+
+                    foreach ($utm_fields as $key):
+                        $label = $key;
+                        $payment_value = isset($utm_params[$key]['payment']) ? $utm_params[$key]['payment'] : '';
+                        $subscription_value = isset($utm_params[$key]['subscription']) ? $utm_params[$key]['subscription'] : '';
+                        ?>
+                        <tr>
+                            <td data-label="<?php esc_attr_e('UTM Parameter', self::TEXT_DOMAIN); ?>">
+                                <strong><?php echo esc_html($label); ?></strong>
+                            </td>
+                            <td data-label="<?php esc_attr_e('Payment Parameter', self::TEXT_DOMAIN); ?>">
+                                <input type="text"
+                                    name="<?php echo esc_attr(Settings::OPTION_UTM_PARAMS); ?>[<?php echo esc_attr($key); ?>][payment]"
+                                    value="<?php echo esc_attr($payment_value); ?>" class="regular-text"
+                                    placeholder="<?php echo esc_attr('bcn_pay_c_' . $key); ?>" />
+                            </td>
+                            <td data-label="<?php esc_attr_e('Subscription Parameter', self::TEXT_DOMAIN); ?>">
+                                <input type="text"
+                                    name="<?php echo esc_attr(Settings::OPTION_UTM_PARAMS); ?>[<?php echo esc_attr($key); ?>][subscription]"
+                                    value="<?php echo esc_attr($subscription_value); ?>" class="regular-text"
+                                    placeholder="<?php echo esc_attr('bcn_sub_c_' . $key); ?>" />
+                            </td>
+                        </tr>
+                        <?php
+                    endforeach;
+                    ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
     }
 }

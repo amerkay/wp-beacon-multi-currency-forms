@@ -9,12 +9,13 @@
  * Requires PHP: 7.4
  */
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
-define('WPBCD_VERSION',        '0.1.0');
-define('WPBCD_FILE',           __FILE__);
-define('WPBCD_PATH',           plugin_dir_path(__FILE__));
-define('WPBCD_URL',            plugin_dir_url(__FILE__));
+define('WPBCD_VERSION', '0.1.1');
+define('WPBCD_FILE', __FILE__);
+define('WPBCD_PATH', plugin_dir_path(__FILE__));
+define('WPBCD_URL', plugin_dir_url(__FILE__));
 
 // --- Includes ---
 require_once WPBCD_PATH . 'includes/class-constants.php';
@@ -111,7 +112,7 @@ add_action('init', function () {
                 // Enqueue assets before rendering
                 wp_enqueue_style('wbcd-front');
                 // Note: enqueue_donation_box is called inside Donate_Box_Render::render with the target URL
-
+        
                 // Call the render method
                 return WBCD\Render\Donate_Box_Render::render($form_name, $render_args);
             },
@@ -207,12 +208,25 @@ add_action('enqueue_block_editor_assets', function () {
 });
 
 // Settings page + admin notices
-add_action('admin_menu',  ['WBCD\\Settings', 'add_menu']);
-add_action('admin_init',  ['WBCD\\Settings', 'register']);
+add_action('admin_menu', ['WBCD\\Settings', 'add_menu']);
+add_action('admin_init', ['WBCD\\Settings', 'register']);
 add_action('admin_enqueue_scripts', ['WBCD\\Settings', 'enqueue_admin_assets']);
 add_action('admin_notices', ['WBCD\\GeoIP_Dependency', 'admin_notices']);
 add_action('admin_footer', ['WBCD\\GeoIP_Dependency', 'enqueue_dismiss_script']);
 add_action('wp_ajax_wbcd_dismiss_geoip_notice', ['WBCD\\GeoIP_Dependency', 'dismiss_notice']);
+
+// UTM Tracking - enqueue globally on frontend when enabled
+add_action('wp_enqueue_scripts', function () {
+    if (WBCD\Settings::get_utm_tracking_enabled()) {
+        wp_enqueue_script(
+            'wbcd-utm-tracker',
+            WPBCD_URL . 'public/js/utm-tracker.js',
+            [],
+            WPBCD_VERSION,
+            true // Load in footer
+        );
+    }
+});
 
 // Elementor Widgets
 add_action('elementor/widgets/register', function ($widgets_manager) {
