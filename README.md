@@ -449,11 +449,25 @@ Install and activate the **[GeoIP Detection](https://wordpress.org/plugins/geoip
 
 ## 📊 UTM Parameter Tracking
 
-The plugin automatically tracks UTM parameters (`utm_source`, `utm_medium`, `utm_campaign`) across your entire website and passes them to donation forms.
+The plugin can automatically track UTM parameters and load the Beacon SDK globally for proper cross-domain attribution.
+
+### Two Independent Settings
+
+**1. Load Beacon JavaScript globally** (Settings → Beacon Donate)
+- Loads the Beacon SDK on all pages (required for cross-domain attribution tracking)
+- When disabled: SDK only loads on pages with donate modules
+- **Default: Unchecked** (opt-in)
+- [Learn more about Beacon tracking](https://guide.beaconcrm.org/en/articles/5720151-tracking-forms-with-google-analytics#h_13617763bc)
+
+**2. Enable tracking and passing UTM parameters to donation forms** (Settings → Beacon Donate)
+- Tracks `utm_source`, `utm_medium`, and `utm_campaign` in a 180-day cookie
+- Passes stored parameters to donation forms via data attributes
+- Configure custom parameter mappings (e.g., `bcn_pay_c_utm_source`)
+- **Default: Unchecked** (opt-in)
 
 ### How It Works
 
-1. **Enabled by default** in Settings → Beacon Donate
+1. Enable one or both settings in **Settings → Beacon Donate**
 2. When a visitor lands with UTM parameters (e.g., from an ad campaign), they are stored in a cookie for 180 days
 3. When the visitor reaches a donation form page, the stored UTM parameters are passed to BeaconCRM via data attributes
 4. Only `utm_source`, `utm_medium`, and `utm_campaign` are tracked (utm_id, utm_term, and utm_content are excluded)
@@ -475,10 +489,6 @@ User navigates to donation form (even 30 days later)
 ↓
 Form receives data attributes and passes to BeaconCRM
 ```
-
-### Disabling UTM Tracking
-
-To disable this feature, go to **Settings → Beacon Donate** and uncheck **"Enable UTM parameter tracking"**.
 
 ---
 
@@ -606,6 +616,17 @@ This plugin is licensed under GPL v2 or later.
 ---
 
 ## 📝 Changelog
+
+### Version 0.1.2
+feat: add UTM tracking, separate Beacon SDK loading, centralize version, improve settings UX
+- New settings default to unchecked (opt-in for Beacon SDK and UTM tracking)
+- Add separate "Load Beacon JavaScript globally" setting for cross-domain attribution
+- Add "Enable tracking and passing UTM parameters" setting with configurable parameter mappings
+- Extract Beacon SDK to separate loader file (`beacon-sdk-loader.js`)
+- Centralize version to plugin header as single source of truth
+- Add dismissible cache clearing reminder after settings save
+- Add Settings link to plugins page action links
+- UTM parameters stored in cookie for 180 days with atomic replacement. Only tracks utm_source, utm_medium, utm_campaign (utm_id, utm_term, utm_content excluded)
 
 ### Version 0.1.1
 feat(utm): add UTM parameter tracking functionality
