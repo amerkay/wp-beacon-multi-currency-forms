@@ -2,7 +2,8 @@
 
 namespace WBCD;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Form Validator Class

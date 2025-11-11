@@ -2,17 +2,18 @@
 
 namespace WBCD\Integrations\Divi;
 
-if (! class_exists('ET_Builder_Module')) {
+if (!class_exists('ET_Builder_Module')) {
     return;
 }
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Donate_Box_Module extends Abstract_WBCD_Divi_Module
 {
-    public $slug       = 'wbcd_divi_donate_box';
+    public $slug = 'wbcd_divi_donate_box';
     public $vb_support = 'off';
-    public $name       = '';
+    public $name = '';
 
     function init()
     {

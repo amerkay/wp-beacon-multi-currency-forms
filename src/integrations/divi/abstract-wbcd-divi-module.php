@@ -2,11 +2,12 @@
 
 namespace WBCD\Integrations\Divi;
 
-if (! class_exists('ET_Builder_Module')) {
+if (!class_exists('ET_Builder_Module')) {
     return;
 }
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Abstract base class for all WBCD Divi modules.

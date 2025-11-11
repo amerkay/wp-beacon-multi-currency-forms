@@ -2,7 +2,8 @@
 
 namespace WBCD\Render;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Donate_Form_Render
 {
@@ -37,18 +38,19 @@ class Donate_Form_Render
 
         // Render a minimal, accessible shell; JS fills in the Beacon form and currency behavior.
         ob_start();
-?>
-        <div id="wpbcd-page" class="wpbcd-wrap"
-            data-custom-params="<?php echo esc_attr($custom_params_json); ?>"
+        ?>
+        <div id="wpbcd-page" class="wpbcd-wrap" data-custom-params="<?php echo esc_attr($custom_params_json); ?>"
             data-default-frequency="<?php echo esc_attr($args['defaultFrequency']); ?>"
             data-default-amount="<?php echo esc_attr($args['defaultAmount']); ?>">
-            <div class="wpbcd-toolbar" role="region" aria-label="<?php esc_attr_e('Donation settings', 'wp-beacon-crm-donate'); ?>">
+            <div class="wpbcd-toolbar" role="region"
+                aria-label="<?php esc_attr_e('Donation settings', 'wp-beacon-crm-donate'); ?>">
                 <label for="wpbcd-currency" class="wpbcd-label"><?php esc_html_e('Currency', 'wp-beacon-crm-donate'); ?></label>
-                <select id="wpbcd-currency" class="wpbcd-select" aria-label="<?php esc_attr_e('Currency', 'wp-beacon-crm-donate'); ?>">
+                <select id="wpbcd-currency" class="wpbcd-select"
+                    aria-label="<?php esc_attr_e('Currency', 'wp-beacon-crm-donate'); ?>">
                     <?php foreach ($currencies as $code => $form_id):
                         $symbol = isset($symbols[$code]) ? $symbols[$code] : '';
                         $display = $symbol ? sprintf('%s %s', $code, $symbol) : $code;
-                    ?>
+                        ?>
                         <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($display); ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -57,7 +59,7 @@ class Donate_Form_Render
                 <div id="wpbcd-beacon-slot"></div>
             </div>
         </div>
-<?php
+        <?php
         return ob_get_clean();
     }
 }

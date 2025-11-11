@@ -224,25 +224,59 @@ class Settings_Renderer
             </button>
         </p>
 
-        <p class="description">
+                <p class="description">
             <?php esc_html_e('Create donation forms and assign Beacon CRM form IDs for each currency. Each form can have multiple currencies and a default currency (used as fallback). Each currency can only appear once per form.', self::TEXT_DOMAIN); ?>
         </p>
-        <?php
+<?php
+    }
+
+    /**
+     * Render the load Beacon globally field
+     * 
+     * @param bool $value Current value
+     */
+    public static function render_load_beacon_globally_field($value)
+    {
+?>
+        <label>
+            <input type="checkbox"
+                id="<?php echo esc_attr(Settings::OPTION_LOAD_BEACON_GLOBALLY); ?>"
+                name="<?php echo esc_attr(Settings::OPTION_LOAD_BEACON_GLOBALLY); ?>"
+                value="1"
+                <?php checked($value, true); ?> />
+            <?php esc_html_e('Load Beacon JavaScript on every page to enable utm_* tracking', self::TEXT_DOMAIN); ?>
+        </label>
+
+        <p class="description">
+            <?php 
+            printf(
+                wp_kses(
+                    __('When enabled, the Beacon SDK is loaded on all pages to enable proper cross-domain attribution tracking. This is required for accurate source attribution because Beacon forms run on a separate domain. <a href="%s" target="_blank" rel="noopener">Learn more about tracking forms with Google Analytics</a>.', self::TEXT_DOMAIN),
+                    ['a' => ['href' => [], 'target' => [], 'rel' => []]]
+                ),
+                'https://guide.beaconcrm.org/en/articles/5720151-tracking-forms-with-google-analytics#h_13617763bc'
+            );
+            ?>
+        </p>
+<?php
     }
 
     /**
      * Render the UTM tracking field
      * 
      * @param bool $value Current value
-     * @param array $utm_params UTM parameter mappings
+     * @param array $utm_params Current UTM parameter mappings
      */
     public static function render_utm_tracking_field($value, $utm_params)
     {
-        ?>
+?>
         <label>
-            <input type="checkbox" id="<?php echo esc_attr(Settings::OPTION_TRACK_UTM); ?>"
-                name="<?php echo esc_attr(Settings::OPTION_TRACK_UTM); ?>" value="1" <?php checked($value, true); ?> />
-            <?php esc_html_e('Enable UTM parameter tracking', self::TEXT_DOMAIN); ?>
+            <input type="checkbox"
+                id="<?php echo esc_attr(Settings::OPTION_TRACK_UTM); ?>"
+                name="<?php echo esc_attr(Settings::OPTION_TRACK_UTM); ?>"
+                value="1"
+                <?php checked($value, true); ?> />
+            <?php esc_html_e('Enable tracking and passing UTM parameters to donation forms', self::TEXT_DOMAIN); ?>
         </label>
 
         <p class="description">

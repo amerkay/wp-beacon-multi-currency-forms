@@ -2,11 +2,12 @@
 
 namespace WBCD\Integrations\Elementor;
 
-if (! class_exists('\Elementor\Widget_Base')) {
+if (!class_exists('\Elementor\Widget_Base')) {
     return;
 }
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Abstract base class for all WBCD Elementor widgets.
@@ -153,7 +154,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
      */
     protected function render_editor_placeholder($widget_title, $icon, $info_lines = [])
     {
-        if (! \Elementor\Plugin::$instance->editor->is_edit_mode()) {
+        if (!\Elementor\Plugin::$instance->editor->is_edit_mode()) {
             return false;
         }
 

@@ -4,7 +4,8 @@ namespace WBCD\Shortcodes;
 
 use WBCD\Render\Donate_Form_Render;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Shortcode_Donate_Form
 {

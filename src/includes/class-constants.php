@@ -2,7 +2,8 @@
 
 namespace WBCD;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Central constants class for all default values.
@@ -22,11 +23,6 @@ if (! defined('ABSPATH')) exit;
  */
 class Constants
 {
-    /**
-     * Plugin version for cache busting.
-     */
-    const VERSION = '0.1.0';
-
     /**
      * WordPress text domain for translations.
      */
@@ -238,12 +234,13 @@ class Constants
 
     /**
      * Get plugin version.
+     * Reads from main plugin file header (single source of truth).
      * 
      * @return string Version string
      */
     public static function get_version()
     {
-        return self::VERSION;
+        return defined('WPBCD_VERSION') ? WPBCD_VERSION : '0.1.0';
     }
 
     // ========================================

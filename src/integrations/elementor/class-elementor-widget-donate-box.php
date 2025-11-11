@@ -2,11 +2,12 @@
 
 namespace WBCD\Integrations\Elementor;
 
-if (! class_exists('\Elementor\Widget_Base')) {
+if (!class_exists('\Elementor\Widget_Base')) {
     return;
 }
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
 {
@@ -110,14 +111,16 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $settings = $this->get_settings_for_display();
 
         // Show editor placeholder
-        if ($this->render_editor_placeholder(
-            __('Beacon Donation Box', 'wp-beacon-crm-donate'),
-            '📦',
-            [
-                __('Form', 'wp-beacon-crm-donate') => $settings['form_name'] ?: __('Default', 'wp-beacon-crm-donate'),
-                __('Title', 'wp-beacon-crm-donate') => $settings['title'] ?? __('Make a donation', 'wp-beacon-crm-donate'),
-            ]
-        )) {
+        if (
+            $this->render_editor_placeholder(
+                __('Beacon Donation Box', 'wp-beacon-crm-donate'),
+                '📦',
+                [
+                    __('Form', 'wp-beacon-crm-donate') => $settings['form_name'] ?: __('Default', 'wp-beacon-crm-donate'),
+                    __('Title', 'wp-beacon-crm-donate') => $settings['title'] ?? __('Make a donation', 'wp-beacon-crm-donate'),
+                ]
+            )
+        ) {
             return;
         }
 

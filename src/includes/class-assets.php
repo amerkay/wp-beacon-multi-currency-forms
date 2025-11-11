@@ -12,6 +12,32 @@ class Assets
      */
     private static $constants_localized = false;
 
+    /**
+     * Track if Beacon SDK has been enqueued to prevent duplicate calls.
+     */
+    private static $sdk_enqueued = false;
+
+    /**
+     * Enqueue Beacon SDK loader script.
+     * Call this to ensure the SDK is loaded (respects single-load pattern).
+     */
+    public static function enqueue_beacon_sdk()
+    {
+        if (self::$sdk_enqueued) {
+            return;
+        }
+
+        wp_enqueue_script(
+            'wbcd-beacon-sdk',
+            WPBCD_URL . 'public/js/beacon-sdk-loader.js',
+            [],
+            WPBCD_VERSION,
+            false // Load in head for early initialization
+        );
+
+        self::$sdk_enqueued = true;
+    }
+
     public static function enqueue_front_base()
     {
         // Shared front styles
@@ -67,6 +93,11 @@ class Assets
 
     public static function enqueue_donation_form($form_name = '')
     {
+        // Enqueue Beacon SDK if not already loaded globally
+        if (!Settings::get_load_beacon_globally()) {
+            self::enqueue_beacon_sdk();
+        }
+
         $beaconAccountName = Settings::get_beacon_account();
         $forms = Settings::get_forms_by_currency($form_name);
 
@@ -99,6 +130,11 @@ class Assets
 
     public static function enqueue_donation_box($form_name = '', $target_page_url = '')
     {
+        // Enqueue Beacon SDK if not already loaded globally
+        if (!Settings::get_load_beacon_globally()) {
+            self::enqueue_beacon_sdk();
+        }
+
         $beaconAccountName = Settings::get_beacon_account();
         $forms = Settings::get_forms_by_currency($form_name);
         $symbols = Settings::get_currency_symbols();

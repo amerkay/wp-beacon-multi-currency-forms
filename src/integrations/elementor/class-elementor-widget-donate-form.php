@@ -3,11 +3,12 @@
 namespace WBCD\Integrations\Elementor;
 
 // If Elementor isn't loaded, bail before defining the class.
-if (! class_exists('\Elementor\Widget_Base')) {
+if (!class_exists('\Elementor\Widget_Base')) {
     return;
 }
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
 {
@@ -70,13 +71,15 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
     protected function render()
     {
         // Show editor placeholder
-        if ($this->render_editor_placeholder(
-            __('Beacon Donation Form', 'wp-beacon-crm-donate'),
-            '📋',
-            [
-                __('Form', 'wp-beacon-crm-donate') => $this->get_settings_for_display()['form_name'] ?: __('Default', 'wp-beacon-crm-donate')
-            ]
-        )) {
+        if (
+            $this->render_editor_placeholder(
+                __('Beacon Donation Form', 'wp-beacon-crm-donate'),
+                '📋',
+                [
+                    __('Form', 'wp-beacon-crm-donate') => $this->get_settings_for_display()['form_name'] ?: __('Default', 'wp-beacon-crm-donate')
+                ]
+            )
+        ) {
             return;
         }
 

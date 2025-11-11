@@ -2,8 +2,8 @@
 
 /**
  * Plugin Name:  Beacon CRM Donate
- * Description:  Two Beacon donation blocks (full page form + donate box) with shortcodes and Elementor/Divi adapters. No bundlers; DRY PHP renderers; simple Settings.
- * Version:      0.1.0
+ * Description:  Two Beacon donation blocks: full page form + donate box (CTA). Use with shortcodes, Gutenberg Divi and Elementor visual builders. Google Analytics UTM integration ready.
+ * Version:      0.1.2
  * Author:       Amer Kawar @ WildAmer.com
  * Text Domain:  wp-beacon-crm-donate
  * Requires PHP: 7.4
@@ -12,7 +12,11 @@
 if (!defined('ABSPATH'))
     exit;
 
-define('WPBCD_VERSION', '0.1.1');
+// Extract version from plugin header (single source of truth)
+if (!defined('WPBCD_VERSION')) {
+    $plugin_data = get_file_data(__FILE__, ['Version' => 'Version']);
+    define('WPBCD_VERSION', $plugin_data['Version']);
+}
 define('WPBCD_FILE', __FILE__);
 define('WPBCD_PATH', plugin_dir_path(__FILE__));
 define('WPBCD_URL', plugin_dir_url(__FILE__));
@@ -210,14 +214,39 @@ add_action('enqueue_block_editor_assets', function () {
 // Settings page + admin notices
 add_action('admin_menu', ['WBCD\\Settings', 'add_menu']);
 add_action('admin_init', ['WBCD\\Settings', 'register']);
+add_action('admin_init', ['WBCD\\Settings', 'on_settings_updated']);
 add_action('admin_enqueue_scripts', ['WBCD\\Settings', 'enqueue_admin_assets']);
+add_action('admin_notices', ['WBCD\\Settings', 'settings_updated_notice']);
 add_action('admin_notices', ['WBCD\\GeoIP_Dependency', 'admin_notices']);
 add_action('admin_footer', ['WBCD\\GeoIP_Dependency', 'enqueue_dismiss_script']);
 add_action('wp_ajax_wbcd_dismiss_geoip_notice', ['WBCD\\GeoIP_Dependency', 'dismiss_notice']);
 
-// UTM Tracking - enqueue globally on frontend when enabled
+// Add settings link to plugins page
+add_filter('plugin_action_links_' . plugin_basename(WPBCD_FILE), function ($links) {
+    $settings_link = sprintf(
+        '<a href="%s">%s</a>',
+        admin_url('options-general.php?page=wbcd-settings'),
+        __('Settings', 'wp-beacon-crm-donate')
+    );
+    array_unshift($links, $settings_link);
+    return $links;
+});
+
+// Frontend scripts - Beacon SDK and UTM Tracking
 add_action('wp_enqueue_scripts', function () {
-    if (WBCD\Settings::get_utm_tracking_enabled()) {
+    $load_beacon_globally = WBCD\Settings::get_load_beacon_globally();
+    $track_utm = WBCD\Settings::get_utm_tracking_enabled();
+
+    // Load Beacon SDK globally if enabled
+    // This enables proper cross-domain attribution tracking per Beacon docs
+    if ($load_beacon_globally) {
+        WBCD\Assets::enqueue_beacon_sdk();
+    }
+    // When disabled, SDK is loaded only on pages with donate modules
+    // (handled in Assets::enqueue_donation_form() and Assets::enqueue_donation_box())
+
+    // Load UTM tracker if enabled
+    if ($track_utm) {
         wp_enqueue_script(
             'wbcd-utm-tracker',
             WPBCD_URL . 'public/js/utm-tracker.js',
@@ -228,7 +257,7 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-// Elementor Widgets
+// Elementor Widgets// Elementor Widgets
 add_action('elementor/widgets/register', function ($widgets_manager) {
     if (!class_exists('\Elementor\Widget_Base')) {
         return;

@@ -2,7 +2,8 @@
 
 namespace WBCD\Utils;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Utility class for parsing preset donation amounts.

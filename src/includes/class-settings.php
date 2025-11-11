@@ -10,6 +10,7 @@ class Settings
     // Option names
     const OPTION_BEACON_ACCOUNT = 'wbcd_beacon_account';
     const OPTION_FORMS = 'wbcd_forms';
+    const OPTION_LOAD_BEACON_GLOBALLY = 'wbcd_load_beacon_globally';
     const OPTION_TRACK_UTM = 'wbcd_track_utm';
     const OPTION_UTM_PARAMS = 'wbcd_utm_params';
 
@@ -128,8 +129,9 @@ class Settings
             'validationFailed' => __('Please fix the following errors before saving:', self::TEXT_DOMAIN),
             'addMoreCurrencies' => __('Add more currencies', self::TEXT_DOMAIN),
             'hideCurrencyForm' => __('Hide', self::TEXT_DOMAIN),
-            'utmTracking' => __('UTM Tracking', self::TEXT_DOMAIN),
-            'enableUtmTracking' => __('Enable UTM parameter tracking', self::TEXT_DOMAIN),
+            'loadBeaconGlobally' => __('Load Beacon JavaScript globally', self::TEXT_DOMAIN),
+            'utmTracking' => __('UTM Parameter Tracking', self::TEXT_DOMAIN),
+            'enableUtmTracking' => __('Enable tracking and passing UTM parameters to donation forms', self::TEXT_DOMAIN),
         ];
     }
 
@@ -144,7 +146,8 @@ class Settings
 
         add_option(self::OPTION_BEACON_ACCOUNT, '');
         add_option(self::OPTION_FORMS, $defaults);
-        add_option(self::OPTION_TRACK_UTM, true);
+        add_option(self::OPTION_LOAD_BEACON_GLOBALLY, false);
+        add_option(self::OPTION_TRACK_UTM, false);
         add_option(self::OPTION_UTM_PARAMS, $default_utm_params);
 
         register_setting('wbcd_group', self::OPTION_BEACON_ACCOUNT, [
@@ -159,9 +162,14 @@ class Settings
             'default' => $defaults,
         ]);
 
+        register_setting('wbcd_group', self::OPTION_LOAD_BEACON_GLOBALLY, [
+            'type' => 'boolean',
+            'default' => false,
+        ]);
+
         register_setting('wbcd_group', self::OPTION_TRACK_UTM, [
             'type' => 'boolean',
-            'default' => true,
+            'default' => false,
         ]);
 
         register_setting('wbcd_group', self::OPTION_UTM_PARAMS, [
@@ -196,8 +204,16 @@ class Settings
         );
 
         add_settings_field(
+            'wbcd_field_load_beacon_globally',
+            __('Beacon JavaScript', self::TEXT_DOMAIN),
+            [__CLASS__, 'field_load_beacon_globally'],
+            'wbcd-settings',
+            'wbcd_section_main'
+        );
+
+        add_settings_field(
             'wbcd_field_track_utm',
-            __('UTM Tracking', self::TEXT_DOMAIN),
+            __('UTM Parameter Tracking', self::TEXT_DOMAIN),
             [__CLASS__, 'field_track_utm'],
             'wbcd-settings',
             'wbcd_section_main'
@@ -366,6 +382,15 @@ class Settings
     }
 
     /**
+     * Render the load Beacon globally field
+     */
+    public static function field_load_beacon_globally()
+    {
+        $value = get_option(self::OPTION_LOAD_BEACON_GLOBALLY, true);
+        Settings_Renderer::render_load_beacon_globally_field($value);
+    }
+
+    /**
      * Render the UTM tracking field
      */
     public static function field_track_utm()
@@ -418,6 +443,35 @@ class Settings
             </form>
         </div>
         <?php
+    }
+
+    /**
+     * Display admin notice after settings update
+     */
+    public static function settings_updated_notice()
+    {
+        // Check if our transient exists
+        if (get_transient('wbcd_settings_updated')) {
+            ?>
+            <div class="notice notice-info is-dismissible">
+                <p><?php esc_html_e('Settings saved successfully. Remember to clear your cache for changes to take effect.', self::TEXT_DOMAIN); ?>
+                </p>
+            </div>
+            <?php
+            // Delete transient after displaying
+            delete_transient('wbcd_settings_updated');
+        }
+    }
+
+    /**
+     * Set transient after successful settings update
+     */
+    public static function on_settings_updated()
+    {
+        // Check if we're updating our settings
+        if (isset($_POST['option_page']) && $_POST['option_page'] === 'wbcd_group') {
+            set_transient('wbcd_settings_updated', true, 60); // 60 seconds
+        }
     }
 
     // ========================================
@@ -585,6 +639,16 @@ class Settings
         }
 
         return '';
+    }
+
+    /**
+     * Check if Beacon SDK should be loaded globally
+     * 
+     * @return bool Whether to load Beacon SDK globally
+     */
+    public static function get_load_beacon_globally()
+    {
+        return (bool) get_option(self::OPTION_LOAD_BEACON_GLOBALLY, true);
     }
 
     /**

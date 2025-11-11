@@ -78,15 +78,8 @@
     ? DEFAULT_CURRENCY 
     : ALLOWED[0];
 
-  // Inject Beacon SDK once
-  (function(d,i){
-    if(!d.getElementById(i)){
-      var s=d.createElement("script");
-      s.id=i;s.async=true;
-      s.src="https://static.beaconproducts.co.uk/js-sdk/production/beaconcrm.min.js";
-      d.head.appendChild(s);
-    }
-  }(document,"beacon-js-sdk"));
+  // Note: Beacon SDK is loaded separately via beacon-sdk-loader.js
+  // (either globally when UTM tracking is enabled, or per-page when disabled)
 
   // Elements
   var selectEl = document.getElementById("wpbcd-currency");

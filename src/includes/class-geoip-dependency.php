@@ -2,14 +2,16 @@
 
 namespace WBCD;
 
-if (! defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 class GeoIP_Dependency
 {
 
     public static function admin_notices()
     {
-        if (! current_user_can('manage_options')) return;
+        if (!current_user_can('manage_options'))
+            return;
 
         // Check if the GeoIP setup notice has been dismissed
         if (get_option('wbcd_geoip_notice_dismissed', false)) {
@@ -35,7 +37,7 @@ class GeoIP_Dependency
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
         $is_active = function_exists('is_plugin_active') && is_plugin_active('geoip-detect/geoip-detect.php');
 
-        if (! $is_active) {
+        if (!$is_active) {
             $url = admin_url('plugin-install.php?s=geoip-detect&tab=search&type=term');
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
@@ -50,8 +52,8 @@ class GeoIP_Dependency
 
         // Gentle guidance to enable AJAX/JS API + MaxMind credentials
         $settings_url = admin_url('options-general.php?page=geoip-detect%2Fgeoip-detect.php');
-        $ajax_doc     = 'https://github.com/yellowtree/geoip-detect/wiki/API%3A-AJAX';
-        $mm_doc       = 'https://www.maxmind.com/en/create-account';
+        $ajax_doc = 'https://github.com/yellowtree/geoip-detect/wiki/API%3A-AJAX';
+        $mm_doc = 'https://www.maxmind.com/en/create-account';
 
         echo '<div class="notice notice-info is-dismissible" data-dismissible="wbcd-geoip-notice"><p>';
         echo wp_kses_post(sprintf(
@@ -69,7 +71,7 @@ class GeoIP_Dependency
 
     public static function dismiss_notice()
     {
-        if (! current_user_can('manage_options')) {
+        if (!current_user_can('manage_options')) {
             wp_send_json_error(['message' => 'Unauthorized'], 403);
         }
 
@@ -81,13 +83,15 @@ class GeoIP_Dependency
 
     public static function enqueue_dismiss_script()
     {
-        if (! current_user_can('manage_options')) return;
-        if (get_option('wbcd_geoip_notice_dismissed', false)) return;
+        if (!current_user_can('manage_options'))
+            return;
+        if (get_option('wbcd_geoip_notice_dismissed', false))
+            return;
 
-?>
+        ?>
         <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                $(document).on('click', '.notice[data-dismissible="wbcd-geoip-notice"] .notice-dismiss', function() {
+            jQuery(document).ready(function ($) {
+                $(document).on('click', '.notice[data-dismissible="wbcd-geoip-notice"] .notice-dismiss', function () {
                     $.ajax({
                         url: ajaxurl,
                         type: 'POST',
@@ -99,6 +103,6 @@ class GeoIP_Dependency
                 });
             });
         </script>
-<?php
+        <?php
     }
 }
