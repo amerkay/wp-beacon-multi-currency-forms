@@ -1,5 +1,5 @@
 /**
- * Beacon CRM Donate - Admin Settings JavaScript
+ * Beacon Multi-Currency Forms - Admin Settings JavaScript
  * Handles dynamic form management on the plugin settings page
  */
 

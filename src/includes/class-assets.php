@@ -29,9 +29,9 @@ class Assets
 
         wp_enqueue_script(
             'wbcd-beacon-sdk',
-            WPBCD_URL . 'public/js/beacon-sdk-loader.js',
+            WPBMCF_URL . 'public/js/beacon-sdk-loader.js',
             [],
-            WPBCD_VERSION,
+            WPBMCF_VERSION,
             false // Load in head for early initialization
         );
 
@@ -43,9 +43,9 @@ class Assets
         // Shared front styles
         wp_register_style(
             'wbcd-front',
-            WPBCD_URL . 'public/css/donate.css',
+            WPBMCF_URL . 'public/css/donate.css',
             [],
-            WPBCD_VERSION
+            WPBMCF_VERSION
         );
         wp_enqueue_style('wbcd-front');
 
@@ -87,7 +87,7 @@ class Assets
     {
         $colors = Constants::get_all_colors();
         // Inject into :root so all WBCD components (buttons, boxes, forms) can access the variables
-        $inline_css = ":root{--wpbcd-brand:{$colors['brand']};--wpbcd-primary:{$colors['primary']};--wpbcd-text:{$colors['text']};--wpbcd-border:{$colors['border']};}";
+        $inline_css = ":root{--wpbmcf-brand:{$colors['brand']};--wpbmcf-primary:{$colors['primary']};--wpbmcf-text:{$colors['text']};--wpbmcf-border:{$colors['border']};}";
         wp_add_inline_style('wbcd-front', $inline_css);
     }
 
@@ -110,13 +110,13 @@ class Assets
 
         wp_register_script(
             'wbcd-donate-form',
-            WPBCD_URL . 'public/js/donate-form.js',
+            WPBMCF_URL . 'public/js/donate-form.js',
             [],
-            WPBCD_VERSION,
+            WPBMCF_VERSION,
             true
         );
 
-        wp_localize_script('wbcd-donate-form', 'WPBCD_FORM_DATA', [
+        wp_localize_script('wbcd-donate-form', 'WPBMCF_FORM_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $forms,
             'allowedCurrencies' => array_keys($forms),
@@ -149,9 +149,9 @@ class Assets
 
         wp_register_script(
             'wbcd-donate-box',
-            WPBCD_URL . 'public/js/donate-box.js',
+            WPBMCF_URL . 'public/js/donate-box.js',
             [],
-            WPBCD_VERSION,
+            WPBMCF_VERSION,
             true
         );
 
@@ -162,7 +162,7 @@ class Assets
             $byCur[$code] = ['id' => $id, 'symbol' => $symbol];
         }
 
-        wp_localize_script('wbcd-donate-box', 'WPBCD_BOX_DATA', [
+        wp_localize_script('wbcd-donate-box', 'WPBMCF_BOX_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $byCur,
             'baseURL' => $target_page_url,

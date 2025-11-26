@@ -26,12 +26,12 @@ class Constants
     /**
      * WordPress text domain for translations.
      */
-    const TEXT_DOMAIN = 'wp-beacon-crm-donate';
+    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
 
     /**
      * CSS class prefix used throughout the plugin.
      */
-    const CSS_PREFIX = 'wpbcd-';
+    const CSS_PREFIX = 'wpbmcf-';
 
     // ========================================
     // COLOR CONSTANTS
@@ -39,13 +39,13 @@ class Constants
 
     /**
      * Default brand color (used for selected states, hover effects).
-     * Used as --wpbcd-brand CSS variable.
+     * Used as --wpbmcf-brand CSS variable.
      */
     const COLOR_BRAND = '#676767';
 
     /**
      * Default primary/accent color (used for CTAs, buttons).
-     * Used as --wpbcd-primary CSS variable.
+     * Used as --wpbmcf-primary CSS variable.
      */
     const COLOR_PRIMARY = '#FF7B1A';
 
@@ -240,7 +240,7 @@ class Constants
      */
     public static function get_version()
     {
-        return defined('WPBCD_VERSION') ? WPBCD_VERSION : '0.1.0';
+        return defined('WPBMCF_VERSION') ? WPBMCF_VERSION : '0.1.0';
     }
 
     // ========================================

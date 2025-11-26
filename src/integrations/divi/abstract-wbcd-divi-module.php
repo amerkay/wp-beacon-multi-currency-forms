@@ -30,7 +30,7 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_form_options()
     {
         $forms = \WBCD\Settings::get_forms_for_dropdown();
-        $options = ['' => __('Default (First form)', 'wp-beacon-crm-donate')];
+        $options = ['' => __('Default (First form)', 'wp-beacon-multi-currency-forms')];
 
         foreach ($forms as $name => $label) {
             $options[$name] = $label;
@@ -47,7 +47,7 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_currency_options()
     {
         $all_currencies = \WBCD\Settings::get_forms_by_currency();
-        $currency_options = ['' => __('None (use default)', 'wp-beacon-crm-donate')];
+        $currency_options = ['' => __('None (use default)', 'wp-beacon-multi-currency-forms')];
 
         foreach (array_keys($all_currencies) as $code) {
             $currency_options[$code] = $code;
@@ -64,10 +64,10 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_frequency_options()
     {
         return [
-            '' => __('None (use default)', 'wp-beacon-crm-donate'),
-            'single' => __('Single', 'wp-beacon-crm-donate'),
-            'monthly' => __('Monthly', 'wp-beacon-crm-donate'),
-            'annual' => __('Annual', 'wp-beacon-crm-donate'),
+            '' => __('None (use default)', 'wp-beacon-multi-currency-forms'),
+            'single' => __('Single', 'wp-beacon-multi-currency-forms'),
+            'monthly' => __('Monthly', 'wp-beacon-multi-currency-forms'),
+            'annual' => __('Annual', 'wp-beacon-multi-currency-forms'),
         ];
     }
 
@@ -80,9 +80,9 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     {
         $sizes = \WBCD\Constants::get_valid_button_sizes();
         $labels = [
-            'md' => __('Medium', 'wp-beacon-crm-donate'),
-            'lg' => __('Large', 'wp-beacon-crm-donate'),
-            'xl' => __('Extra Large', 'wp-beacon-crm-donate'),
+            'md' => __('Medium', 'wp-beacon-multi-currency-forms'),
+            'lg' => __('Large', 'wp-beacon-multi-currency-forms'),
+            'xl' => __('Extra Large', 'wp-beacon-multi-currency-forms'),
         ];
 
         $options = [];
@@ -149,11 +149,11 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_form_selection_field($description = null)
     {
         if ($description === null) {
-            $description = __('Choose which donation form to use', 'wp-beacon-crm-donate');
+            $description = __('Choose which donation form to use', 'wp-beacon-multi-currency-forms');
         }
 
         return [
-            'label' => __('Select Form', 'wp-beacon-crm-donate'),
+            'label' => __('Select Form', 'wp-beacon-multi-currency-forms'),
             'type' => 'select',
             'options' => $this->get_form_options(),
             'default' => '',
@@ -171,11 +171,11 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_custom_params_field($description = null)
     {
         if ($description === null) {
-            $description = __('Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the donation form.', 'wp-beacon-crm-donate');
+            $description = __('Enter custom parameters in URL format: bcn_c_adopted_animal=12345&key2=value2. This will be added to the URL of the donation form.', 'wp-beacon-multi-currency-forms');
         }
 
         return [
-            'label' => __('Custom URL Parameters', 'wp-beacon-crm-donate'),
+            'label' => __('Custom URL Parameters', 'wp-beacon-multi-currency-forms'),
             'type' => 'text',
             'default' => '',
             'description' => $description,
@@ -191,23 +191,23 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_frequency_fields()
     {
         $frequencies = [
-            'single' => __('Single', 'wp-beacon-crm-donate'),
-            'monthly' => __('Monthly', 'wp-beacon-crm-donate'),
-            'annual' => __('Annual', 'wp-beacon-crm-donate'),
+            'single' => __('Single', 'wp-beacon-multi-currency-forms'),
+            'monthly' => __('Monthly', 'wp-beacon-multi-currency-forms'),
+            'annual' => __('Annual', 'wp-beacon-multi-currency-forms'),
         ];
 
         $fields = [];
 
         foreach ($frequencies as $freq => $label) {
             $fields['frequency_' . $freq] = [
-                'label' => sprintf(__('Show %s Frequency', 'wp-beacon-crm-donate'), $label),
+                'label' => sprintf(__('Show %s Frequency', 'wp-beacon-multi-currency-forms'), $label),
                 'type' => 'yes_no_button',
                 'options' => [
-                    'on' => __('Yes', 'wp-beacon-crm-donate'),
-                    'off' => __('No', 'wp-beacon-crm-donate'),
+                    'on' => __('Yes', 'wp-beacon-multi-currency-forms'),
+                    'off' => __('No', 'wp-beacon-multi-currency-forms'),
                 ],
                 'default' => 'on',
-                'description' => sprintf(__('Show %s donation frequency option. %s', 'wp-beacon-crm-donate'), strtolower($label), $this->replace_notice),
+                'description' => sprintf(__('Show %s donation frequency option. %s', 'wp-beacon-multi-currency-forms'), strtolower($label), $this->replace_notice),
             ];
         }
 
@@ -227,15 +227,15 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
 
         $presets = [
             'single' => [
-                'label' => __('Single', 'wp-beacon-crm-donate'),
+                'label' => __('Single', 'wp-beacon-multi-currency-forms'),
                 'default' => implode(', ', $default_presets['single'])
             ],
             'monthly' => [
-                'label' => __('Monthly', 'wp-beacon-crm-donate'),
+                'label' => __('Monthly', 'wp-beacon-multi-currency-forms'),
                 'default' => implode(', ', $default_presets['monthly'])
             ],
             'annual' => [
-                'label' => __('Annual', 'wp-beacon-crm-donate'),
+                'label' => __('Annual', 'wp-beacon-multi-currency-forms'),
                 'default' => implode(', ', $default_presets['annual'])
             ],
         ];
@@ -244,10 +244,10 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
 
         foreach ($presets as $freq => $data) {
             $fields['presets_' . $freq] = [
-                'label' => sprintf(__('%s Preset Amounts', 'wp-beacon-crm-donate'), $data['label']),
+                'label' => sprintf(__('%s Preset Amounts', 'wp-beacon-multi-currency-forms'), $data['label']),
                 'type' => 'text',
                 'default' => $data['default'],
-                'description' => sprintf(__('Comma-separated amounts for %s donations (e.g., %s). %s', 'wp-beacon-crm-donate'), strtolower($data['label']), $data['default'], $this->replace_notice),
+                'description' => sprintf(__('Comma-separated amounts for %s donations (e.g., %s). %s', 'wp-beacon-multi-currency-forms'), strtolower($data['label']), $data['default'], $this->replace_notice),
             ];
         }
 
@@ -264,7 +264,7 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     {
         $pages = get_pages();
         // use an empty-string key for the placeholder and make all keys strings
-        $options = ['' => __('— Select Page —', 'wp-beacon-crm-donate')];
+        $options = ['' => __('— Select Page —', 'wp-beacon-multi-currency-forms')];
 
         foreach ($pages as $page) {
             $permalink = get_permalink($page->ID);
@@ -291,11 +291,11 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     protected function get_target_page_field($description = null)
     {
         if ($description === null) {
-            $description = __('Page where donors will be sent to complete the donation (optional). Start typing to search.', 'wp-beacon-crm-donate');
+            $description = __('Page where donors will be sent to complete the donation (optional). Start typing to search.', 'wp-beacon-multi-currency-forms');
         }
 
         return [
-            'label' => __('Donation Form Page', 'wp-beacon-crm-donate'),
+            'label' => __('Donation Form Page', 'wp-beacon-multi-currency-forms'),
             'type' => 'select',
             'options' => $this->get_page_options(),
             'default' => 0,
@@ -314,16 +314,16 @@ abstract class Abstract_WBCD_Divi_Module extends \ET_Builder_Module
     {
         return [
             'primary_color' => [
-                'label' => __('Primary Color', 'wp-beacon-crm-donate'),
+                'label' => __('Primary Color', 'wp-beacon-multi-currency-forms'),
                 'type' => 'color-alpha',
                 'default' => '',
-                'description' => sprintf(__('Default primary color. %s', 'wp-beacon-crm-donate'), $this->replace_notice),
+                'description' => sprintf(__('Default primary color. %s', 'wp-beacon-multi-currency-forms'), $this->replace_notice),
             ],
             'brand_color' => [
-                'label' => __('Brand Color', 'wp-beacon-crm-donate'),
+                'label' => __('Brand Color', 'wp-beacon-multi-currency-forms'),
                 'type' => 'color-alpha',
                 'default' => '',
-                'description' => sprintf(__('Default brand color. %s', 'wp-beacon-crm-donate'), $this->replace_notice),
+                'description' => sprintf(__('Default brand color. %s', 'wp-beacon-multi-currency-forms'), $this->replace_notice),
             ],
         ];
     }

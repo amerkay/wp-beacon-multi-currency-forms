@@ -1,14 +1,14 @@
 (function(){
-  // Expect localized WPBCD_BOX_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
-  if (typeof WPBCD_BOX_DATA !== 'object') return;
+  // Expect localized WPBMCF_BOX_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
+  if (typeof WPBMCF_BOX_DATA !== 'object') return;
 
-  var formsByCurrency = WPBCD_BOX_DATA.formsByCurrency || {};
-  var baseURL = WPBCD_BOX_DATA.baseURL || (location.origin + "/donation-form/");
-  var DEFAULT_CURRENCY = WPBCD_BOX_DATA.defaultCurrency || '';
+  var formsByCurrency = WPBMCF_BOX_DATA.formsByCurrency || {};
+  var baseURL = WPBMCF_BOX_DATA.baseURL || (location.origin + "/donation-form/");
+  var DEFAULT_CURRENCY = WPBMCF_BOX_DATA.defaultCurrency || '';
 
   // Check if we have any currencies configured
   if (!Object.keys(formsByCurrency).length) {
-    console.warn('WPBCD: No currencies configured. Please configure donation forms in settings.');
+    console.warn('WPBMCF: No currencies configured. Please configure donation forms in settings.');
     return;
   }
 
@@ -46,17 +46,17 @@
   };
 
   // Elements
-  var wrap = document.getElementById("wpbcd-donate");
+  var wrap = document.getElementById("wpbmcf-donate");
   if(!wrap) return;
 
-  var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".wpbcd-btn-frequency"));
-  var amountBtnsWrap = document.getElementById("wpbcd-amount-buttons");
-  var customWrap = document.getElementById("wpbcd-custom-wrap");
-  var customToggle = document.getElementById("wpbcd-toggle-custom");
-  var customAmountInput = document.getElementById("wpbcd-custom-amount");
-  var currencySymbol = document.getElementById("wpbcd-currency-symbol");
-  var currencySelect = document.getElementById("wpbcd-currency-select");
-  var nextBtn = document.getElementById("wpbcd-next");
+  var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".wpbmcf-btn-frequency"));
+  var amountBtnsWrap = document.getElementById("wpbmcf-amount-buttons");
+  var customWrap = document.getElementById("wpbmcf-custom-wrap");
+  var customToggle = document.getElementById("wpbmcf-toggle-custom");
+  var customAmountInput = document.getElementById("wpbmcf-custom-amount");
+  var currencySymbol = document.getElementById("wpbmcf-currency-symbol");
+  var currencySelect = document.getElementById("wpbmcf-currency-select");
+  var nextBtn = document.getElementById("wpbmcf-next");
 
   // Parse custom URL parameters from data attribute
   var customParams = {};
@@ -66,7 +66,7 @@
       customParams = JSON.parse(customParamsAttr);
     }
   } catch(e) {
-    console.warn('WPBCD: Failed to parse custom params', e);
+    console.warn('WPBMCF: Failed to parse custom params', e);
   }
 
   // Parse allowed frequencies from data attribute
@@ -80,7 +80,7 @@
       }
     }
   } catch(e) {
-    console.warn('WPBCD: Failed to parse allowed frequencies', e);
+    console.warn('WPBMCF: Failed to parse allowed frequencies', e);
   }
 
   // Parse default presets from data attribute
@@ -98,7 +98,7 @@
       }
     }
   } catch(e) {
-    console.warn('WPBCD: Failed to parse default presets', e);
+    console.warn('WPBMCF: Failed to parse default presets', e);
   }
 
   // Initialize state with configured values
@@ -153,12 +153,12 @@
     safeGroup.forEach(function(v){
       var btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "wpbcd-tab wpbcd-btn-amount";
+      btn.className = "wpbmcf-tab wpbmcf-btn-amount";
       btn.textContent = formsByCurrency[state.currency].symbol + String(Number(v));
       btn.setAttribute("aria-pressed","false");
       btn.setAttribute("data-amount", String(v));
       btn.addEventListener("click", function(){
-        Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbcd-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
+        Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbmcf-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
         btn.setAttribute("aria-pressed","true");
         state.amountSelected = Number(v);
         customAmountInput.value = "";
@@ -183,18 +183,18 @@
   function applyBrandColor(color){
     if (!color) return;
     // Don't override if a color is already set inline (e.g., from Elementor settings)
-    var existingColor = wrap && wrap.style.getPropertyValue('--wpbcd-brand');
+    var existingColor = wrap && wrap.style.getPropertyValue('--wpbmcf-brand');
     if (existingColor && existingColor.trim()) return;
     
     // Update the CSS variable - color-mix in CSS handles the darker shade automatically
     if (wrap) {
-      wrap.style.setProperty('--wpbcd-brand', color);
+      wrap.style.setProperty('--wpbmcf-brand', color);
     }
   }
 
   function fetchPresets(currency){
     var formId = formsByCurrency[currency].id;
-    var beaconAccountName = WPBCD_BOX_DATA.beaconAccountName;
+    var beaconAccountName = WPBMCF_BOX_DATA.beaconAccountName;
     var url = "https://portal.beaconproducts.co.uk/v1/account/" + beaconAccountName + "/form/" + formId + "?fp=x";
     return fetch(url, { credentials:"omit", cache:"no-store" })
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })
@@ -323,7 +323,7 @@
   customToggle.addEventListener("click", function(){ setCustomVisible(!isCustomVisible()); });
 
   customAmountInput.addEventListener("input", function(){
-    Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbcd-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
+    Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbmcf-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
     state.amountSelected = null;
     updateNextButton();
   });

@@ -1,16 +1,16 @@
 (function(){
-  // Expect localized WPBCD_FORM_DATA with: beaconAccountName, formsByCurrency, allowedCurrencies, defaultCurrency
-  if (typeof WPBCD_FORM_DATA !== 'object') return;
+  // Expect localized WPBMCF_FORM_DATA with: beaconAccountName, formsByCurrency, allowedCurrencies, defaultCurrency
+  if (typeof WPBMCF_FORM_DATA !== 'object') return;
 
-  var BEACON_ACCOUNT_NAME = WPBCD_FORM_DATA.beaconAccountName;
-  var formsByCurrency = WPBCD_FORM_DATA.formsByCurrency || {};
-  var ALLOWED = WPBCD_FORM_DATA.allowedCurrencies || [];
-  var DEFAULT_CURRENCY = WPBCD_FORM_DATA.defaultCurrency || '';
+  var BEACON_ACCOUNT_NAME = WPBMCF_FORM_DATA.beaconAccountName;
+  var formsByCurrency = WPBMCF_FORM_DATA.formsByCurrency || {};
+  var ALLOWED = WPBMCF_FORM_DATA.allowedCurrencies || [];
+  var DEFAULT_CURRENCY = WPBMCF_FORM_DATA.defaultCurrency || '';
 
   // Handle required URL parameters from data attribute
   // This must run before anything else to ensure params are in URL
   (function validateRequiredParams(){
-    var pageEl = document.getElementById("wpbcd-page");
+    var pageEl = document.getElementById("wpbmcf-page");
     if (!pageEl) return;
 
     var customParamsAttr = pageEl.getAttribute('data-custom-params');
@@ -43,7 +43,7 @@
           }
         }
       } catch (e) {
-        console.warn('WPBCD: Error checking required parameters', e);
+        console.warn('WPBMCF: Error checking required parameters', e);
       }
     }
 
@@ -69,7 +69,7 @@
 
   // Check if we have any currencies configured
   if (!ALLOWED.length) {
-    console.warn('WPBCD: No currencies configured. Please configure donation forms in settings.');
+    console.warn('WPBMCF: No currencies configured. Please configure donation forms in settings.');
     return;
   }
 
@@ -82,8 +82,8 @@
   // (either globally when UTM tracking is enabled, or per-page when disabled)
 
   // Elements
-  var selectEl = document.getElementById("wpbcd-currency");
-  var slot = document.getElementById("wpbcd-beacon-slot");
+  var selectEl = document.getElementById("wpbmcf-currency");
+  var slot = document.getElementById("wpbmcf-beacon-slot");
   if(!selectEl || !slot) return;
 
   // Helpers
@@ -114,8 +114,8 @@
       var storedUtm = window.WBCD_getStoredUtm && window.WBCD_getStoredUtm();
       if (storedUtm) {
         // Get UTM parameter mappings and field names from localized data
-        var utmParams = WPBCD_FORM_DATA.utmParams || {};
-        var utmFields = WPBCD_FORM_DATA.utmFieldNames || ['utm_source', 'utm_medium', 'utm_campaign'];
+        var utmParams = WPBMCF_FORM_DATA.utmParams || {};
+        var utmFields = WPBMCF_FORM_DATA.utmFieldNames || ['utm_source', 'utm_medium', 'utm_campaign'];
         
         // Loop through each UTM parameter and set data attributes
         for (var i = 0; i < utmFields.length; i++) {

@@ -18,7 +18,7 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
 
     public function get_title()
     {
-        return __('Beacon Donation Box', 'wp-beacon-crm-donate');
+        return __('Beacon Donation Box', 'wp-beacon-multi-currency-forms');
     }
 
     public function get_icon()
@@ -32,7 +32,7 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $this->start_controls_section(
             'content_section',
             [
-                'label' => __('Form Settings', 'wp-beacon-crm-donate'),
+                'label' => __('Form Settings', 'wp-beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -47,7 +47,7 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $this->start_controls_section(
             'text_section',
             [
-                'label' => __('Text Content', 'wp-beacon-crm-donate'),
+                'label' => __('Text Content', 'wp-beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -55,27 +55,27 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $this->add_control(
             'title',
             [
-                'label' => __('Title', 'wp-beacon-crm-donate'),
+                'label' => __('Title', 'wp-beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::TEXT,
-                'default' => __('Make a donation', 'wp-beacon-crm-donate'),
+                'default' => __('Make a donation', 'wp-beacon-multi-currency-forms'),
             ]
         );
 
         $this->add_control(
             'subtitle',
             [
-                'label' => __('Subtitle', 'wp-beacon-crm-donate'),
+                'label' => __('Subtitle', 'wp-beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::TEXT,
-                'default' => __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
+                'default' => __('Pick your currency, frequency, and amount', 'wp-beacon-multi-currency-forms'),
             ]
         );
 
         $this->add_control(
             'notice_text',
             [
-                'label' => __('Notice Text', 'wp-beacon-crm-donate'),
+                'label' => __('Notice Text', 'wp-beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::TEXTAREA,
-                'default' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
+                'default' => __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-multi-currency-forms'),
                 'rows' => 3,
             ]
         );
@@ -83,11 +83,11 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $this->add_control(
             'button_text',
             [
-                'label' => __('Button Text', 'wp-beacon-crm-donate'),
+                'label' => __('Button Text', 'wp-beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::TEXT,
-                'default' => __('Donate now →', 'wp-beacon-crm-donate'),
-                'placeholder' => __('Donate now →', 'wp-beacon-crm-donate'),
-                'description' => __('Text shown on the donate button', 'wp-beacon-crm-donate'),
+                'default' => __('Donate now →', 'wp-beacon-multi-currency-forms'),
+                'placeholder' => __('Donate now →', 'wp-beacon-multi-currency-forms'),
+                'description' => __('Text shown on the donate button', 'wp-beacon-multi-currency-forms'),
             ]
         );
 
@@ -113,11 +113,11 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         // Show editor placeholder
         if (
             $this->render_editor_placeholder(
-                __('Beacon Donation Box', 'wp-beacon-crm-donate'),
+                __('Beacon Donation Box', 'wp-beacon-multi-currency-forms'),
                 '📦',
                 [
-                    __('Form', 'wp-beacon-crm-donate') => $settings['form_name'] ?: __('Default', 'wp-beacon-crm-donate'),
-                    __('Title', 'wp-beacon-crm-donate') => $settings['title'] ?? __('Make a donation', 'wp-beacon-crm-donate'),
+                    __('Form', 'wp-beacon-multi-currency-forms') => $settings['form_name'] ?: __('Default', 'wp-beacon-multi-currency-forms'),
+                    __('Title', 'wp-beacon-multi-currency-forms') => $settings['title'] ?? __('Make a donation', 'wp-beacon-multi-currency-forms'),
                 ]
             )
         ) {
@@ -142,10 +142,10 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $render_args = [
             'primaryColor' => isset($settings['primary_color']) ? $settings['primary_color'] : '',
             'brandColor' => isset($settings['brand_color']) ? $settings['brand_color'] : '',
-            'title' => isset($settings['title']) ? $settings['title'] : __('Make a donation', 'wp-beacon-crm-donate'),
-            'subtitle' => isset($settings['subtitle']) ? $settings['subtitle'] : __('Pick your currency, frequency, and amount', 'wp-beacon-crm-donate'),
-            'noticeText' => isset($settings['notice_text']) ? $settings['notice_text'] : __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-crm-donate'),
-            'buttonText' => isset($settings['button_text']) ? $settings['button_text'] : __('Donate now →', 'wp-beacon-crm-donate'),
+            'title' => isset($settings['title']) ? $settings['title'] : __('Make a donation', 'wp-beacon-multi-currency-forms'),
+            'subtitle' => isset($settings['subtitle']) ? $settings['subtitle'] : __('Pick your currency, frequency, and amount', 'wp-beacon-multi-currency-forms'),
+            'noticeText' => isset($settings['notice_text']) ? $settings['notice_text'] : __("You'll be taken to our secure donation form to complete your gift.", 'wp-beacon-multi-currency-forms'),
+            'buttonText' => isset($settings['button_text']) ? $settings['button_text'] : __('Donate now →', 'wp-beacon-multi-currency-forms'),
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
             'defaultPresets' => $default_presets,

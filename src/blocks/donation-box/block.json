@@ -5,7 +5,7 @@
   "title": "Beacon Donation Box",
   "category": "widgets",
   "description": "donate box that sends donors to the full BeaconCRM form with preselected currency/frequency/amount.",
-  "textdomain": "wp-beacon-crm-donate",
+  "textdomain": "wp-beacon-multi-currency-forms",
   "attributes": {
     "formName": {
       "type": "string",

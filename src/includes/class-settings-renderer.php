@@ -14,7 +14,7 @@ if (!defined('ABSPATH'))
 class Settings_Renderer
 {
     // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-crm-donate';
+    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
 
     /**
      * Render the beacon account field

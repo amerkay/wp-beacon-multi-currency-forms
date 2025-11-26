@@ -1,51 +1,58 @@
 <?php
 
 /**
- * Plugin Name:  Beacon CRM Donate
- * Description:  Two Beacon donation blocks: full page form + donate box (CTA). Use with shortcodes, Gutenberg Divi and Elementor visual builders. Google Analytics UTM integration ready.
- * Version:      0.1.2
- * Author:       Amer Kawar @ WildAmer.com
- * Text Domain:  wp-beacon-crm-donate
- * Requires PHP: 7.4
+ * Plugin Name:       Beacon Multi Currency Forms
+ * Plugin URI:        https://github.com/amerkay/wp-beacon-multi-currency-forms
+ * Description:       Embed BeaconCRM donation forms with multi-currency support, geo-location detection, and UTM tracking. Works with Gutenberg, Elementor, and Divi.
+ * Version:           0.1.2
+ * Requires at least: 6.0
+ * Requires PHP:      7.4
+ * Tested up to:      6.7
+ * Author:            Amer Kawar
+ * Author URI:        https://wildamer.com
+ * License:           GPLv3
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       wp-beacon-multi-currency-forms
+ * Domain Path:       /languages
  */
 
 if (!defined('ABSPATH'))
     exit;
 
 // Extract version from plugin header (single source of truth)
-if (!defined('WPBCD_VERSION')) {
+if (!defined('WPBMCF_VERSION')) {
     $plugin_data = get_file_data(__FILE__, ['Version' => 'Version']);
-    define('WPBCD_VERSION', $plugin_data['Version']);
+    define('WPBMCF_VERSION', $plugin_data['Version']);
 }
-define('WPBCD_FILE', __FILE__);
-define('WPBCD_PATH', plugin_dir_path(__FILE__));
-define('WPBCD_URL', plugin_dir_url(__FILE__));
+define('WPBMCF_FILE', __FILE__);
+define('WPBMCF_PATH', plugin_dir_path(__FILE__));
+define('WPBMCF_URL', plugin_dir_url(__FILE__));
 
 // --- Includes ---
-require_once WPBCD_PATH . 'includes/class-constants.php';
-require_once WPBCD_PATH . 'includes/class-form-validator.php';
-require_once WPBCD_PATH . 'includes/class-form-sanitizer.php';
-require_once WPBCD_PATH . 'includes/class-settings-renderer.php';
-require_once WPBCD_PATH . 'includes/class-settings.php';
-require_once WPBCD_PATH . 'includes/class-assets.php';
-require_once WPBCD_PATH . 'includes/class-geoip-dependency.php';
+require_once WPBMCF_PATH . 'includes/class-constants.php';
+require_once WPBMCF_PATH . 'includes/class-form-validator.php';
+require_once WPBMCF_PATH . 'includes/class-form-sanitizer.php';
+require_once WPBMCF_PATH . 'includes/class-settings-renderer.php';
+require_once WPBMCF_PATH . 'includes/class-settings.php';
+require_once WPBMCF_PATH . 'includes/class-assets.php';
+require_once WPBMCF_PATH . 'includes/class-geoip-dependency.php';
 
-require_once WPBCD_PATH . 'includes/utils/class-params-parser.php';
-require_once WPBCD_PATH . 'includes/utils/class-preset-parser.php';
-require_once WPBCD_PATH . 'includes/utils/class-frequency-parser.php';
-require_once WPBCD_PATH . 'includes/utils/class-block-attrs-parser.php';
+require_once WPBMCF_PATH . 'includes/utils/class-params-parser.php';
+require_once WPBMCF_PATH . 'includes/utils/class-preset-parser.php';
+require_once WPBMCF_PATH . 'includes/utils/class-frequency-parser.php';
+require_once WPBMCF_PATH . 'includes/utils/class-block-attrs-parser.php';
 
-require_once WPBCD_PATH . 'includes/render/class-donate-form-render.php';
-require_once WPBCD_PATH . 'includes/render/class-donate-box-render.php';
+require_once WPBMCF_PATH . 'includes/render/class-donate-form-render.php';
+require_once WPBMCF_PATH . 'includes/render/class-donate-box-render.php';
 
-require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-form.php';
-require_once WPBCD_PATH . 'includes/shortcodes/class-shortcode-donate-box.php';
+require_once WPBMCF_PATH . 'includes/shortcodes/class-shortcode-donate-form.php';
+require_once WPBMCF_PATH . 'includes/shortcodes/class-shortcode-donate-box.php';
 
 // Elementor & Divi adapters are loaded conditionally in their respective hooks below.
 
 // --- Bootstrap ---
 add_action('plugins_loaded', function () {
-    load_plugin_textdomain('wp-beacon-crm-donate', false, dirname(plugin_basename(WPBCD_FILE)) . '/languages');
+    load_plugin_textdomain('wp-beacon-multi-currency-forms', false, dirname(plugin_basename(WPBMCF_FILE)) . '/languages');
 });
 
 add_action('init', function () {
@@ -53,14 +60,14 @@ add_action('init', function () {
     // Register style handle early so block.json can reference it
     wp_register_style(
         'wbcd-front',
-        WPBCD_URL . 'public/css/donate.css',
+        WPBMCF_URL . 'public/css/donate.css',
         [],
-        WPBCD_VERSION
+        WPBMCF_VERSION
     );
 
     // Register dynamic blocks from metadata
     register_block_type_from_metadata(
-        WPBCD_PATH . 'blocks/donation-form',
+        WPBMCF_PATH . 'blocks/donation-form',
         array(
             'render_callback' => function ($attrs, $content) {
                 // Get form name from block attributes
@@ -84,7 +91,7 @@ add_action('init', function () {
     );
 
     register_block_type_from_metadata(
-        WPBCD_PATH . 'blocks/donation-box',
+        WPBMCF_PATH . 'blocks/donation-box',
         array(
             'render_callback' => function ($attrs, $content) {
                 // Get form name from block attributes
@@ -160,7 +167,7 @@ add_action('init', function () {
 // Localize forms data for Gutenberg block editor
 add_action('enqueue_block_editor_assets', function () {
     $forms = WBCD\Settings::get_forms_for_dropdown();
-    $form_options = [['value' => '', 'label' => __('Default (First form)', 'wp-beacon-crm-donate')]];
+    $form_options = [['value' => '', 'label' => __('Default (First form)', 'wp-beacon-multi-currency-forms')]];
     $forms_data = [];
 
     foreach ($forms as $name => $label) {
@@ -179,7 +186,7 @@ add_action('enqueue_block_editor_assets', function () {
     $default_currencies = WBCD\Settings::get_forms_by_currency('');
     $forms_data[''] = [
         'name' => '',
-        'label' => __('Default (First form)', 'wp-beacon-crm-donate'),
+        'label' => __('Default (First form)', 'wp-beacon-multi-currency-forms'),
         'currencies' => array_keys($default_currencies)
     ];
 
@@ -222,11 +229,11 @@ add_action('admin_footer', ['WBCD\\GeoIP_Dependency', 'enqueue_dismiss_script'])
 add_action('wp_ajax_wbcd_dismiss_geoip_notice', ['WBCD\\GeoIP_Dependency', 'dismiss_notice']);
 
 // Add settings link to plugins page
-add_filter('plugin_action_links_' . plugin_basename(WPBCD_FILE), function ($links) {
+add_filter('plugin_action_links_' . plugin_basename(WPBMCF_FILE), function ($links) {
     $settings_link = sprintf(
         '<a href="%s">%s</a>',
         admin_url('options-general.php?page=wbcd-settings'),
-        __('Settings', 'wp-beacon-crm-donate')
+        __('Settings', 'wp-beacon-multi-currency-forms')
     );
     array_unshift($links, $settings_link);
     return $links;
@@ -249,9 +256,9 @@ add_action('wp_enqueue_scripts', function () {
     if ($track_utm) {
         wp_enqueue_script(
             'wbcd-utm-tracker',
-            WPBCD_URL . 'public/js/utm-tracker.js',
+            WPBMCF_URL . 'public/js/utm-tracker.js',
             [],
-            WPBCD_VERSION,
+            WPBMCF_VERSION,
             true // Load in footer
         );
     }
@@ -263,10 +270,10 @@ add_action('elementor/widgets/register', function ($widgets_manager) {
         return;
     }
     // Load abstract base class first
-    require_once WPBCD_PATH . 'integrations/elementor/abstract-wbcd-elementor-widget.php';
+    require_once WPBMCF_PATH . 'integrations/elementor/abstract-wbcd-elementor-widget.php';
     // Load widget classes
-    require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-form.php';
-    require_once WPBCD_PATH . 'integrations/elementor/class-elementor-widget-donate-box.php';
+    require_once WPBMCF_PATH . 'integrations/elementor/class-elementor-widget-donate-form.php';
+    require_once WPBMCF_PATH . 'integrations/elementor/class-elementor-widget-donate-box.php';
     // Register widgets
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Form_Widget());
     $widgets_manager->register(new \WBCD\Integrations\Elementor\Donate_Box_Widget());
@@ -278,10 +285,10 @@ add_action('et_builder_ready', function () {
         return;
     }
     // Load abstract base class first
-    require_once WPBCD_PATH . 'integrations/divi/abstract-wbcd-divi-module.php';
+    require_once WPBMCF_PATH . 'integrations/divi/abstract-wbcd-divi-module.php';
     // Load module classes
-    require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-form.php';
-    require_once WPBCD_PATH . 'integrations/divi/class-divi-module-donate-box.php';
+    require_once WPBMCF_PATH . 'integrations/divi/class-divi-module-donate-form.php';
+    require_once WPBMCF_PATH . 'integrations/divi/class-divi-module-donate-box.php';
     // Instantiate modules
     new \WBCD\Integrations\Divi\Donate_Form_Module();
     new \WBCD\Integrations\Divi\Donate_Box_Module();

@@ -15,7 +15,7 @@ class Settings
     const OPTION_UTM_PARAMS = 'wbcd_utm_params';
 
     // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-crm-donate';
+    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
 
     // Cached data
     private static $currencies_data = null;
@@ -63,17 +63,17 @@ class Settings
         // Enqueue admin CSS
         wp_enqueue_style(
             'wbcd-admin-settings',
-            WPBCD_URL . 'admin/css/settings-admin.css',
+            WPBMCF_URL . 'admin/css/settings-admin.css',
             [],
-            WPBCD_VERSION
+            WPBMCF_VERSION
         );
 
         // Enqueue admin JS with jQuery dependency
         wp_enqueue_script(
             'wbcd-admin-settings',
-            WPBCD_URL . 'admin/js/settings-admin.js',
+            WPBMCF_URL . 'admin/js/settings-admin.js',
             ['jquery'],
-            WPBCD_VERSION,
+            WPBMCF_VERSION,
             true
         );
 
@@ -411,7 +411,7 @@ class Settings
             return self::$currencies_data;
         }
 
-        $json_path = WPBCD_PATH . 'assets/currencies-iso-4217.json';
+        $json_path = WPBMCF_PATH . 'assets/currencies-iso-4217.json';
         if (!file_exists($json_path)) {
             self::$currencies_data = [];
             return self::$currencies_data;

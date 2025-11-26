@@ -22,7 +22,7 @@ class Form_Validator
     const FORM_ID_MAX_LENGTH = 12;
 
     // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-crm-donate';
+    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
 
     /**
      * Validate a Beacon form ID

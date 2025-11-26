@@ -14,7 +14,7 @@ if (!defined('ABSPATH'))
 class Form_Sanitizer
 {
     // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-crm-donate';
+    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
 
     /**
      * Sanitize a form name

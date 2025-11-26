@@ -25,7 +25,7 @@ class GeoIP_Dependency
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
-                __('Beacon Donate requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'wp-beacon-crm-donate'),
+                __('Beacon Donate requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'wp-beacon-multi-currency-forms'),
                 '<a href="' . esc_url($url) . '">',
                 '</a>'
             ));
@@ -42,7 +42,7 @@ class GeoIP_Dependency
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
-                __('Beacon Donate requires the %1$sGeolocation IP Detection%2$s plugin. Please install & activate it.', 'wp-beacon-crm-donate'),
+                __('Beacon Donate requires the %1$sGeolocation IP Detection%2$s plugin. Please install & activate it.', 'wp-beacon-multi-currency-forms'),
                 '<a href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">',
                 '</a>'
             ));
@@ -58,7 +58,7 @@ class GeoIP_Dependency
         echo '<div class="notice notice-info is-dismissible" data-dismissible="wbcd-geoip-notice"><p>';
         echo wp_kses_post(sprintf(
             /* translators: 1: settings link open, 2: close, 3: docs open, 4: close, 5: MaxMind open, 6: close */
-            __('For reliable currency auto-detection on cached pages, go to %1$sGeolocation IP Detection settings%2$s and enable the JS/AJAX endpoint. See the %3$sAJAX docs%4$s. Also configure automatic GeoLite2 updates with your %5$sMaxMind Account ID & License Key%6$s.', 'wp-beacon-crm-donate'),
+            __('For reliable currency auto-detection on cached pages, go to %1$sGeolocation IP Detection settings%2$s and enable the JS/AJAX endpoint. See the %3$sAJAX docs%4$s. Also configure automatic GeoLite2 updates with your %5$sMaxMind Account ID & License Key%6$s.', 'wp-beacon-multi-currency-forms'),
             '<a href="' . esc_url($settings_url) . '" rel="noopener noreferrer">',
             '</a>',
             '<a href="' . esc_url($ajax_doc) . '" target="_blank" rel="noopener noreferrer">',

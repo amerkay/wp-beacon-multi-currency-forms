@@ -1,4 +1,4 @@
-# Beacon CRM Donate
+# Beacon Multi-Currency Forms
 
 WordPress plugin for embedding BeaconCRM donation forms with multi-currency support, automatic geo-location detection, and UTM tracking.
 
@@ -266,7 +266,7 @@ In **Settings → Beacon Donate**:
 ### How It Works
 
 ```
-User clicks ad: ?utm_source=facebook&utm_medium=social&utm_campaign=march2025
+User clicks link: ?utm_source=facebook&utm_medium=social&utm_campaign=march2025
 ↓
 Cookie stores parameters (180 days)
 ↓
@@ -312,34 +312,34 @@ The plugin inherits your theme's styles. Override with custom CSS:
 **Add to Appearance → Customize → Additional CSS:**
 ```css
 /* Change button color */
-.wpbcd-btn {
+.wpbmcf-btn {
   background-color: #your-color !important;
 }
 
 /* Change card appearance */
-.wpbcd-card {
+.wpbmcf-card {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Change text color */
-.wpbcd-wrap {
+.wpbmcf-wrap {
   color: #333;
 }
 ```
 
 **Common CSS Classes:**
-- `.wpbcd-wrap` - Main container
-- `.wpbcd-card` - Donation box card
-- `.wpbcd-btn` - Buttons
-- `.wpbcd-select` - Dropdowns
-- `.wpbcd-tab` - Frequency/amount buttons
+- `.wpbmcf-wrap` - Main container
+- `.wpbmcf-card` - Donation box card
+- `.wpbmcf-btn` - Buttons
+- `.wpbmcf-select` - Dropdowns
+- `.wpbmcf-tab` - Frequency/amount buttons
 
 **CSS Variables:**
-- `--wpbcd-primary` - Primary button color
-- `--wpbcd-brand` - Brand color for tabs/links
-- `--wpbcd-text` - Text color
-- `--wpbcd-border` - Border color
+- `--wpbmcf-primary` - Primary button color
+- `--wpbmcf-brand` - Brand color for tabs/links
+- `--wpbmcf-text` - Text color
+- `--wpbmcf-border` - Border color
 
 ---
 
@@ -347,7 +347,7 @@ The plugin inherits your theme's styles. Override with custom CSS:
 
 **Plugin Version:** 0.1.2  
 **Author:** Amer Kawar @ [WildAmer.com](https://wildamer.com)  
-**License:** GPLv2
+**License:** GPLv3
 
 ### Changelog
 

@@ -19,7 +19,7 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
 
     public function get_title()
     {
-        return __('Beacon Donation Form', 'wp-beacon-crm-donate');
+        return __('Beacon Donation Form', 'wp-beacon-multi-currency-forms');
     }
 
     public function get_icon()
@@ -33,39 +33,39 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
         $this->start_controls_section(
             'content_section',
             [
-                'label' => __('Form Settings', 'wp-beacon-crm-donate'),
+                'label' => __('Form Settings', 'wp-beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
 
-        $this->add_form_selection_control(__('Choose which donation form to display', 'wp-beacon-crm-donate'));
+        $this->add_form_selection_control(__('Choose which donation form to display', 'wp-beacon-multi-currency-forms'));
 
         $this->add_control(
             'default_frequency',
             [
-                'label' => __('Default Frequency', 'wp-beacon-crm-donate'),
+                'label' => __('Default Frequency', 'wp-beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => '',
                 'options' => $this->get_frequency_options(),
-                'description' => __('Set a default donation frequency', 'wp-beacon-crm-donate'),
+                'description' => __('Set a default donation frequency', 'wp-beacon-multi-currency-forms'),
             ]
         );
 
         $this->add_control(
             'default_amount',
             [
-                'label' => __('Default Amount', 'wp-beacon-crm-donate'),
+                'label' => __('Default Amount', 'wp-beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::TEXT,
                 'default' => '',
-                'placeholder' => __('e.g., 50', 'wp-beacon-crm-donate'),
-                'description' => __('Set a default donation amount', 'wp-beacon-crm-donate'),
+                'placeholder' => __('e.g., 50', 'wp-beacon-multi-currency-forms'),
+                'description' => __('Set a default donation amount', 'wp-beacon-multi-currency-forms'),
             ]
         );
 
         $this->end_controls_section();
 
         // Custom Parameters Section - with custom notice for required params
-        $this->add_custom_params_section(__('Add required parameters that must be in the URL. If missing, users will be redirected to include them.', 'wp-beacon-crm-donate'));
+        $this->add_custom_params_section(__('Add required parameters that must be in the URL. If missing, users will be redirected to include them.', 'wp-beacon-multi-currency-forms'));
     }
 
     protected function render()
@@ -73,10 +73,10 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
         // Show editor placeholder
         if (
             $this->render_editor_placeholder(
-                __('Beacon Donation Form', 'wp-beacon-crm-donate'),
+                __('Beacon Donation Form', 'wp-beacon-multi-currency-forms'),
                 '📋',
                 [
-                    __('Form', 'wp-beacon-crm-donate') => $this->get_settings_for_display()['form_name'] ?: __('Default', 'wp-beacon-crm-donate')
+                    __('Form', 'wp-beacon-multi-currency-forms') => $this->get_settings_for_display()['form_name'] ?: __('Default', 'wp-beacon-multi-currency-forms')
                 ]
             )
         ) {
