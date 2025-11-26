@@ -20,7 +20,7 @@ WordPress plugin for embedding BeaconCRM donation forms with multi-currency supp
 
 This plugin integrates BeaconCRM donation forms into WordPress. Display donation forms on dedicated pages or compact donation boxes in sidebars and content areas. Each form supports multiple currencies with automatic detection based on visitor location.
 
-![Plugin Overview Screenshot](./public/config-wp-beacon-donate-form.png)
+![Plugin Overview Screenshot](./public/frontend-wp-beacon-donate-auto-currency-selection.png)
 
 ---
 
@@ -30,11 +30,13 @@ This plugin integrates BeaconCRM donation forms into WordPress. Display donation
 
 Upload to `/wp-content/plugins/` and activate through WordPress admin.
 
+> TODO: Publish to Wordpress Plugin Directory
+
 ### Step 2: Configure Account
 
 Go to **Settings → Beacon Donate**.
 
-![Settings Page Screenshot](#)
+![Settings Page Screenshot](./public/config-wp-beacon-donate-account-id.png)
 
 **Beacon Account Name:**
 - Find this in your BeaconCRM embed code: `data-account="yourorg"`
@@ -52,7 +54,7 @@ Go to **Settings → Beacon Donate**.
 4. **Set Default Currency:** Click radio button next to one currency
 5. **Save Settings**
 
-![Form Configuration Screenshot](#)
+![Form Configuration Screenshot](./public/config-wp-beacon-donate-form.png)
 
 **That's it!** You're ready to add donation forms to your pages.
 
@@ -83,7 +85,7 @@ The WordPress Block Editor (formerly called Gutenberg) provides visual controls 
    - Control frequencies (single/monthly/annual)
    - Set preset amounts per frequency
 
-![Gutenberg Block Screenshot](#)
+![Gutenberg Block Screenshot](./public/page-wp-beacon-donate-form-block-editor.png)
 
 **Widget Areas:**
 The Donation Box block works in widget areas (sidebars, footers). Go to **Appearance → Widgets** and add the "Beacon Donation Box" block to any widget area.
@@ -257,7 +259,7 @@ In **Settings → Beacon Donate**:
 - Automatically passes to donation forms
 - Configure custom parameter names (default: `bcn_pay_c_utm_source`, etc.)
 
-![UTM Settings Screenshot](#)
+![UTM Settings Screenshot](./public/config-wp-beacon-donate-utm-tracking-settings.png)
 
 ### How It Works
 
