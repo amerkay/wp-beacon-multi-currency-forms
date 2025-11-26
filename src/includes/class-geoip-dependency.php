@@ -25,7 +25,7 @@ class GeoIP_Dependency
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
-                __('Beacon Donate requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'wp-beacon-multi-currency-forms'),
+                __('Beacon Multi-Currency Forms requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'wp-beacon-multi-currency-forms'),
                 '<a href="' . esc_url($url) . '">',
                 '</a>'
             ));
@@ -38,12 +38,12 @@ class GeoIP_Dependency
         $is_active = function_exists('is_plugin_active') && is_plugin_active('geoip-detect/geoip-detect.php');
 
         if (!$is_active) {
-            $url = admin_url('plugin-install.php?s=geoip-detect&tab=search&type=term');
+            $url = admin_url('plugin-install.php?tab=plugin-information&plugin=geoip-detect&TB_iframe=true&width=772&height=785');
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
-                __('Beacon Donate requires the %1$sGeolocation IP Detection%2$s plugin. Please install & activate it.', 'wp-beacon-multi-currency-forms'),
-                '<a href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">',
+                __('Beacon Multi-Currency Forms requires the %1$sGeolocation IP Detection%2$s plugin. Please install & activate it.', 'wp-beacon-multi-currency-forms'),
+                '<a href="' . esc_url($url) . '" rel="noopener noreferrer">',
                 '</a>'
             ));
             echo '</p></div>';

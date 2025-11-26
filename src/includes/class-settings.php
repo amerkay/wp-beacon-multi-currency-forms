@@ -40,8 +40,8 @@ class Settings
     public static function add_menu()
     {
         add_options_page(
-            __('Beacon Donate', self::TEXT_DOMAIN),
-            __('Beacon Donate', self::TEXT_DOMAIN),
+            __('Beacon Multi-Currency Forms', self::TEXT_DOMAIN),
+            __('Beacon Multi-Currency Forms', self::TEXT_DOMAIN),
             'manage_options',
             'wbcd-settings',
             [__CLASS__, 'render_page']
@@ -433,7 +433,7 @@ class Settings
             return;
         ?>
         <div class="wrap">
-            <h1><?php esc_html_e('Beacon Donate', self::TEXT_DOMAIN); ?></h1>
+            <h1><?php esc_html_e('Beacon Multi-Currency Forms', self::TEXT_DOMAIN); ?></h1>
             <form action="options.php" method="post">
                 <?php
                 settings_fields('wbcd_group');

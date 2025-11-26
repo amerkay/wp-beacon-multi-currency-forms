@@ -103,11 +103,11 @@
           });
         }
         
-        // Find current page label for ComboboxControl
+        // Find current page value for ComboboxControl
         var currentPageOption = pageOptions.find(function(opt) {
           return opt.value === String(attrs.targetPageId);
         });
-        var currentPageValue = currentPageOption ? currentPageOption.label : '';
+        var currentPageValue = currentPageOption ? currentPageOption.value : '0';
         
         // Helpers for custom params
         var addParam = function() {
@@ -143,14 +143,9 @@
                 label: 'Donation Form Page',
                 value: currentPageValue,
                 options: pageOptions,
-                onChange: function(selectedLabel) {
-                  // Find the option that matches the selected label
-                  var selectedOption = pageOptions.find(function(opt) {
-                    return opt.label === selectedLabel;
-                  });
-                  if (selectedOption) {
-                    setAttributes({ targetPageId: parseInt(selectedOption.value, 10) });
-                  }
+                onChange: function(selectedValue) {
+                  // selectedValue is the option's value field
+                  setAttributes({ targetPageId: parseInt(selectedValue, 10) });
                 },
                 help: 'Page where donors will be sent to complete the donation (optional). Start typing to search.'
               })

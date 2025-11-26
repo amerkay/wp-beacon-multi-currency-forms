@@ -7,7 +7,7 @@
  * Version:           0.1.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
- * Tested up to:      6.7
+ * Tested up to:      6.8.3
  * Author:            Amer Kawar
  * Author URI:        https://wildamer.com
  * License:           GPLv3

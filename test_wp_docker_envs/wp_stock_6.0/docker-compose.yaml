@@ -1,0 +1,39 @@
+services:
+  # To Fake IP addresses
+  proxy:
+    image: nginx:alpine
+    ports: ["80:80"]
+    depends_on: [wordpress]
+    volumes:
+      - ../proxy.conf:/etc/nginx/conf.d/default.conf:ro
+
+  wordpress:
+    image: wordpress:6.0.3
+    entrypoint: ["/bin/bash","-c","a2enmod headers && a2enmod rewrite || true; cp -r /tmp/duplicator_archive/* /var/www/html/; chown www-data:www-data /var/www/html/* && docker-entrypoint.sh apache2-foreground"]    
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+    expose: ["80"]
+    volumes:
+      - wp_html:/var/www/html
+      - ../uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+      # Mount the plugin source into the WP plugins directory for easy testing
+      - ../../src/:/var/www/html/wp-content/plugins/wp-beacon-multi-currency-forms:ro
+      # Used to setup site on first run, restore from backup
+      - ./duplicator_archive/:/tmp/duplicator_archive:ro
+  db:
+    image: mariadb:latest
+    command: "--default-authentication-plugin=mysql_native_password"
+    environment:
+      - MYSQL_ROOT_PASSWORD=somewordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  wp_html:
+  db_data:

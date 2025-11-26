@@ -1,9 +1,8 @@
 === Beacon Multi-Currency Forms ===
 Contributors: amerkay
-Donate link: https://wildamer.com
 Tags: donation, fundraising, beacon, crm, charity
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.8.3
 Stable tag: 0.1.2
 Requires PHP: 7.4
 License: GPLv3
@@ -101,7 +100,7 @@ This plugin does not collect or store any personal data. All donation processing
 
 = Configuration =
 
-1. Go to **Settings → Beacon Donate**
+1. Go to **Settings → Beacon Multi-Currency Forms**
 2. Enter your **Beacon Account Name** (found in your BeaconCRM embed code)
 3. Add your first donation form:
    - Form Name (e.g., "General Donations")

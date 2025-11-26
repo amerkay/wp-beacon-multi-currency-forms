@@ -34,7 +34,7 @@ Upload to `/wp-content/plugins/` and activate through WordPress admin.
 
 ### Step 2: Configure Account
 
-Go to **Settings → Beacon Donate**.
+Go to **Settings → Beacon Multi-Currency Forms**.
 
 ![Settings Page Screenshot](./public/config-wp-beacon-donate-account-id.png)
 
@@ -250,7 +250,7 @@ Track campaign parameters and pass them to donation forms.
 
 ### Enable Tracking
 
-In **Settings → Beacon Donate**:
+In **Settings → Beacon Multi-Currency Forms**:
 
 **1. Load Beacon JavaScript globally** (optional)
 - Loads Beacon SDK on all pages for cross-domain attribution
