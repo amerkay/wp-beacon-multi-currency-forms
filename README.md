@@ -215,7 +215,7 @@ Configure in module settings.
 
 ### Automatic Currency Detection
 
-Install the **[GeoIP Detection](https://wordpress.org/plugins/geoip-detection/)** plugin for automatic currency selection based on visitor location.
+Install the **[GeoIP Detection](https://wordpress.org/plugins/geoip-detect/)** plugin for automatic currency selection based on visitor location.
 
 **Setup:**
 1. Install and activate GeoIP Detection
@@ -228,6 +228,8 @@ Install the **[GeoIP Detection](https://wordpress.org/plugins/geoip-detection/)*
 **How it works:**
 - Visitor arrives → plugin detects country → selects matching currency
 - If currency not supported or detection fails → uses default currency
+
+![geoip-detect plugin with Maxmind](./public/config-geoip-detect-maxmind-settings.png)
 
 ### Multiple Forms
 
