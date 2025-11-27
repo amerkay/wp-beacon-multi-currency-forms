@@ -70,6 +70,12 @@ class Shortcode_Donate_Box
 
         \BMCF\Assets::enqueue_front_base();
 
-        return Donate_Box_Render::render($form_name, $render_args);
+        $output = Donate_Box_Render::render($form_name, $render_args);
+
+        // Strip whitespace between tags to prevent wpautop from adding <p> tags
+        // This is necessary when shortcode is used in Block Editor
+        $output = preg_replace('/>\s+</', '><', $output);
+
+        return $output;
     }
 }

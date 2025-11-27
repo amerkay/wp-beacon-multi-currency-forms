@@ -38,6 +38,12 @@ class Shortcode_Donate_Form
         \BMCF\Assets::enqueue_front_base();
         \BMCF\Assets::enqueue_donation_form($form_name);
 
-        return Donate_Form_Render::render($form_name, $render_args);
+        $output = Donate_Form_Render::render($form_name, $render_args);
+
+        // Strip whitespace between tags to prevent wpautop from adding <p> tags
+        // This is necessary when shortcode is used in Block Editor
+        $output = preg_replace('/>\s+</', '><', $output);
+
+        return $output;
     }
 }
