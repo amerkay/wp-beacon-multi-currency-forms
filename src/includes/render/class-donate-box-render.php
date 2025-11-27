@@ -68,12 +68,17 @@ class Donate_Box_Render
         $default_presets = !empty($args['defaultPresets']) ? $args['defaultPresets'] : \BMCF\Constants::get_all_presets();
         $default_presets_json = wp_json_encode($default_presets);
 
+        // Generate unique ID for this box instance
+        static $box_instance = 0;
+        $box_instance++;
+        $box_id = 'bmcf-donate-' . $box_instance;
+
         // Enqueue assets with target page URL
         \BMCF\Assets::enqueue_donation_box($form_name, $args['targetPageUrl']);
 
         ob_start();
         ?>
-        <div id="bmcf-donate" class="bmcf-wrap" style="<?php echo esc_attr($inline_style); ?>"
+        <div class="bmcf-wrap" style="<?php echo esc_attr($inline_style); ?>"
             data-custom-params="<?php echo esc_attr($custom_params_json); ?>"
             data-allowed-frequencies="<?php echo esc_attr($allowed_frequencies_json); ?>"
             data-default-presets="<?php echo esc_attr($default_presets_json); ?>">
@@ -98,9 +103,9 @@ class Donate_Box_Render
                 <div class="bmcf-amount">
                     <div class="bmcf-amount-header">
                         <div class="bmcf-amount-label"><?php esc_html_e('Amount', 'beacon-multi-currency-forms'); ?></div>
-                        <label class="bmcf-currency-select-label" for="bmcf-currency-select"
+                        <label class="bmcf-currency-select-label" for="<?php echo esc_attr($box_id); ?>-currency-select"
                             aria-label="<?php esc_attr_e('Currency', 'beacon-multi-currency-forms'); ?>"></label>
-                        <select id="bmcf-currency-select" class="bmcf-select"
+                        <select id="<?php echo esc_attr($box_id); ?>-currency-select" class="bmcf-select"
                             aria-label="<?php esc_attr_e('Currency', 'beacon-multi-currency-forms'); ?>">
                             <?php foreach ($currencies as $code => $form_id):
                                 $symbol = isset($symbols[$code]) ? $symbols[$code] : '';
@@ -111,27 +116,28 @@ class Donate_Box_Render
                         </select>
                     </div>
 
-                    <div class="bmcf-tabs bmcf-tabs--grid" id="bmcf-amount-buttons" role="group"
+                    <div class="bmcf-tabs bmcf-tabs--grid bmcf-amount-buttons" role="group"
                         aria-label="<?php esc_attr_e('Preset amounts', 'beacon-multi-currency-forms'); ?>">
                         <!-- JS fills preset buttons -->
                     </div>
 
                     <div class="bmcf-amount-custom">
-                        <button id="bmcf-toggle-custom" class="bmcf-link" type="button" aria-expanded="false"
-                            aria-controls="bmcf-custom-wrap"><?php esc_html_e('Custom amount', 'beacon-multi-currency-forms'); ?></button>
-                        <div id="bmcf-custom-wrap" class="bmcf-input-wrap" hidden>
-                            <span id="bmcf-currency-symbol" aria-hidden="true"><?php
+                        <button class="bmcf-link bmcf-toggle-custom" type="button" aria-expanded="false"
+                            aria-controls="<?php echo esc_attr($box_id); ?>-custom-wrap"><?php esc_html_e('Custom amount', 'beacon-multi-currency-forms'); ?></button>
+                        <div id="<?php echo esc_attr($box_id); ?>-custom-wrap" class="bmcf-input-wrap bmcf-custom-wrap" hidden>
+                            <span class="bmcf-currency-symbol" aria-hidden="true"><?php
                             // Use first currency's symbol as default
                             $first_code = array_key_first($currencies);
                             echo esc_html(isset($symbols[$first_code]) ? $symbols[$first_code] : $first_code);
                             ?></span>
-                            <input id="bmcf-custom-amount" type="number" min="1" step="1" inputmode="decimal" placeholder="0" />
+                            <input class="bmcf-custom-amount" type="number" min="1" step="1" inputmode="decimal"
+                                placeholder="0" />
                         </div>
                     </div>
                 </div>
 
                 <div class="bmcf-actions">
-                    <button id="bmcf-next" class="bmcf-button bmcf-button--md" type="button"
+                    <button class="bmcf-button bmcf-button--md bmcf-next" type="button"
                         aria-label="<?php esc_attr_e('Continue to secure form', 'beacon-multi-currency-forms'); ?>"
                         disabled><?php echo esc_html($args['buttonText']); ?></button>
                     <div class="bmcf-note"><?php echo esc_html($args['noticeText']); ?></div>

@@ -42,6 +42,13 @@
       .catch(function(){ return defaultCurrency; });
   }
 
+  // Initialize all boxes on the page
+  var allBoxes = document.querySelectorAll(".bmcf-wrap");
+  allBoxes.forEach(function(wrap){
+    initBox(wrap);
+  });
+
+  function initBox(wrap) {
   // State
   var state = {
     currency: defaultCurrency,
@@ -52,17 +59,15 @@
   };
 
   // Elements
-  var wrap = document.getElementById("bmcf-donate");
-  if(!wrap) return;
 
   var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".bmcf-btn-frequency"));
-  var amountBtnsWrap = document.getElementById("bmcf-amount-buttons");
-  var customWrap = document.getElementById("bmcf-custom-wrap");
-  var customToggle = document.getElementById("bmcf-toggle-custom");
-  var customAmountInput = document.getElementById("bmcf-custom-amount");
-  var currencySymbol = document.getElementById("bmcf-currency-symbol");
-  var currencySelect = document.getElementById("bmcf-currency-select");
-  var nextBtn = document.getElementById("bmcf-next");
+  var amountBtnsWrap = wrap.querySelector(".bmcf-amount-buttons");
+  var customWrap = wrap.querySelector(".bmcf-custom-wrap");
+  var customToggle = wrap.querySelector(".bmcf-toggle-custom");
+  var customAmountInput = wrap.querySelector(".bmcf-custom-amount");
+  var currencySymbol = wrap.querySelector(".bmcf-currency-symbol");
+  var currencySelect = wrap.querySelector(".bmcf-select");
+  var nextBtn = wrap.querySelector(".bmcf-next");
 
   // Parse custom URL parameters from data attribute
   var customParams = {};
@@ -371,4 +376,5 @@
       }
     });
   }());
+  } // end initBox
 }());
