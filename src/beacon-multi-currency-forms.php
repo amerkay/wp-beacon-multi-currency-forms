@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Plugin Name:       Beacon Multi Currency Forms
+ * Plugin Name:       Beacon Multi-Currency Forms
  * Plugin URI:        https://github.com/amerkay/wp-beacon-multi-currency-forms
- * Description:       Embed BeaconCRM donation forms with multi-currency support, geo-location detection, and UTM tracking. Works with Gutenberg, Elementor, and Divi.
+ * Description:       Embed Beacon CRM donation forms with multi-currency support, geo-location detection, and UTM tracking. Supports shortcodes, blocks, Elementor & Divi
  * Version:           0.1.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
- * Tested up to:      6.8.3
+ * Tested up to:      6.8
  * Author:            Amer Kawar
  * Author URI:        https://wildamer.com
  * License:           GPLv3
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:       wp-beacon-multi-currency-forms
+ * Text Domain:       beacon-multi-currency-forms
  * Domain Path:       /languages
  */
 
@@ -21,8 +21,8 @@ if (!defined('ABSPATH'))
 
 // Extract version from plugin header (single source of truth)
 if (!defined('WPBMCF_VERSION')) {
-    $plugin_data = get_file_data(__FILE__, ['Version' => 'Version']);
-    define('WPBMCF_VERSION', $plugin_data['Version']);
+    $wpbmcf_plugin_data = get_file_data(__FILE__, ['Version' => 'Version']);
+    define('WPBMCF_VERSION', $wpbmcf_plugin_data['Version']);
 }
 define('WPBMCF_FILE', __FILE__);
 define('WPBMCF_PATH', plugin_dir_path(__FILE__));
@@ -51,9 +51,8 @@ require_once WPBMCF_PATH . 'includes/shortcodes/class-shortcode-donate-box.php';
 // Elementor & Divi adapters are loaded conditionally in their respective hooks below.
 
 // --- Bootstrap ---
-add_action('plugins_loaded', function () {
-    load_plugin_textdomain('wp-beacon-multi-currency-forms', false, dirname(plugin_basename(WPBMCF_FILE)) . '/languages');
-});
+// Note: load_plugin_textdomain is not needed for WordPress.org hosted plugins since WP 4.6.
+// WordPress automatically loads translations for the plugin slug.
 
 add_action('init', function () {
 
@@ -167,7 +166,7 @@ add_action('init', function () {
 // Localize forms data for Gutenberg block editor
 add_action('enqueue_block_editor_assets', function () {
     $forms = WBCD\Settings::get_forms_for_dropdown();
-    $form_options = [['value' => '', 'label' => __('Default (First form)', 'wp-beacon-multi-currency-forms')]];
+    $form_options = [['value' => '', 'label' => __('Default (First form)', 'beacon-multi-currency-forms')]];
     $forms_data = [];
 
     foreach ($forms as $name => $label) {
@@ -186,7 +185,7 @@ add_action('enqueue_block_editor_assets', function () {
     $default_currencies = WBCD\Settings::get_forms_by_currency('');
     $forms_data[''] = [
         'name' => '',
-        'label' => __('Default (First form)', 'wp-beacon-multi-currency-forms'),
+        'label' => __('Default (First form)', 'beacon-multi-currency-forms'),
         'currencies' => array_keys($default_currencies)
     ];
 
@@ -221,7 +220,8 @@ add_action('enqueue_block_editor_assets', function () {
 // Settings page + admin notices
 add_action('admin_menu', ['WBCD\\Settings', 'add_menu']);
 add_action('admin_init', ['WBCD\\Settings', 'register']);
-add_action('admin_init', ['WBCD\\Settings', 'on_settings_updated']);
+add_action('update_option_wbcd_beacon_account', ['WBCD\\Settings', 'on_settings_updated']);
+add_action('update_option_wbcd_forms', ['WBCD\\Settings', 'on_settings_updated']);
 add_action('admin_enqueue_scripts', ['WBCD\\Settings', 'enqueue_admin_assets']);
 add_action('admin_notices', ['WBCD\\Settings', 'settings_updated_notice']);
 add_action('admin_notices', ['WBCD\\GeoIP_Dependency', 'admin_notices']);
@@ -233,7 +233,7 @@ add_filter('plugin_action_links_' . plugin_basename(WPBMCF_FILE), function ($lin
     $settings_link = sprintf(
         '<a href="%s">%s</a>',
         admin_url('options-general.php?page=wbcd-settings'),
-        __('Settings', 'wp-beacon-multi-currency-forms')
+        __('Settings', 'beacon-multi-currency-forms')
     );
     array_unshift($links, $settings_link);
     return $links;

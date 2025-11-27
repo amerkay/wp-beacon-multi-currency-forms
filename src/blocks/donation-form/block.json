@@ -5,7 +5,7 @@
     "title": "Beacon Donation Form",
     "category": "widgets",
     "description": "Full-page BeaconCRM form with currency switcher.",
-    "textdomain": "wp-beacon-multi-currency-forms",
+    "textdomain": "beacon-multi-currency-forms",
     "attributes": {
         "formName": {
             "type": "string",

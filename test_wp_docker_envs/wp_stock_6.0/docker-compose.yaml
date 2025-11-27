@@ -20,7 +20,7 @@ services:
       - wp_html:/var/www/html
       - ../uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
       # Mount the plugin source into the WP plugins directory for easy testing
-      - ../../src/:/var/www/html/wp-content/plugins/wp-beacon-multi-currency-forms:ro
+      - ../../src/:/var/www/html/wp-content/plugins/beacon-multi-currency-forms:ro
       # Used to setup site on first run, restore from backup
       - ./duplicator_archive/:/tmp/duplicator_archive:ro
   db:

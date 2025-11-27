@@ -25,7 +25,7 @@ class GeoIP_Dependency
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
-                __('Beacon Multi-Currency Forms requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'wp-beacon-multi-currency-forms'),
+                __('Beacon Multi-Currency Forms requires configuration. Please %1$senter your Beacon account name%2$s in the settings.', 'beacon-multi-currency-forms'),
                 '<a href="' . esc_url($url) . '">',
                 '</a>'
             ));
@@ -42,7 +42,7 @@ class GeoIP_Dependency
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
-                __('Beacon Multi-Currency Forms requires the %1$sGeolocation IP Detection%2$s plugin. Please install & activate it.', 'wp-beacon-multi-currency-forms'),
+                __('Beacon Multi-Currency Forms requires the %1$sGeolocation IP Detection%2$s plugin. Please install & activate it.', 'beacon-multi-currency-forms'),
                 '<a href="' . esc_url($url) . '" rel="noopener noreferrer">',
                 '</a>'
             ));
@@ -58,7 +58,7 @@ class GeoIP_Dependency
         echo '<div class="notice notice-info is-dismissible" data-dismissible="wbcd-geoip-notice"><p>';
         echo wp_kses_post(sprintf(
             /* translators: 1: settings link open, 2: close, 3: docs open, 4: close, 5: MaxMind open, 6: close */
-            __('For reliable currency auto-detection on cached pages, go to %1$sGeolocation IP Detection settings%2$s and enable the JS/AJAX endpoint. See the %3$sAJAX docs%4$s. Also configure automatic GeoLite2 updates with your %5$sMaxMind Account ID & License Key%6$s.', 'wp-beacon-multi-currency-forms'),
+            __('For reliable currency auto-detection on cached pages, go to %1$sGeolocation IP Detection settings%2$s and enable the JS/AJAX endpoint. See the %3$sAJAX docs%4$s. Also configure automatic GeoLite2 updates with your %5$sMaxMind Account ID & License Key%6$s.', 'beacon-multi-currency-forms'),
             '<a href="' . esc_url($settings_url) . '" rel="noopener noreferrer">',
             '</a>',
             '<a href="' . esc_url($ajax_doc) . '" target="_blank" rel="noopener noreferrer">',
@@ -89,20 +89,20 @@ class GeoIP_Dependency
             return;
 
         ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function ($) {
-                $(document).on('click', '.notice[data-dismissible="wbcd-geoip-notice"] .notice-dismiss', function () {
-                    $.ajax({
-                        url: ajaxurl,
-                        type: 'POST',
-                        data: {
-                            action: 'wbcd_dismiss_geoip_notice',
-                            nonce: '<?php echo wp_create_nonce('wbcd_dismiss_geoip_notice'); ?>'
-                        }
+                <script type="text/javascript">
+                    jQuery(document).ready(function ($) {
+                        $(document).on('click', '.notice[data-dismissible="wbcd-geoip-notice"] .notice-dismiss', function () {
+                            $.ajax({
+                                url: ajaxurl,
+                                type: 'POST',
+                                data: {
+                                    action: 'wbcd_dismiss_geoip_notice',
+                                    nonce: '<?php echo esc_js(wp_create_nonce('wbcd_dismiss_geoip_notice')); ?>'
+                                }
+                            });
+                        });
                     });
-                });
-            });
-        </script>
-        <?php
+                </script>
+                <?php
     }
 }

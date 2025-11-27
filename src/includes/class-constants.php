@@ -26,7 +26,7 @@ class Constants
     /**
      * WordPress text domain for translations.
      */
-    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
+    const TEXT_DOMAIN = 'beacon-multi-currency-forms';
 
     /**
      * CSS class prefix used throughout the plugin.
@@ -210,16 +210,6 @@ class Constants
     public static function get_default_button_size()
     {
         return self::DEFAULT_BUTTON_SIZE;
-    }
-
-    /**
-     * Get the text domain for translations.
-     * 
-     * @return string Text domain
-     */
-    public static function get_text_domain()
-    {
-        return self::TEXT_DOMAIN;
     }
 
     /**

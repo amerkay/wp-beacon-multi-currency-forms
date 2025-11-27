@@ -21,9 +21,6 @@ class Form_Validator
     const FORM_ID_MIN_LENGTH = 6;
     const FORM_ID_MAX_LENGTH = 12;
 
-    // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
-
     /**
      * Validate a Beacon form ID
      * 
@@ -39,7 +36,7 @@ class Form_Validator
         if (empty($form_id)) {
             return [
                 'valid' => false,
-                'message' => __('Please enter a Beacon form ID.', self::TEXT_DOMAIN)
+                'message' => __('Please enter a Beacon form ID.', 'beacon-multi-currency-forms')
             ];
         }
 
@@ -48,7 +45,8 @@ class Form_Validator
             return [
                 'valid' => false,
                 'message' => sprintf(
-                    __('Beacon form ID must be between %d and %d characters long.', self::TEXT_DOMAIN),
+                    /* translators: 1: Minimum length, 2: Maximum length */
+                    __('Beacon form ID must be between %1$d and %2$d characters long.', 'beacon-multi-currency-forms'),
                     self::FORM_ID_MIN_LENGTH,
                     self::FORM_ID_MAX_LENGTH
                 )
@@ -59,7 +57,7 @@ class Form_Validator
         if (!preg_match(self::PATTERN_FORM_ID, $form_id)) {
             return [
                 'valid' => false,
-                'message' => __('Beacon form ID must contain only letters and numbers (no spaces or special characters).', self::TEXT_DOMAIN)
+                'message' => __('Beacon form ID must contain only letters and numbers (no spaces or special characters).', 'beacon-multi-currency-forms')
             ];
         }
 
@@ -89,7 +87,7 @@ class Form_Validator
         if (!preg_match(self::PATTERN_ACCOUNT_NAME, $account_name)) {
             return [
                 'valid' => false,
-                'message' => __('Beacon Account Name must be lowercase and contain only letters, numbers, hyphens, and underscores (no spaces).', self::TEXT_DOMAIN)
+                'message' => __('Beacon Account Name must be lowercase and contain only letters, numbers, hyphens, and underscores (no spaces).', 'beacon-multi-currency-forms')
             ];
         }
 
@@ -107,7 +105,7 @@ class Form_Validator
         if (empty($target_page_id) || $target_page_id === 0) {
             return [
                 'valid' => false,
-                'message' => __('A donation form page must be selected.', self::TEXT_DOMAIN)
+                'message' => __('A donation form page must be selected.', 'beacon-multi-currency-forms')
             ];
         }
 
@@ -125,7 +123,7 @@ class Form_Validator
         if (empty($currencies) || !is_array($currencies)) {
             return [
                 'valid' => false,
-                'message' => __('At least one currency with a form ID must be added.', self::TEXT_DOMAIN)
+                'message' => __('At least one currency with a form ID must be added.', 'beacon-multi-currency-forms')
             ];
         }
 
@@ -161,16 +159,17 @@ class Form_Validator
     public static function get_js_validation_messages()
     {
         return [
-            'enterFormId' => __('Please enter a Beacon form ID.', self::TEXT_DOMAIN),
+            'enterFormId' => __('Please enter a Beacon form ID.', 'beacon-multi-currency-forms'),
             'formIdLengthError' => sprintf(
-                __('Beacon form ID must be between %d and %d characters long.', self::TEXT_DOMAIN),
+                /* translators: 1: Minimum length, 2: Maximum length */
+                __('Beacon form ID must be between %1$d and %2$d characters long.', 'beacon-multi-currency-forms'),
                 self::FORM_ID_MIN_LENGTH,
                 self::FORM_ID_MAX_LENGTH
             ),
-            'formIdAlphanumericError' => __('Beacon form ID must contain only letters and numbers (no spaces or special characters).', self::TEXT_DOMAIN),
-            'targetPageRequired' => __('A donation form page must be selected.', self::TEXT_DOMAIN),
-            'currenciesRequired' => __('At least one currency with a form ID must be added.', self::TEXT_DOMAIN),
-            'validationFailed' => __('Please fix the following errors before saving:', self::TEXT_DOMAIN),
+            'formIdAlphanumericError' => __('Beacon form ID must contain only letters and numbers (no spaces or special characters).', 'beacon-multi-currency-forms'),
+            'targetPageRequired' => __('A donation form page must be selected.', 'beacon-multi-currency-forms'),
+            'currenciesRequired' => __('At least one currency with a form ID must be added.', 'beacon-multi-currency-forms'),
+            'validationFailed' => __('Please fix the following errors before saving:', 'beacon-multi-currency-forms'),
         ];
     }
 }

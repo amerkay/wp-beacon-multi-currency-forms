@@ -614,7 +614,7 @@ Also add information on how to contact you by electronic and paper mail.
 If the program does terminal interaction, make it output a short notice like
 this when it starts in an interactive mode:
 
-	wp-beacon-multi-currency-forms  Copyright (C) 2025  Amer Kawar
+	beacon-multi-currency-forms  Copyright (C) 2025  Amer Kawar
 	This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
 	This is free software, and you are welcome to redistribute it
 	under certain conditions; type `show c' for details.

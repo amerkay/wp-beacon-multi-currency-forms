@@ -15,7 +15,7 @@ class Settings
     const OPTION_UTM_PARAMS = 'wbcd_utm_params';
 
     // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
+    const TEXT_DOMAIN = 'beacon-multi-currency-forms';
 
     // Cached data
     private static $currencies_data = null;
@@ -40,8 +40,8 @@ class Settings
     public static function add_menu()
     {
         add_options_page(
-            __('Beacon Multi-Currency Forms', self::TEXT_DOMAIN),
-            __('Beacon Multi-Currency Forms', self::TEXT_DOMAIN),
+            __('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'),
+            __('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'),
             'manage_options',
             'wbcd-settings',
             [__CLASS__, 'render_page']
@@ -102,36 +102,36 @@ class Settings
     private static function get_localized_strings()
     {
         return [
-            'selectCurrency' => __('Please select a currency.', self::TEXT_DOMAIN),
-            'enterFormId' => __('Please enter a Beacon form ID.', self::TEXT_DOMAIN),
-            'formIdLengthError' => __('Beacon form ID must be between 6 and 12 characters long.', self::TEXT_DOMAIN),
-            'formIdAlphanumericError' => __('Beacon form ID must contain only letters and numbers (no spaces or special characters).', self::TEXT_DOMAIN),
-            'confirmRemoveCurrency' => __('Remove this currency?', self::TEXT_DOMAIN),
-            'confirmRemoveForm' => __('Remove this entire form and all its currencies?', self::TEXT_DOMAIN),
-            'default' => __('Default', self::TEXT_DOMAIN),
-            'currency' => __('Currency', self::TEXT_DOMAIN),
-            'beaconFormId' => __('Beacon Form ID', self::TEXT_DOMAIN),
-            'action' => __('Action', self::TEXT_DOMAIN),
-            'remove' => __('Remove', self::TEXT_DOMAIN),
-            'noCurrencies' => __('No currencies added yet.', self::TEXT_DOMAIN),
-            'form' => __('Form', self::TEXT_DOMAIN),
-            'formName' => __('Form Name:', self::TEXT_DOMAIN),
-            'formNamePlaceholder' => __('e.g., General Donations', self::TEXT_DOMAIN),
-            'supportedCurrencies' => __('Supported Currencies:', self::TEXT_DOMAIN),
-            'addCurrency' => __('Add Currency:', self::TEXT_DOMAIN),
-            'selectCurrencyOption' => __('-- Select a currency --', self::TEXT_DOMAIN),
-            'beaconFormIdPlaceholder' => __('Beacon form ID', self::TEXT_DOMAIN),
-            'addCurrencyBtn' => __('Add Currency', self::TEXT_DOMAIN),
-            'removeForm' => __('Remove This Form', self::TEXT_DOMAIN),
-            'setAsDefault' => __('Set as default currency', self::TEXT_DOMAIN),
-            'defaultCurrencyDesc' => __('Select a default currency by clicking the radio button. This currency will be used when geo-detection fails or detects an unsupported currency.', self::TEXT_DOMAIN),
-            'currenciesRequired' => __('At least one currency with a form ID must be added.', self::TEXT_DOMAIN),
-            'validationFailed' => __('Please fix the following errors before saving:', self::TEXT_DOMAIN),
-            'addMoreCurrencies' => __('Add more currencies', self::TEXT_DOMAIN),
-            'hideCurrencyForm' => __('Hide', self::TEXT_DOMAIN),
-            'loadBeaconGlobally' => __('Load Beacon JavaScript globally', self::TEXT_DOMAIN),
-            'utmTracking' => __('UTM Parameter Tracking', self::TEXT_DOMAIN),
-            'enableUtmTracking' => __('Enable tracking and passing UTM parameters to donation forms', self::TEXT_DOMAIN),
+            'selectCurrency' => __('Please select a currency.', 'beacon-multi-currency-forms'),
+            'enterFormId' => __('Please enter a Beacon form ID.', 'beacon-multi-currency-forms'),
+            'formIdLengthError' => __('Beacon form ID must be between 6 and 12 characters long.', 'beacon-multi-currency-forms'),
+            'formIdAlphanumericError' => __('Beacon form ID must contain only letters and numbers (no spaces or special characters).', 'beacon-multi-currency-forms'),
+            'confirmRemoveCurrency' => __('Remove this currency?', 'beacon-multi-currency-forms'),
+            'confirmRemoveForm' => __('Remove this entire form and all its currencies?', 'beacon-multi-currency-forms'),
+            'default' => __('Default', 'beacon-multi-currency-forms'),
+            'currency' => __('Currency', 'beacon-multi-currency-forms'),
+            'beaconFormId' => __('Beacon Form ID', 'beacon-multi-currency-forms'),
+            'action' => __('Action', 'beacon-multi-currency-forms'),
+            'remove' => __('Remove', 'beacon-multi-currency-forms'),
+            'noCurrencies' => __('No currencies added yet.', 'beacon-multi-currency-forms'),
+            'form' => __('Form', 'beacon-multi-currency-forms'),
+            'formName' => __('Form Name:', 'beacon-multi-currency-forms'),
+            'formNamePlaceholder' => __('e.g., General Donations', 'beacon-multi-currency-forms'),
+            'supportedCurrencies' => __('Supported Currencies:', 'beacon-multi-currency-forms'),
+            'addCurrency' => __('Add Currency:', 'beacon-multi-currency-forms'),
+            'selectCurrencyOption' => __('-- Select a currency --', 'beacon-multi-currency-forms'),
+            'beaconFormIdPlaceholder' => __('Beacon form ID', 'beacon-multi-currency-forms'),
+            'addCurrencyBtn' => __('Add Currency', 'beacon-multi-currency-forms'),
+            'removeForm' => __('Remove This Form', 'beacon-multi-currency-forms'),
+            'setAsDefault' => __('Set as default currency', 'beacon-multi-currency-forms'),
+            'defaultCurrencyDesc' => __('Select a default currency by clicking the radio button. This currency will be used when geo-detection fails or detects an unsupported currency.', 'beacon-multi-currency-forms'),
+            'currenciesRequired' => __('At least one currency with a form ID must be added.', 'beacon-multi-currency-forms'),
+            'validationFailed' => __('Please fix the following errors before saving:', 'beacon-multi-currency-forms'),
+            'addMoreCurrencies' => __('Add more currencies', 'beacon-multi-currency-forms'),
+            'hideCurrencyForm' => __('Hide', 'beacon-multi-currency-forms'),
+            'loadBeaconGlobally' => __('Load Beacon JavaScript globally', 'beacon-multi-currency-forms'),
+            'utmTracking' => __('UTM Parameter Tracking', 'beacon-multi-currency-forms'),
+            'enableUtmTracking' => __('Enable tracking and passing UTM parameters to donation forms', 'beacon-multi-currency-forms'),
         ];
     }
 
@@ -180,16 +180,16 @@ class Settings
 
         add_settings_section(
             'wbcd_section_main',
-            __('Donation Settings', self::TEXT_DOMAIN),
+            __('Donation Settings', 'beacon-multi-currency-forms'),
             function () {
-                echo '<p>' . esc_html__('Configure your Beacon account name and donation forms. Each form can have multiple currencies, a default currency (used when geo-detection fails or detects an unsupported currency), and a dedicated page for the full donation form.', self::TEXT_DOMAIN) . '</p>';
+                echo '<p>' . esc_html__('Configure your Beacon account name and donation forms. Each form can have multiple currencies, a default currency (used when geo-detection fails or detects an unsupported currency), and a dedicated page for the full donation form.', 'beacon-multi-currency-forms') . '</p>';
             },
             'wbcd-settings'
         );
 
         add_settings_field(
             'wbcd_field_beacon_account',
-            __('Beacon Account Name', self::TEXT_DOMAIN),
+            __('Beacon Account Name', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_beacon_account'],
             'wbcd-settings',
             'wbcd_section_main'
@@ -197,7 +197,7 @@ class Settings
 
         add_settings_field(
             'wbcd_field_forms',
-            __('Donation Forms', self::TEXT_DOMAIN),
+            __('Donation Forms', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_forms'],
             'wbcd-settings',
             'wbcd_section_main'
@@ -205,7 +205,7 @@ class Settings
 
         add_settings_field(
             'wbcd_field_load_beacon_globally',
-            __('Beacon JavaScript', self::TEXT_DOMAIN),
+            __('Beacon JavaScript', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_load_beacon_globally'],
             'wbcd-settings',
             'wbcd_section_main'
@@ -213,7 +213,7 @@ class Settings
 
         add_settings_field(
             'wbcd_field_track_utm',
-            __('UTM Parameter Tracking', self::TEXT_DOMAIN),
+            __('UTM Parameter Tracking', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_track_utm'],
             'wbcd-settings',
             'wbcd_section_main'
@@ -298,7 +298,8 @@ class Settings
                     add_settings_error(
                         self::OPTION_UTM_PARAMS,
                         'invalid_payment_param_' . $utm_field,
-                        sprintf(__('Payment parameter for %s must start with "bcn_".', self::TEXT_DOMAIN), $utm_field),
+                        /* translators: %s: UTM field name */
+                        sprintf(__('Payment parameter for %s must start with "bcn_".', 'beacon-multi-currency-forms'), $utm_field),
                         'error'
                     );
                     $has_error = true;
@@ -309,7 +310,8 @@ class Settings
                     add_settings_error(
                         self::OPTION_UTM_PARAMS,
                         'invalid_subscription_param_' . $utm_field,
-                        sprintf(__('Subscription parameter for %s must start with "bcn_".', self::TEXT_DOMAIN), $utm_field),
+                        /* translators: %s: UTM field name */
+                        sprintf(__('Subscription parameter for %s must start with "bcn_".', 'beacon-multi-currency-forms'), $utm_field),
                         'error'
                     );
                     $has_error = true;
@@ -432,17 +434,17 @@ class Settings
         if (!current_user_can('manage_options'))
             return;
         ?>
-        <div class="wrap">
-            <h1><?php esc_html_e('Beacon Multi-Currency Forms', self::TEXT_DOMAIN); ?></h1>
-            <form action="options.php" method="post">
+                <div class="wrap">
+                    <h1><?php esc_html_e('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'); ?></h1>
+                    <form action="options.php" method="post">
+                        <?php
+                        settings_fields('wbcd_group');
+                        do_settings_sections('wbcd-settings');
+                        submit_button();
+                        ?>
+                    </form>
+                </div>
                 <?php
-                settings_fields('wbcd_group');
-                do_settings_sections('wbcd-settings');
-                submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
     }
 
     /**
@@ -453,25 +455,24 @@ class Settings
         // Check if our transient exists
         if (get_transient('wbcd_settings_updated')) {
             ?>
-            <div class="notice notice-info is-dismissible">
-                <p><?php esc_html_e('Settings saved successfully. Remember to clear your cache for changes to take effect.', self::TEXT_DOMAIN); ?>
-                </p>
-            </div>
-            <?php
-            // Delete transient after displaying
-            delete_transient('wbcd_settings_updated');
+                        <div class="notice notice-info is-dismissible">
+                            <p><?php esc_html_e('Settings saved successfully. Remember to clear your cache for changes to take effect.', 'beacon-multi-currency-forms'); ?>
+                            </p>
+                        </div>
+                        <?php
+                        // Delete transient after displaying
+                        delete_transient('wbcd_settings_updated');
         }
     }
 
     /**
      * Set transient after successful settings update
+     * This is triggered by WordPress when any of our options are updated
      */
     public static function on_settings_updated()
     {
-        // Check if we're updating our settings
-        if (isset($_POST['option_page']) && $_POST['option_page'] === 'wbcd_group') {
-            set_transient('wbcd_settings_updated', true, 60); // 60 seconds
-        }
+        // Set transient to show success message
+        set_transient('wbcd_settings_updated', true, 60); // 60 seconds
     }
 
     // ========================================
@@ -540,7 +541,7 @@ class Settings
                     '%s (%d %s)',
                     $name,
                     $currency_count,
-                    _n('currency', 'currencies', $currency_count, self::TEXT_DOMAIN)
+                    _n('currency', 'currencies', $currency_count, 'beacon-multi-currency-forms')
                 );
                 $options[$name] = $label;
             }

@@ -14,7 +14,7 @@ if (!defined('ABSPATH'))
 class Form_Sanitizer
 {
     // Text domain
-    const TEXT_DOMAIN = 'wp-beacon-multi-currency-forms';
+    const TEXT_DOMAIN = 'beacon-multi-currency-forms';
 
     /**
      * Sanitize a form name
@@ -62,7 +62,8 @@ class Form_Sanitizer
             $validation = Form_Validator::validate_form_id($form_id);
             if (!$validation['valid']) {
                 $errors[] = sprintf(
-                    __('Invalid Beacon form ID "%s" for currency %s in form "%s". %s', self::TEXT_DOMAIN),
+                    /* translators: 1: Beacon form ID, 2: Currency code, 3: Form name, 4: Validation error message */
+                    __('Invalid Beacon form ID "%1$s" for currency %2$s in form "%3$s". %4$s', 'beacon-multi-currency-forms'),
                     $form_id,
                     $code,
                     $form_name,
@@ -74,7 +75,8 @@ class Form_Sanitizer
             // Check for duplicate currency within the same form
             if (isset($form_used_currencies[$code])) {
                 $errors[] = sprintf(
-                    __('Currency %s appears multiple times in form "%s". Each currency can only be used once per form.', self::TEXT_DOMAIN),
+                    /* translators: 1: Currency code, 2: Form name */
+                    __('Currency %1$s appears multiple times in form "%2$s". Each currency can only be used once per form.', 'beacon-multi-currency-forms'),
                     $code,
                     $form_name
                 );
@@ -155,7 +157,8 @@ class Form_Sanitizer
         $currency_validation = Form_Validator::validate_currencies($currencies);
         if (!$currency_validation['valid']) {
             $errors[] = sprintf(
-                __('Form "%s": %s', self::TEXT_DOMAIN),
+                /* translators: 1: Form name, 2: Validation error message */
+                __('Form "%1$s": %2$s', 'beacon-multi-currency-forms'),
                 $form_name,
                 $currency_validation['message']
             );

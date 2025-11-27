@@ -52,7 +52,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     protected function get_form_options()
     {
         $forms = \WBCD\Settings::get_forms_for_dropdown();
-        $options = ['' => __('Default (First form)', 'wp-beacon-multi-currency-forms')];
+        $options = ['' => __('Default (First form)', 'beacon-multi-currency-forms')];
 
         foreach ($forms as $name => $label) {
             $options[$name] = $label;
@@ -69,7 +69,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     protected function get_currency_options()
     {
         $all_currencies = \WBCD\Settings::get_forms_by_currency();
-        $currency_options = ['' => __('None (use default)', 'wp-beacon-multi-currency-forms')];
+        $currency_options = ['' => __('None (use default)', 'beacon-multi-currency-forms')];
 
         foreach (array_keys($all_currencies) as $code) {
             $currency_options[$code] = $code;
@@ -86,10 +86,10 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     protected function get_frequency_options()
     {
         return [
-            '' => __('None (use default)', 'wp-beacon-multi-currency-forms'),
-            'single' => __('Single', 'wp-beacon-multi-currency-forms'),
-            'monthly' => __('Monthly', 'wp-beacon-multi-currency-forms'),
-            'annual' => __('Annual', 'wp-beacon-multi-currency-forms'),
+            '' => __('None (use default)', 'beacon-multi-currency-forms'),
+            'single' => __('Single', 'beacon-multi-currency-forms'),
+            'monthly' => __('Monthly', 'beacon-multi-currency-forms'),
+            'annual' => __('Annual', 'beacon-multi-currency-forms'),
         ];
     }
 
@@ -102,9 +102,9 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     {
         $sizes = \WBCD\Constants::get_valid_button_sizes();
         $labels = [
-            'md' => __('Medium', 'wp-beacon-multi-currency-forms'),
-            'lg' => __('Large', 'wp-beacon-multi-currency-forms'),
-            'xl' => __('Extra Large', 'wp-beacon-multi-currency-forms'),
+            'md' => __('Medium', 'beacon-multi-currency-forms'),
+            'lg' => __('Large', 'beacon-multi-currency-forms'),
+            'xl' => __('Extra Large', 'beacon-multi-currency-forms'),
         ];
 
         $options = [];
@@ -165,7 +165,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
             echo '<p style="margin: 0 0 5px; font-size: 14px; color: #50575e;"><strong>' . esc_html($label) . ':</strong> ' . esc_html($value) . '</p>';
         }
 
-        echo '<p style="margin: 10px 0 0; font-size: 12px; color: #8c8f94;">' . esc_html__('Preview on frontend', 'wp-beacon-multi-currency-forms') . '</p>';
+        echo '<p style="margin: 10px 0 0; font-size: 12px; color: #8c8f94;">' . esc_html__('Preview on frontend', 'beacon-multi-currency-forms') . '</p>';
         echo '</div>';
 
         return true;
@@ -189,13 +189,13 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     protected function add_form_selection_control($description = null)
     {
         if ($description === null) {
-            $description = __('Choose which donation form to use', 'wp-beacon-multi-currency-forms');
+            $description = __('Choose which donation form to use', 'beacon-multi-currency-forms');
         }
 
         $this->add_control(
             'form_name',
             [
-                'label' => __('Select Form', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Select Form', 'beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => '',
                 'options' => $this->get_form_options(),
@@ -213,13 +213,13 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     protected function add_custom_params_section($notice_text = null)
     {
         if ($notice_text === null) {
-            $notice_text = __('Add custom parameters to include in the donation form URL. Each parameter will be appended as key=value pairs.', 'wp-beacon-multi-currency-forms');
+            $notice_text = __('Add custom parameters to include in the donation form URL. Each parameter will be appended as key=value pairs.', 'beacon-multi-currency-forms');
         }
 
         $this->start_controls_section(
             'params_section',
             [
-                'label' => __('Custom URL Parameters', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Custom URL Parameters', 'beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -235,19 +235,19 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         $this->add_control(
             'custom_params',
             [
-                'label' => __('Parameters', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Parameters', 'beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::REPEATER,
                 'fields' => [
                     [
                         'name' => 'param_key',
-                        'label' => __('Parameter Name', 'wp-beacon-multi-currency-forms'),
+                        'label' => __('Parameter Name', 'beacon-multi-currency-forms'),
                         'type' => \Elementor\Controls_Manager::TEXT,
                         'placeholder' => 'e.g., bcn_c_adopted_animal',
                         'default' => '',
                     ],
                     [
                         'name' => 'param_value',
-                        'label' => __('Parameter Value', 'wp-beacon-multi-currency-forms'),
+                        'label' => __('Parameter Value', 'beacon-multi-currency-forms'),
                         'type' => \Elementor\Controls_Manager::TEXT,
                         'placeholder' => 'e.g., 12345',
                         'default' => '',
@@ -276,7 +276,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         $this->start_controls_section(
             'frequencies_section',
             [
-                'label' => __('Frequencies', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Frequencies', 'beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -290,22 +290,24 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         );
 
         $frequencies = [
-            'single' => __('Single', 'wp-beacon-multi-currency-forms'),
-            'monthly' => __('Monthly', 'wp-beacon-multi-currency-forms'),
-            'annual' => __('Annual', 'wp-beacon-multi-currency-forms'),
+            'single' => __('Single', 'beacon-multi-currency-forms'),
+            'monthly' => __('Monthly', 'beacon-multi-currency-forms'),
+            'annual' => __('Annual', 'beacon-multi-currency-forms'),
         ];
 
         foreach ($frequencies as $freq => $label) {
             $this->add_control(
                 'frequency_' . $freq,
                 [
-                    'label' => sprintf(__('Show %s Frequency', 'wp-beacon-multi-currency-forms'), $label),
+                    /* translators: %s: Frequency label (One-time, Monthly, or Annual) */
+                    'label' => sprintf(__('Show %s Frequency', 'beacon-multi-currency-forms'), $label),
                     'type' => \Elementor\Controls_Manager::SWITCHER,
-                    'label_on' => __('Yes', 'wp-beacon-multi-currency-forms'),
-                    'label_off' => __('No', 'wp-beacon-multi-currency-forms'),
+                    'label_on' => __('Yes', 'beacon-multi-currency-forms'),
+                    'label_off' => __('No', 'beacon-multi-currency-forms'),
                     'return_value' => 'yes',
                     'default' => 'yes',
-                    'description' => sprintf(__('Show %s donation frequency option', 'wp-beacon-multi-currency-forms'), strtolower($label)),
+                    /* translators: %s: Frequency label (one-time, monthly, or annual) */
+                    'description' => sprintf(__('Show %s donation frequency option', 'beacon-multi-currency-forms'), strtolower($label)),
                 ]
             );
         }
@@ -324,7 +326,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         $this->start_controls_section(
             'presets_section',
             [
-                'label' => __('Default Preset Amounts', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Default Preset Amounts', 'beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -342,15 +344,15 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
 
         $presets = [
             'single' => [
-                'label' => __('Single', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Single', 'beacon-multi-currency-forms'),
                 'default' => implode(', ', $default_presets['single'])
             ],
             'monthly' => [
-                'label' => __('Monthly', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Monthly', 'beacon-multi-currency-forms'),
                 'default' => implode(', ', $default_presets['monthly'])
             ],
             'annual' => [
-                'label' => __('Annual', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Annual', 'beacon-multi-currency-forms'),
                 'default' => implode(', ', $default_presets['annual'])
             ],
         ];
@@ -359,11 +361,13 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
             $this->add_control(
                 'presets_' . $freq,
                 [
-                    'label' => sprintf(__('%s Preset Amounts', 'wp-beacon-multi-currency-forms'), $data['label']),
+                    /* translators: %s: Frequency label (One-time, Monthly, or Annual) */
+                    'label' => sprintf(__('%s Preset Amounts', 'beacon-multi-currency-forms'), $data['label']),
                     'type' => \Elementor\Controls_Manager::TEXT,
                     'default' => $data['default'],
                     'placeholder' => $data['default'],
-                    'description' => sprintf(__('Comma-separated amounts for %s donations (e.g., %s)', 'wp-beacon-multi-currency-forms'), strtolower($data['label']), $data['default']),
+                    /* translators: 1: Frequency label (one-time, monthly, or annual), 2: Default preset amounts */
+                    'description' => sprintf(__('Comma-separated amounts for %1$s donations (e.g., %2$s)', 'beacon-multi-currency-forms'), strtolower($data['label']), $data['default']),
                 ]
             );
         }
@@ -382,7 +386,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         $this->start_controls_section(
             'colors_section',
             [
-                'label' => __('Colors', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Colors', 'beacon-multi-currency-forms'),
                 'tab' => \Elementor\Controls_Manager::TAB_STYLE,
             ]
         );
@@ -398,20 +402,20 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         $this->add_control(
             'primary_color',
             [
-                'label' => __('Primary Color', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Primary Color', 'beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'default' => '',
-                'description' => __('Default primary color', 'wp-beacon-multi-currency-forms'),
+                'description' => __('Default primary color', 'beacon-multi-currency-forms'),
             ]
         );
 
         $this->add_control(
             'brand_color',
             [
-                'label' => __('Brand Color', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Brand Color', 'beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'default' => '',
-                'description' => __('Default brand color', 'wp-beacon-multi-currency-forms'),
+                'description' => __('Default brand color', 'beacon-multi-currency-forms'),
             ]
         );
 
@@ -427,7 +431,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
     protected function get_page_options()
     {
         $pages = get_pages();
-        $options = [0 => __('— Select Page —', 'wp-beacon-multi-currency-forms')];
+        $options = [0 => __('— Select Page —', 'beacon-multi-currency-forms')];
 
         foreach ($pages as $page) {
             $permalink = get_permalink($page->ID);
@@ -448,11 +452,11 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         $this->add_control(
             'target_page_id',
             [
-                'label' => __('Donation Form Page', 'wp-beacon-multi-currency-forms'),
+                'label' => __('Donation Form Page', 'beacon-multi-currency-forms'),
                 'type' => \Elementor\Controls_Manager::SELECT2,
                 'default' => 0,
                 'options' => $this->get_page_options(),
-                'description' => __('Page where donors will be sent to complete the donation (optional). Start typing to search.', 'wp-beacon-multi-currency-forms'),
+                'description' => __('Page where donors will be sent to complete the donation (optional). Start typing to search.', 'beacon-multi-currency-forms'),
             ]
         );
     }
