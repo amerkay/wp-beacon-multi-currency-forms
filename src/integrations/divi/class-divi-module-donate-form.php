@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Integrations\Divi;
+namespace BMCF\Integrations\Divi;
 
 if (!class_exists('ET_Builder_Module')) {
     return;
@@ -9,9 +9,9 @@ if (!class_exists('ET_Builder_Module')) {
 if (!defined('ABSPATH'))
     exit;
 
-class Donate_Form_Module extends Abstract_WBCD_Divi_Module
+class Donate_Form_Module extends Abstract_BMCF_Divi_Module
 {
-    public $slug = 'wbcd_divi_donate_form';
+    public $slug = 'bmcf_divi_donate_form';
     public $vb_support = 'off';
     public $name = '';
 
@@ -58,7 +58,7 @@ class Donate_Form_Module extends Abstract_WBCD_Divi_Module
         ];
 
         $this->enqueue_base_assets();
-        \WBCD\Assets::enqueue_donation_form($form_name);
-        return \WBCD\Render\Donate_Form_Render::render($form_name, $render_args);
+        \BMCF\Assets::enqueue_donation_form($form_name);
+        return \BMCF\Render\Donate_Form_Render::render($form_name, $render_args);
     }
 }

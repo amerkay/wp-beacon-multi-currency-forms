@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD;
+namespace BMCF;
 
 if (!defined('ABSPATH'))
     exit;
@@ -31,12 +31,12 @@ class Settings_Renderer
 
                 <p class="description">
                     <?php esc_html_e('Enter your BeaconCRM account name (e.g., "yourorg").', 'beacon-multi-currency-forms'); ?>
-                    <a href="#" class="wbcd-toggle-instructions" id="wbcd-account-name-toggle">
+                    <a href="#" class="bmcf-toggle-instructions" id="bmcf-account-name-toggle">
                         <strong><?php esc_html_e('How to find your account name and form IDs?', 'beacon-multi-currency-forms'); ?></strong>
                     </a>
                 </p>
 
-                <ol class="description wbcd-instructions-list wbcd-collapsible" id="wbcd-account-name-instructions">
+                <ol class="description bmcf-instructions-list bmcf-collapsible" id="bmcf-account-name-instructions">
                     <li><?php esc_html_e('Navigate to any of your forms on BeaconCRM\'s interface.', 'beacon-multi-currency-forms'); ?></li>
                     <li><?php esc_html_e('Click it, then click "Embed".', 'beacon-multi-currency-forms'); ?></li>
                     <li><?php echo wp_kses_post(__('The form code should look like <code>&lt;div class="beacon-form" data-account="yourorg" data-form="f0rm1d"&gt;&lt;/div&gt;</code>. In this example, the account name is <code>yourorg</code> and the form ID (to fill below) is <code>f0rm1d</code>.', 'beacon-multi-currency-forms')); ?>
@@ -56,13 +56,13 @@ class Settings_Renderer
     public static function render_currency_table($form_index, $form_currencies, $default_currency, $currencies_data)
     {
         ?>
-                <table class="wbcd-settings-table">
+                <table class="bmcf-settings-table">
                     <thead>
                         <tr>
-                            <th class="wbcd-col-default"><?php esc_html_e('Default', 'beacon-multi-currency-forms'); ?></th>
+                            <th class="bmcf-col-default"><?php esc_html_e('Default', 'beacon-multi-currency-forms'); ?></th>
                             <th><?php esc_html_e('Currency', 'beacon-multi-currency-forms'); ?></th>
                             <th><?php esc_html_e('Beacon Form ID', 'beacon-multi-currency-forms'); ?></th>
-                            <th class="wbcd-col-action"><?php esc_html_e('Action', 'beacon-multi-currency-forms'); ?></th>
+                            <th class="bmcf-col-action"><?php esc_html_e('Action', 'beacon-multi-currency-forms'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,7 +75,7 @@ class Settings_Renderer
                             ?>
                                 <tr>
                                     <td data-label="<?php esc_attr_e('Default', 'beacon-multi-currency-forms'); ?>">
-                                        <input type="radio" name="wbcd_forms[<?php echo esc_attr($form_index); ?>][default_currency]"
+                                        <input type="radio" name="bmcf_forms[<?php echo esc_attr($form_index); ?>][default_currency]"
                                             value="<?php echo esc_attr($code); ?>" <?php checked($is_default, true); ?>
                                             title="<?php esc_attr_e('Set as default currency', 'beacon-multi-currency-forms'); ?>" />
                                     </td>
@@ -84,12 +84,12 @@ class Settings_Renderer
                                     </td>
                                     <td data-label="<?php esc_attr_e('Beacon Form ID', 'beacon-multi-currency-forms'); ?>">
                                         <input type="text"
-                                            name="wbcd_forms[<?php echo esc_attr($form_index); ?>][currencies][<?php echo esc_attr($code); ?>]"
+                                            name="bmcf_forms[<?php echo esc_attr($form_index); ?>][currencies][<?php echo esc_attr($code); ?>]"
                                             value="<?php echo esc_attr($form_id); ?>" class="regular-text"
                                             placeholder="<?php esc_attr_e('Beacon form ID', 'beacon-multi-currency-forms'); ?>" />
                                     </td>
                                     <td data-label="<?php esc_attr_e('Action', 'beacon-multi-currency-forms'); ?>">
-                                        <button type="button" class="button wbcd-remove-currency"
+                                        <button type="button" class="button bmcf-remove-currency"
                                             data-form="<?php echo esc_attr($form_index); ?>" data-currency="<?php echo esc_attr($code); ?>">
                                             <?php esc_html_e('Remove', 'beacon-multi-currency-forms'); ?>
                                         </button>
@@ -116,16 +116,16 @@ class Settings_Renderer
         // Get currencies already used in THIS form only
         $current_form_currencies = array_keys($form_currencies);
         ?>
-                <button type="button" class="button wbcd-show-add-currency" data-form-index="<?php echo esc_attr($form_index); ?>">
+                <button type="button" class="button bmcf-show-add-currency" data-form-index="<?php echo esc_attr($form_index); ?>">
                     <?php esc_html_e('Add more currencies', 'beacon-multi-currency-forms'); ?>
                 </button>
 
-                <div class="wbcd-add-currency" data-form-index="<?php echo esc_attr($form_index); ?>">
-                    <label for="wbcd_new_currency_<?php echo esc_attr($form_index); ?>">
+                <div class="bmcf-add-currency" data-form-index="<?php echo esc_attr($form_index); ?>">
+                    <label for="bmcf_new_currency_<?php echo esc_attr($form_index); ?>">
                         <strong><?php esc_html_e('Add Currency:', 'beacon-multi-currency-forms'); ?></strong>
                     </label><br>
 
-                    <select id="wbcd_new_currency_<?php echo esc_attr($form_index); ?>" class="wbcd-currency-select"
+                    <select id="bmcf_new_currency_<?php echo esc_attr($form_index); ?>" class="bmcf-currency-select"
                         data-form-index="<?php echo esc_attr($form_index); ?>">
                         <option value=""><?php esc_html_e('-- Select a currency --', 'beacon-multi-currency-forms'); ?></option>
                         <?php foreach ($currencies_data as $code => $info):
@@ -139,10 +139,10 @@ class Settings_Renderer
                         endforeach; ?>
                     </select>
 
-                    <input type="text" id="wbcd_new_currency_id_<?php echo esc_attr($form_index); ?>" class="wbcd-currency-id"
+                    <input type="text" id="bmcf_new_currency_id_<?php echo esc_attr($form_index); ?>" class="bmcf-currency-id"
                         placeholder="<?php esc_attr_e('Beacon form ID', 'beacon-multi-currency-forms'); ?>" />
 
-                    <button type="button" class="button wbcd-add-currency-btn" data-form-index="<?php echo esc_attr($form_index); ?>">
+                    <button type="button" class="button bmcf-add-currency-btn" data-form-index="<?php echo esc_attr($form_index); ?>">
                         <?php esc_html_e('Add Currency', 'beacon-multi-currency-forms'); ?>
                     </button>
                 </div>
@@ -163,23 +163,23 @@ class Settings_Renderer
         $form_currencies = isset($form['currencies']) ? $form['currencies'] : [];
         $default_currency = isset($form['default_currency']) ? $form['default_currency'] : '';
         ?>
-                <div class="wbcd-form-item">
+                <div class="bmcf-form-item">
                     <?php /* translators: %d: Form number */ ?>
                     <h3><?php echo esc_html(sprintf(__('Form #%d', 'beacon-multi-currency-forms'), $form_index + 1)); ?></h3>
 
                     <!-- Form name -->
                     <p>
-                        <label for="wbcd_form_name_<?php echo esc_attr($form_index); ?>">
+                        <label for="bmcf_form_name_<?php echo esc_attr($form_index); ?>">
                             <strong><?php esc_html_e('Form Name:', 'beacon-multi-currency-forms'); ?></strong>
                         </label><br>
-                        <input type="text" id="wbcd_form_name_<?php echo esc_attr($form_index); ?>"
-                            name="wbcd_forms[<?php echo esc_attr($form_index); ?>][name]" value="<?php echo esc_attr($form_name); ?>"
+                        <input type="text" id="bmcf_form_name_<?php echo esc_attr($form_index); ?>"
+                            name="bmcf_forms[<?php echo esc_attr($form_index); ?>][name]" value="<?php echo esc_attr($form_name); ?>"
                             class="regular-text" required
                             placeholder="<?php esc_attr_e('e.g., General Donations', 'beacon-multi-currency-forms'); ?>" />
                     </p>
 
                     <!-- Currencies section -->
-                    <div class="wbcd-currencies-section">
+                    <div class="bmcf-currencies-section">
                         <h4><?php esc_html_e('Supported Currencies:', 'beacon-multi-currency-forms'); ?></h4>
 
                         <?php if (!empty($form_currencies)): ?>
@@ -193,8 +193,8 @@ class Settings_Renderer
 
                     <!-- Remove form button -->
                     <?php if ($total_forms > 1): ?>
-                            <p class="wbcd-remove-form-wrapper">
-                                <button type="button" class="button button-link-delete wbcd-remove-form"
+                            <p class="bmcf-remove-form-wrapper">
+                                <button type="button" class="button button-link-delete bmcf-remove-form"
                                     data-form-index="<?php echo esc_attr($form_index); ?>">
                                     <?php esc_html_e('Remove This Form', 'beacon-multi-currency-forms'); ?>
                                 </button>
@@ -213,14 +213,14 @@ class Settings_Renderer
     public static function render_forms_field($forms, $currencies_data)
     {
         ?>
-                <div id="wbcd-forms-container">
+                <div id="bmcf-forms-container">
                     <?php foreach ($forms as $form_index => $form): ?>
                             <?php self::render_form_item($form_index, $form, count($forms), $currencies_data); ?>
                     <?php endforeach; ?>
                 </div>
 
                 <p>
-                    <button type="button" id="wbcd-add-form" class="button">
+                    <button type="button" id="bmcf-add-form" class="button">
                         <?php esc_html_e('+ Add Another Form', 'beacon-multi-currency-forms'); ?>
                     </button>
                 </p>
@@ -285,13 +285,13 @@ class Settings_Renderer
                     <?php esc_html_e('When enabled, UTM parameters (utm_source, utm_medium, utm_campaign) are automatically tracked across all pages and stored in a cookie for 180 days. These parameters are then passed to donation forms via data attributes.', 'beacon-multi-currency-forms'); ?>
                 </p>
 
-                <div id="wbcd-utm-params-section" <?php echo $value ? '' : 'style="display:none;"'; ?>>
+                <div id="bmcf-utm-params-section" <?php echo $value ? '' : 'style="display:none;"'; ?>>
                     <h4><?php esc_html_e('Parameter Configuration', 'beacon-multi-currency-forms'); ?></h4>
                     <p class="description">
                         <?php esc_html_e('Choose the URL Data parameters as configured under "URL Data" in your forms. All parameter names must start with "bcn_".', 'beacon-multi-currency-forms'); ?>
                     </p>
 
-                    <table class="wbcd-settings-table">
+                    <table class="bmcf-settings-table">
                         <thead>
                             <tr>
                                 <th><?php esc_html_e('UTM Parameter', 'beacon-multi-currency-forms'); ?></th>

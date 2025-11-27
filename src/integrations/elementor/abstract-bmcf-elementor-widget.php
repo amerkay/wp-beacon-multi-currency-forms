@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Integrations\Elementor;
+namespace BMCF\Integrations\Elementor;
 
 if (!class_exists('\Elementor\Widget_Base')) {
     return;
@@ -10,10 +10,10 @@ if (!defined('ABSPATH'))
     exit;
 
 /**
- * Abstract base class for all WBCD Elementor widgets.
+ * Abstract base class for all BMCF Elementor widgets.
  * Provides shared functionality to eliminate code duplication.
  */
-abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
+abstract class Abstract_BMCF_Elementor_Widget extends \Elementor\Widget_Base
 {
     /**
      * Replacement notice text for backup fields.
@@ -24,7 +24,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
 
     /**
      * Get widget categories.
-     * All WBCD widgets belong to the 'general' category.
+     * All BMCF widgets belong to the 'general' category.
      * 
      * @return array Widget categories.
      */
@@ -35,7 +35,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
 
     /**
      * Show widget in Elementor panel.
-     * All WBCD widgets are visible in the panel.
+     * All BMCF widgets are visible in the panel.
      * 
      * @return bool
      */
@@ -51,7 +51,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
      */
     protected function get_form_options()
     {
-        $forms = \WBCD\Settings::get_forms_for_dropdown();
+        $forms = \BMCF\Settings::get_forms_for_dropdown();
         $options = ['' => __('Default (First form)', 'beacon-multi-currency-forms')];
 
         foreach ($forms as $name => $label) {
@@ -68,7 +68,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
      */
     protected function get_currency_options()
     {
-        $all_currencies = \WBCD\Settings::get_forms_by_currency();
+        $all_currencies = \BMCF\Settings::get_forms_by_currency();
         $currency_options = ['' => __('None (use default)', 'beacon-multi-currency-forms')];
 
         foreach (array_keys($all_currencies) as $code) {
@@ -100,7 +100,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
      */
     protected function get_button_size_options()
     {
-        $sizes = \WBCD\Constants::get_valid_button_sizes();
+        $sizes = \BMCF\Constants::get_valid_button_sizes();
         $labels = [
             'md' => __('Medium', 'beacon-multi-currency-forms'),
             'lg' => __('Large', 'beacon-multi-currency-forms'),
@@ -124,7 +124,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
      */
     protected function parse_custom_params_from_settings($settings)
     {
-        return \WBCD\Utils\Params_Parser::from_array($settings['custom_params'] ?? []);
+        return \BMCF\Utils\Params_Parser::from_array($settings['custom_params'] ?? []);
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
             'annual' => isset($settings['frequency_annual']) && $settings['frequency_annual'] === 'yes',
         ];
 
-        return \WBCD\Utils\Frequency_Parser::from_toggles($frequency_toggles);
+        return \BMCF\Utils\Frequency_Parser::from_toggles($frequency_toggles);
     }
 
     /**
@@ -177,7 +177,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
      */
     protected function enqueue_base_assets()
     {
-        \WBCD\Assets::enqueue_front_base();
+        \BMCF\Assets::enqueue_front_base();
     }
 
     /**
@@ -340,7 +340,7 @@ abstract class Abstract_WBCD_Elementor_Widget extends \Elementor\Widget_Base
         );
 
         // Get defaults from Constants
-        $default_presets = \WBCD\Constants::get_all_presets();
+        $default_presets = \BMCF\Constants::get_all_presets();
 
         $presets = [
             'single' => [

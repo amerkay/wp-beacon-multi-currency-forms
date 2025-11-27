@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD;
+namespace BMCF;
 
 if (!defined('ABSPATH'))
     exit;
@@ -8,11 +8,11 @@ if (!defined('ABSPATH'))
 class Settings
 {
     // Option names
-    const OPTION_BEACON_ACCOUNT = 'wbcd_beacon_account';
-    const OPTION_FORMS = 'wbcd_forms';
-    const OPTION_LOAD_BEACON_GLOBALLY = 'wbcd_load_beacon_globally';
-    const OPTION_TRACK_UTM = 'wbcd_track_utm';
-    const OPTION_UTM_PARAMS = 'wbcd_utm_params';
+    const OPTION_BEACON_ACCOUNT = 'bmcf_beacon_account';
+    const OPTION_FORMS = 'bmcf_forms';
+    const OPTION_LOAD_BEACON_GLOBALLY = 'bmcf_load_beacon_globally';
+    const OPTION_TRACK_UTM = 'bmcf_track_utm';
+    const OPTION_UTM_PARAMS = 'bmcf_utm_params';
 
     // Text domain
     const TEXT_DOMAIN = 'beacon-multi-currency-forms';
@@ -43,7 +43,7 @@ class Settings
             __('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'),
             __('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'),
             'manage_options',
-            'wbcd-settings',
+            'bmcf-settings',
             [__CLASS__, 'render_page']
         );
     }
@@ -56,24 +56,24 @@ class Settings
     public static function enqueue_admin_assets($hook)
     {
         // Only enqueue on our settings page
-        if ($hook !== 'settings_page_wbcd-settings') {
+        if ($hook !== 'settings_page_bmcf-settings') {
             return;
         }
 
         // Enqueue admin CSS
         wp_enqueue_style(
-            'wbcd-admin-settings',
-            WPBMCF_URL . 'admin/css/settings-admin.css',
+            'bmcf-admin-settings',
+            BMCF_URL . 'admin/css/settings-admin.css',
             [],
-            WPBMCF_VERSION
+            BMCF_VERSION
         );
 
         // Enqueue admin JS with jQuery dependency
         wp_enqueue_script(
-            'wbcd-admin-settings',
-            WPBMCF_URL . 'admin/js/settings-admin.js',
+            'bmcf-admin-settings',
+            BMCF_URL . 'admin/js/settings-admin.js',
             ['jquery'],
-            WPBMCF_VERSION,
+            BMCF_VERSION,
             true
         );
 
@@ -82,8 +82,8 @@ class Settings
         $currencies_data = self::load_currencies_data();
 
         wp_localize_script(
-            'wbcd-admin-settings',
-            'wbcdAdminSettings',
+            'bmcf-admin-settings',
+            'bmcfAdminSettings',
             [
                 'formCount' => count($forms),
                 'currencies' => $currencies_data,
@@ -150,73 +150,73 @@ class Settings
         add_option(self::OPTION_TRACK_UTM, false);
         add_option(self::OPTION_UTM_PARAMS, $default_utm_params);
 
-        register_setting('wbcd_group', self::OPTION_BEACON_ACCOUNT, [
+        register_setting('bmcf_group', self::OPTION_BEACON_ACCOUNT, [
             'type' => 'string',
             'sanitize_callback' => [__CLASS__, 'sanitize_account'],
             'default' => '',
         ]);
 
-        register_setting('wbcd_group', self::OPTION_FORMS, [
+        register_setting('bmcf_group', self::OPTION_FORMS, [
             'type' => 'array',
             'sanitize_callback' => [__CLASS__, 'sanitize_forms'],
             'default' => $defaults,
         ]);
 
-        register_setting('wbcd_group', self::OPTION_LOAD_BEACON_GLOBALLY, [
+        register_setting('bmcf_group', self::OPTION_LOAD_BEACON_GLOBALLY, [
             'type' => 'boolean',
             'default' => false,
         ]);
 
-        register_setting('wbcd_group', self::OPTION_TRACK_UTM, [
+        register_setting('bmcf_group', self::OPTION_TRACK_UTM, [
             'type' => 'boolean',
             'default' => false,
         ]);
 
-        register_setting('wbcd_group', self::OPTION_UTM_PARAMS, [
+        register_setting('bmcf_group', self::OPTION_UTM_PARAMS, [
             'type' => 'array',
             'sanitize_callback' => [__CLASS__, 'sanitize_utm_params'],
             'default' => $default_utm_params,
         ]);
 
         add_settings_section(
-            'wbcd_section_main',
+            'bmcf_section_main',
             __('Donation Settings', 'beacon-multi-currency-forms'),
             function () {
                 echo '<p>' . esc_html__('Configure your Beacon account name and donation forms. Each form can have multiple currencies, a default currency (used when geo-detection fails or detects an unsupported currency), and a dedicated page for the full donation form.', 'beacon-multi-currency-forms') . '</p>';
             },
-            'wbcd-settings'
+            'bmcf-settings'
         );
 
         add_settings_field(
-            'wbcd_field_beacon_account',
+            'bmcf_field_beacon_account',
             __('Beacon Account Name', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_beacon_account'],
-            'wbcd-settings',
-            'wbcd_section_main'
+            'bmcf-settings',
+            'bmcf_section_main'
         );
 
         add_settings_field(
-            'wbcd_field_forms',
+            'bmcf_field_forms',
             __('Donation Forms', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_forms'],
-            'wbcd-settings',
-            'wbcd_section_main'
+            'bmcf-settings',
+            'bmcf_section_main'
         );
 
         add_settings_field(
-            'wbcd_field_load_beacon_globally',
+            'bmcf_field_load_beacon_globally',
             __('Beacon JavaScript', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_load_beacon_globally'],
-            'wbcd-settings',
-            'wbcd_section_main'
+            'bmcf-settings',
+            'bmcf_section_main'
         );
 
         add_settings_field(
-            'wbcd_field_track_utm',
+            'bmcf_field_track_utm',
             __('UTM Parameter Tracking', 'beacon-multi-currency-forms'),
             [__CLASS__, 'field_track_utm'],
-            'wbcd-settings',
-            'wbcd_section_main'
+            'bmcf-settings',
+            'bmcf_section_main'
         );
     }
 
@@ -413,7 +413,7 @@ class Settings
             return self::$currencies_data;
         }
 
-        $json_path = WPBMCF_PATH . 'assets/currencies-iso-4217.json';
+        $json_path = BMCF_PATH . 'assets/currencies-iso-4217.json';
         if (!file_exists($json_path)) {
             self::$currencies_data = [];
             return self::$currencies_data;
@@ -434,17 +434,17 @@ class Settings
         if (!current_user_can('manage_options'))
             return;
         ?>
-                <div class="wrap">
-                    <h1><?php esc_html_e('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'); ?></h1>
-                    <form action="options.php" method="post">
-                        <?php
-                        settings_fields('wbcd_group');
-                        do_settings_sections('wbcd-settings');
-                        submit_button();
-                        ?>
-                    </form>
-                </div>
+        <div class="wrap">
+            <h1><?php esc_html_e('Beacon Multi-Currency Forms', 'beacon-multi-currency-forms'); ?></h1>
+            <form action="options.php" method="post">
                 <?php
+                settings_fields('bmcf_group');
+                do_settings_sections('bmcf-settings');
+                submit_button();
+                ?>
+            </form>
+        </div>
+        <?php
     }
 
     /**
@@ -453,15 +453,15 @@ class Settings
     public static function settings_updated_notice()
     {
         // Check if our transient exists
-        if (get_transient('wbcd_settings_updated')) {
+        if (get_transient('bmcf_settings_updated')) {
             ?>
-                        <div class="notice notice-info is-dismissible">
-                            <p><?php esc_html_e('Settings saved successfully. Remember to clear your cache for changes to take effect.', 'beacon-multi-currency-forms'); ?>
-                            </p>
-                        </div>
-                        <?php
-                        // Delete transient after displaying
-                        delete_transient('wbcd_settings_updated');
+            <div class="notice notice-info is-dismissible">
+                <p><?php esc_html_e('Settings saved successfully. Remember to clear your cache for changes to take effect.', 'beacon-multi-currency-forms'); ?>
+                </p>
+            </div>
+            <?php
+            // Delete transient after displaying
+            delete_transient('bmcf_settings_updated');
         }
     }
 
@@ -472,7 +472,7 @@ class Settings
     public static function on_settings_updated()
     {
         // Set transient to show success message
-        set_transient('wbcd_settings_updated', true, 60); // 60 seconds
+        set_transient('bmcf_settings_updated', true, 60); // 60 seconds
     }
 
     // ========================================

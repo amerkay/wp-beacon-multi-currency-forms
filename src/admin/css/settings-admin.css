@@ -4,16 +4,16 @@
  */
 
 /* Account name instructions toggle */
-.wbcd-toggle-instructions {
+.bmcf-toggle-instructions {
     text-decoration: none;
     cursor: pointer;
 }
 
-.wbcd-toggle-instructions:hover {
+.bmcf-toggle-instructions:hover {
     text-decoration: underline;
 }
 
-.wbcd-instructions-list.wbcd-collapsible {
+.bmcf-instructions-list.bmcf-collapsible {
     display: none;
     overflow: hidden;
     margin-top: 10px;
@@ -30,7 +30,7 @@
 }
 
 /* Form item container */
-.wbcd-form-item {
+.bmcf-form-item {
     position: relative;
     border: 1px solid #ccc;
     padding: 15px;
@@ -39,43 +39,43 @@
     border-radius: 3px;
 }
 
-.wbcd-form-item h3 {
+.bmcf-form-item h3 {
     margin-top: 0;
     color: #23282d;
     font-size: 1.1em;
 }
 
-.wbcd-form-item h4 {
+.bmcf-form-item h4 {
     margin-top: 10px;
     margin-bottom: 10px;
     color: #23282d;
 }
 
 /* Currency select dropdown */
-.wbcd-currency-select {
+.bmcf-currency-select {
     max-width: 100%;
     min-width: 300px;
 }
 
 /* Currency ID input */
-.wbcd-currency-id {
+.bmcf-currency-id {
     width: 200px;
 }
 
 /* Currencies section */
-.wbcd-currencies-section {
+.bmcf-currencies-section {
     margin-top: 15px;
 }
 
 /* Settings tables - generic styling for all admin tables */
-.wbcd-settings-table {
+.bmcf-settings-table {
     width: 100%;
     margin-bottom: 10px;
     border: 1px solid #ccd0d4;
     border-collapse: collapse;
 }
 
-.wbcd-settings-table thead th {
+.bmcf-settings-table thead th {
     background: #f3f4f5;
     font-weight: 600;
     padding: 8px 10px;
@@ -83,84 +83,84 @@
     border-bottom: 1px solid #ccd0d4;
 }
 
-.wbcd-settings-table thead th.wbcd-col-default,
-.wbcd-settings-table thead th.wbcd-col-action {
+.bmcf-settings-table thead th.bmcf-col-default,
+.bmcf-settings-table thead th.bmcf-col-action {
     width: 80px;
 }
 
-.wbcd-settings-table tbody td {
+.bmcf-settings-table tbody td {
     padding: 8px 10px;
     vertical-align: middle;
     border-bottom: 1px solid #f0f0f1;
 }
 
-.wbcd-settings-table tbody tr {
+.bmcf-settings-table tbody tr {
     background: #fff;
 }
 
-.wbcd-settings-table tbody tr:hover {
+.bmcf-settings-table tbody tr:hover {
     background: #f9f9f9;
 }
 
 /* Default currency radio button cell */
-.wbcd-settings-table td:first-child {
+.bmcf-settings-table td:first-child {
     text-align: left;
     padding-left: 15px;
 }
 
 /* Action buttons in table */
-.wbcd-settings-table .button {
+.bmcf-settings-table .button {
     padding: 2px 10px;
     height: auto;
     line-height: 1.5;
 }
 
 /* Add currency section */
-.wbcd-add-currency {
+.bmcf-add-currency {
     padding-top: 10px;
     padding-bottom: 10px;
     border-top: 1px solid #e0e0e0;
     display: none;
 }
 
-.wbcd-add-currency.visible {
+.bmcf-add-currency.visible {
     display: block;
 }
 
-.wbcd-add-currency label {
+.bmcf-add-currency label {
     display: inline-block;
     margin-bottom: 5px;
 }
 
 /* Show add currencies button */
-.wbcd-show-add-currency {
+.bmcf-show-add-currency {
     margin-top: 12px !important;
     margin-bottom: 12px !important;
 }
 
 /* Remove form button */
-.wbcd-remove-form-wrapper {
+.bmcf-remove-form-wrapper {
     padding-top: 15px;
     border-top: 1px solid #ddd;
     margin-bottom: 0;
 }
 
-.wbcd-form-item>p:last-child {
+.bmcf-form-item>p:last-child {
     margin-bottom: 0;
 }
 
 /* Forms container */
-#wbcd-forms-container {
+#bmcf-forms-container {
     margin-bottom: 10px;
 }
 
-#wbcd-forms-container .wbcd-form-item label {
+#bmcf-forms-container .bmcf-form-item label {
     margin-bottom: 4px;
     display: inline-block;
 }
 
 /* Add form button spacing */
-#wbcd-add-form {
+#bmcf-add-form {
     margin-top: 5px;
 }
 
@@ -170,7 +170,7 @@
 }
 
 /* Validation error styles */
-.wbcd-validation-error {
+.bmcf-validation-error {
     display: block;
     color: #dc3232;
     font-weight: 600;
@@ -181,55 +181,55 @@
     border-radius: 2px;
 }
 
-.wbcd-form-item.wbcd-has-error {
+.bmcf-form-item.bmcf-has-error {
     border-color: #dc3232;
     border-width: 2px;
     background: #fef7f7;
 }
 
-.wbcd-form-item.wbcd-has-error h3 {
+.bmcf-form-item.bmcf-has-error h3 {
     color: #dc3232;
 }
 
 /* Responsive adjustments */
 @media screen and (max-width: 782px) {
-    .wbcd-currency-select {
+    .bmcf-currency-select {
         min-width: 100%;
         margin-bottom: 10px;
     }
 
-    .wbcd-currency-id {
+    .bmcf-currency-id {
         width: 100%;
         margin-bottom: 10px;
     }
 
-    .wbcd-add-currency-btn {
+    .bmcf-add-currency-btn {
         width: 100%;
     }
 
-    .wbcd-settings-table {
+    .bmcf-settings-table {
         font-size: 14px;
     }
 
-    .wbcd-settings-table td,
-    .wbcd-settings-table th {
+    .bmcf-settings-table td,
+    .bmcf-settings-table th {
         padding: 6px 8px;
     }
 
     /* Hide table headers on mobile */
-    .wbcd-settings-table thead {
+    .bmcf-settings-table thead {
         display: none;
     }
 
     /* Make table rows display as cards */
-    .wbcd-settings-table,
-    .wbcd-settings-table tbody,
-    .wbcd-settings-table tr {
+    .bmcf-settings-table,
+    .bmcf-settings-table tbody,
+    .bmcf-settings-table tr {
         display: block;
         width: 100%;
     }
 
-    .wbcd-settings-table tr {
+    .bmcf-settings-table tr {
         border: 1px solid #ccd0d4;
         border-radius: 3px;
         padding: 10px;
@@ -237,7 +237,7 @@
         margin-bottom: 10px;
     }
 
-    .wbcd-settings-table td {
+    .bmcf-settings-table td {
         display: block;
         width: 100%;
         text-align: left !important;
@@ -247,7 +247,7 @@
     }
 
     /* Show labels before content on mobile using data attributes */
-    .wbcd-settings-table td[data-label]:before {
+    .bmcf-settings-table td[data-label]:before {
         content: attr(data-label);
         font-weight: 600;
         display: block;
@@ -257,23 +257,23 @@
     }
 
     /* Special handling for first column (Default radio) - label on same line */
-    .wbcd-settings-table td:first-child {
+    .bmcf-settings-table td:first-child {
         padding-left: 0 !important;
         display: flex;
         align-items: center;
     }
 
-    .wbcd-settings-table td:first-child:before {
+    .bmcf-settings-table td:first-child:before {
         margin-bottom: 0;
     }
 
-    .wbcd-settings-table td:first-child input[type="radio"] {
+    .bmcf-settings-table td:first-child input[type="radio"] {
         margin: 0;
         flex-shrink: 0;
     }
 
     /* Make form inputs responsive */
-    .wbcd-settings-table td input[type="text"] {
+    .bmcf-settings-table td input[type="text"] {
         max-width: 100%;
         box-sizing: border-box;
     }

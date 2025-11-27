@@ -47,8 +47,8 @@ Embed Beacon CRM donation forms with multi-currency support, geo-location detect
 * Beacon Donation Box - Compact CTA with currency/amount selector
 
 **Shortcodes:**
-* `[beaconcrm_donate_form]` - Full donation form
-* `[beaconcrm_donate_box]` - Compact donation box
+* `[beacondonate_form]` - Full donation form
+* `[beacondonate_box]` - Compact donation box
 
 **Page Builders:**
 * Elementor widgets
@@ -119,9 +119,9 @@ This plugin does not collect or store any personal data. All donation processing
 
 **Using Shortcodes:**
 Add to any page, post, or widget:
-`[beaconcrm_donate_form]`
+`[beacondonate_form]`
 or
-`[beaconcrm_donate_box]`
+`[beacondonate_box]`
 
 **Using Page Builders:**
 Search for "Beacon Donation Form" or "Beacon Donation Box" in Elementor widgets or Divi modules.

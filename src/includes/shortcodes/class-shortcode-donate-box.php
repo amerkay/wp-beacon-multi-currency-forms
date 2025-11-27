@@ -1,8 +1,8 @@
 <?php
 
-namespace WBCD\Shortcodes;
+namespace BMCF\Shortcodes;
 
-use WBCD\Render\Donate_Box_Render;
+use BMCF\Render\Donate_Box_Render;
 
 if (!defined('ABSPATH'))
     exit;
@@ -11,12 +11,12 @@ class Shortcode_Donate_Box
 {
     public static function register()
     {
-        add_shortcode('beaconcrm_donate_box', [__CLASS__, 'handle']);
+        add_shortcode('beacondonate_box', [__CLASS__, 'handle']);
     }
 
     public static function handle($atts = [])
     {
-        $default_presets = \WBCD\Constants::get_all_presets();
+        $default_presets = \BMCF\Constants::get_all_presets();
 
         $atts = shortcode_atts([
             'form' => '', // Form name
@@ -32,7 +32,7 @@ class Shortcode_Donate_Box
             'presets_single' => implode(',', $default_presets['single']),
             'presets_monthly' => implode(',', $default_presets['monthly']),
             'presets_annual' => implode(',', $default_presets['annual']),
-        ], $atts, 'beaconcrm_donate_box');
+        ], $atts, 'beacondonate_box');
 
         $form_name = $atts['form'];
 
@@ -47,13 +47,13 @@ class Shortcode_Donate_Box
         }
 
         // Parse custom params using utility
-        $custom_params = \WBCD\Utils\Params_Parser::from_url_encoded($atts['params']);
+        $custom_params = \BMCF\Utils\Params_Parser::from_url_encoded($atts['params']);
 
         // Parse allowed frequencies using utility
-        $allowed_frequencies = \WBCD\Utils\Frequency_Parser::from_csv($atts['frequencies']);
+        $allowed_frequencies = \BMCF\Utils\Frequency_Parser::from_csv($atts['frequencies']);
 
         // Parse default presets using utility
-        $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($atts);
+        $default_presets = \BMCF\Utils\Preset_Parser::parse_all_presets($atts);
 
         $render_args = [
             'primaryColor' => $atts['primary_color'],
@@ -68,7 +68,7 @@ class Shortcode_Donate_Box
             'targetPageUrl' => $target_page_url
         ];
 
-        \WBCD\Assets::enqueue_front_base();
+        \BMCF\Assets::enqueue_front_base();
 
         return Donate_Box_Render::render($form_name, $render_args);
     }

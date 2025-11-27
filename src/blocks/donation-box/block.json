@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "wbcd/donation-box",
+  "name": "bmcf/donation-box",
   "title": "Beacon Donation Box",
   "category": "widgets",
   "description": "donate box that sends donors to the full BeaconCRM form with preselected currency/frequency/amount.",
@@ -79,8 +79,8 @@
     "reusable": true,
     "multiple": true
   },
-  "style": "wbcd-front",
-  "editorStyle": "wbcd-front",
+  "style": "bmcf-front",
+  "editorStyle": "bmcf-front",
   "icon": "money",
   "editorScript": "file:./editor.js"
 }

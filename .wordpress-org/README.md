@@ -26,29 +26,7 @@ rsvg-convert -w 256 -h 256 icon.svg -o icon-256x256.png
 
 ## Screenshot Files (REQUIRED)
 
-Copy and rename your screenshots from `public/` to `.wordpress-org/` following this mapping:
-
-```bash
-cd /home/kay/Desktop/PangeaTrust/wp-beacon-multi-currency-forms
-
-# Screenshot 1: Settings page
-cp public/config-wp-beacon-donate-account-id.png .wordpress-org/screenshot-1.png
-
-# Screenshot 2: Form configuration
-cp public/config-wp-beacon-donate-form.png .wordpress-org/screenshot-2.png
-
-# Screenshot 3: Gutenberg block editor
-cp public/page-wp-beacon-donate-form-block-editor.png .wordpress-org/screenshot-3.png
-
-# Screenshot 4: Frontend donation box
-cp public/frontend-wp-beacon-donate-auto-currency-selection.png .wordpress-org/screenshot-4.png
-
-# Screenshot 5: GeoIP settings
-cp public/config-geoip-detect-maxmind-settings.png .wordpress-org/screenshot-5.png
-
-# Screenshot 6: UTM tracking settings
-cp public/config-wp-beacon-donate-utm-tracking-settings.png .wordpress-org/screenshot-6.png
-```
+Copy and rename your screenshots from `public/` to `.wordpress-org/`. See .sh file.
 
 ## Banner Image (RECOMMENDED)
 

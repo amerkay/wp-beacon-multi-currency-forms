@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD;
+namespace BMCF;
 
 if (!defined('ABSPATH'))
     exit;
@@ -18,7 +18,7 @@ if (!defined('ABSPATH'))
  * All other PHP files, JavaScript (via wp_localize_script), and CSS (via inline styles)
  * should reference these constants to ensure consistency across the plugin.
  * 
- * @package WBCD
+ * @package BMCF
  * @since 0.1.0
  */
 class Constants
@@ -31,7 +31,7 @@ class Constants
     /**
      * CSS class prefix used throughout the plugin.
      */
-    const CSS_PREFIX = 'wpbmcf-';
+    const CSS_PREFIX = 'bmcf-';
 
     // ========================================
     // COLOR CONSTANTS
@@ -39,13 +39,13 @@ class Constants
 
     /**
      * Default brand color (used for selected states, hover effects).
-     * Used as --wpbmcf-brand CSS variable.
+     * Used as --bmcf-brand CSS variable.
      */
     const COLOR_BRAND = '#676767';
 
     /**
      * Default primary/accent color (used for CTAs, buttons).
-     * Used as --wpbmcf-primary CSS variable.
+     * Used as --bmcf-primary CSS variable.
      */
     const COLOR_PRIMARY = '#FF7B1A';
 
@@ -230,7 +230,7 @@ class Constants
      */
     public static function get_version()
     {
-        return defined('WPBMCF_VERSION') ? WPBMCF_VERSION : '0.1.0';
+        return defined('BMCF_VERSION') ? BMCF_VERSION : '0.1.0';
     }
 
     // ========================================
@@ -246,7 +246,7 @@ class Constants
     public static function get_filtered_color($key)
     {
         $color = self::get_color($key);
-        return apply_filters('wbcd_default_color_' . $key, $color);
+        return apply_filters('bmcf_default_color_' . $key, $color);
     }
 
     /**
@@ -258,7 +258,7 @@ class Constants
     public static function get_filtered_preset_amounts($frequency)
     {
         $amounts = self::get_preset_amounts($frequency);
-        return apply_filters('wbcd_default_preset_amounts_' . $frequency, $amounts);
+        return apply_filters('bmcf_default_preset_amounts_' . $frequency, $amounts);
     }
 
     /**
@@ -269,7 +269,7 @@ class Constants
     public static function get_filtered_all_presets()
     {
         $presets = self::get_all_presets();
-        return apply_filters('wbcd_default_all_presets', $presets);
+        return apply_filters('bmcf_default_all_presets', $presets);
     }
 
     /**
@@ -280,6 +280,6 @@ class Constants
     public static function get_filtered_default_frequencies()
     {
         $frequencies = self::get_default_frequencies();
-        return apply_filters('wbcd_default_frequencies', $frequencies);
+        return apply_filters('bmcf_default_frequencies', $frequencies);
     }
 }

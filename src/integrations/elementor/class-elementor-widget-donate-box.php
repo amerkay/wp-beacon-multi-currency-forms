@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Integrations\Elementor;
+namespace BMCF\Integrations\Elementor;
 
 if (!class_exists('\Elementor\Widget_Base')) {
     return;
@@ -9,11 +9,11 @@ if (!class_exists('\Elementor\Widget_Base')) {
 if (!defined('ABSPATH'))
     exit;
 
-class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
+class Donate_Box_Widget extends Abstract_BMCF_Elementor_Widget
 {
     public function get_name()
     {
-        return 'wbcd_donate_box';
+        return 'bmcf_donate_box';
     }
 
     public function get_title()
@@ -127,7 +127,7 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         $form_name = isset($settings['form_name']) ? $settings['form_name'] : '';
         $custom_params = $this->parse_custom_params_from_settings($settings);
         $allowed_frequencies = $this->parse_frequencies_from_settings($settings);
-        $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($settings);
+        $default_presets = \BMCF\Utils\Preset_Parser::parse_all_presets($settings);
 
         // Get target page URL
         $target_page_url = '';
@@ -153,6 +153,6 @@ class Donate_Box_Widget extends Abstract_WBCD_Elementor_Widget
         ];
 
         $this->enqueue_base_assets();
-        echo \WBCD\Render\Donate_Box_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
+        echo \BMCF\Render\Donate_Box_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
     }
 }

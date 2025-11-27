@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Utils;
+namespace BMCF\Utils;
 
 if (!defined('ABSPATH'))
     exit;

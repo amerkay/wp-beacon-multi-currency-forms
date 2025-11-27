@@ -10,7 +10,7 @@
   var Fragment = wp.element.Fragment;
 
   wp.domReady(function () {
-    registerBlockType('wbcd/donation-form', {
+    registerBlockType('bmcf/donation-form', {
       title: 'Beacon Donation Form',
       description: 'Full-page BeaconCRM form with currency switcher.',
       icon: 'money',
@@ -42,7 +42,7 @@
         var setAttributes = props.setAttributes;
         
         // Get forms from localized data
-        var formOptions = window.wbcdForms || [{ value: '', label: 'Default (First form)' }];
+        var formOptions = window.bmcfForms || [{ value: '', label: 'Default (First form)' }];
         
         // Helpers for custom params
         var addParam = function() {

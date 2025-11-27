@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Utils;
+namespace BMCF\Utils;
 
 if (!defined('ABSPATH'))
     exit;
@@ -9,7 +9,7 @@ if (!defined('ABSPATH'))
  * Utility class for parsing donation frequency options.
  * Provides consistent frequency parsing from CSV strings or boolean toggles.
  * 
- * @uses \WBCD\Constants For valid and default frequencies
+ * @uses \BMCF\Constants For valid and default frequencies
  */
 class Frequency_Parser
 {
@@ -23,17 +23,17 @@ class Frequency_Parser
     public static function from_csv($frequencies_string)
     {
         if (empty($frequencies_string) || !is_string($frequencies_string)) {
-            return \WBCD\Constants::get_default_frequencies();
+            return \BMCF\Constants::get_default_frequencies();
         }
 
         $allowed = array_map('trim', explode(',', $frequencies_string));
         $allowed = array_filter($allowed, function ($f) {
-            return in_array($f, \WBCD\Constants::get_valid_frequencies());
+            return in_array($f, \BMCF\Constants::get_valid_frequencies());
         });
 
         // Return default if none valid
         if (empty($allowed)) {
-            return \WBCD\Constants::get_default_frequencies();
+            return \BMCF\Constants::get_default_frequencies();
         }
 
         return array_values($allowed);
@@ -50,7 +50,7 @@ class Frequency_Parser
     {
         $allowed = [];
 
-        foreach (\WBCD\Constants::get_valid_frequencies() as $freq) {
+        foreach (\BMCF\Constants::get_valid_frequencies() as $freq) {
             if (!empty($toggles[$freq])) {
                 $allowed[] = $freq;
             }
@@ -58,7 +58,7 @@ class Frequency_Parser
 
         // Return default if none selected
         if (empty($allowed)) {
-            return \WBCD\Constants::get_default_frequencies();
+            return \BMCF\Constants::get_default_frequencies();
         }
 
         return $allowed;
@@ -71,7 +71,7 @@ class Frequency_Parser
      */
     public static function get_valid_frequencies()
     {
-        return \WBCD\Constants::get_valid_frequencies();
+        return \BMCF\Constants::get_valid_frequencies();
     }
 
     /**
@@ -81,6 +81,6 @@ class Frequency_Parser
      */
     public static function get_defaults()
     {
-        return \WBCD\Constants::get_default_frequencies();
+        return \BMCF\Constants::get_default_frequencies();
     }
 }

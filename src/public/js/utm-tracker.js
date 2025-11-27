@@ -6,7 +6,7 @@
 (function() {
   'use strict';
 
-  var COOKIE_NAME = 'wbcd_utm_params';
+  var COOKIE_NAME = 'bmcf_utm_params';
   var COOKIE_DAYS = 180;
   var UTM_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign'];
 
@@ -74,7 +74,7 @@
     try {
       setCookie(COOKIE_NAME, JSON.stringify(utmData), COOKIE_DAYS);
     } catch (e) {
-      console.warn('WBCD: Failed to store UTM parameters', e);
+      console.warn('BMCF: Failed to store UTM parameters', e);
     }
   }
 
@@ -82,14 +82,14 @@
    * Get stored UTM parameters from cookie
    * This function is used by other scripts (like donate-form.js)
    */
-  window.WBCD_getStoredUtm = function() {
+  window.BMCF_getStoredUtm = function() {
     try {
       var cookieValue = getCookie(COOKIE_NAME);
       if (cookieValue) {
         return JSON.parse(decodeURIComponent(cookieValue));
       }
     } catch (e) {
-      console.warn('WBCD: Failed to parse UTM cookie', e);
+      console.warn('BMCF: Failed to parse UTM cookie', e);
     }
     return null;
   };

@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Utils;
+namespace BMCF\Utils;
 
 if (!defined('ABSPATH'))
     exit;
@@ -9,7 +9,7 @@ if (!defined('ABSPATH'))
  * Utility class for parsing preset donation amounts.
  * Provides consistent preset amount parsing with validation and defaults.
  * 
- * @uses \WBCD\Constants For default preset amounts
+ * @uses \BMCF\Constants For default preset amounts
  */
 class Preset_Parser
 {
@@ -61,7 +61,7 @@ class Preset_Parser
             if (!empty($attrs[$preset_key])) {
                 $parsed = self::parse_amounts(
                     $attrs[$preset_key],
-                    \WBCD\Constants::get_preset_amounts($freq)
+                    \BMCF\Constants::get_preset_amounts($freq)
                 );
 
                 if (!empty($parsed)) {
@@ -71,7 +71,7 @@ class Preset_Parser
 
             // Set default if not specified or parsing failed
             if (empty($default_presets[$freq])) {
-                $default_presets[$freq] = \WBCD\Constants::get_preset_amounts($freq);
+                $default_presets[$freq] = \BMCF\Constants::get_preset_amounts($freq);
             }
         }
 
@@ -86,7 +86,7 @@ class Preset_Parser
      */
     public static function get_defaults($frequency)
     {
-        return \WBCD\Constants::get_preset_amounts($frequency);
+        return \BMCF\Constants::get_preset_amounts($frequency);
     }
 
     /**
@@ -96,6 +96,6 @@ class Preset_Parser
      */
     public static function get_all_defaults()
     {
-        return \WBCD\Constants::get_all_presets();
+        return \BMCF\Constants::get_all_presets();
     }
 }

@@ -8,50 +8,50 @@
 
     // Selectors (defined once for reusability)
     const SELECTORS = {
-        formItem: '.wbcd-form-item',
-        formContainer: '#wbcd-forms-container',
-        addFormBtn: '#wbcd-add-form',
-        removeFormBtn: '.wbcd-remove-form',
-        addCurrencyBtn: '.wbcd-add-currency-btn',
-        removeCurrencyBtn: '.wbcd-remove-currency',
-        showAddCurrencyBtn: '.wbcd-show-add-currency',
-        addCurrencySection: '.wbcd-add-currency',
-        currencySelect: '.wbcd-currency-select',
-        currencyIdInput: '.wbcd-currency-id',
+        formItem: '.bmcf-form-item',
+        formContainer: '#bmcf-forms-container',
+        addFormBtn: '#bmcf-add-form',
+        removeFormBtn: '.bmcf-remove-form',
+        addCurrencyBtn: '.bmcf-add-currency-btn',
+        removeCurrencyBtn: '.bmcf-remove-currency',
+        showAddCurrencyBtn: '.bmcf-show-add-currency',
+        addCurrencySection: '.bmcf-add-currency',
+        currencySelect: '.bmcf-currency-select',
+        currencyIdInput: '.bmcf-currency-id',
         currencyTable: 'table tbody',
-        currenciesSection: '.wbcd-currencies-section',
-        validationError: '.wbcd-validation-error',
-        hasErrorClass: 'wbcd-has-error'
+        currenciesSection: '.bmcf-currencies-section',
+        validationError: '.bmcf-validation-error',
+        hasErrorClass: 'bmcf-has-error'
     };
 
     // CSS Classes
     const CSS_CLASSES = {
-        settingsTable: 'wbcd-settings-table',
-        colDefault: 'wbcd-col-default',
-        colAction: 'wbcd-col-action',
-        removeFormWrapper: 'wbcd-remove-form-wrapper'
+        settingsTable: 'bmcf-settings-table',
+        colDefault: 'bmcf-col-default',
+        colAction: 'bmcf-col-action',
+        removeFormWrapper: 'bmcf-remove-form-wrapper'
     };
 
     // Wait for DOM to be ready
     $(document).ready(function() {
         
         // Form counter for creating new forms
-        var formCounter = wbcdAdminSettings.formCount;
+        var formCounter = bmcfAdminSettings.formCount;
 
         /**
          * Handle toggle for account name instructions
          */
-        $('.wbcd-toggle-instructions').on('click', function(e) {
+        $('.bmcf-toggle-instructions').on('click', function(e) {
             e.preventDefault();
-            var $instructions = $('#wbcd-account-name-instructions');
+            var $instructions = $('#bmcf-account-name-instructions');
             $instructions.slideToggle(300);
         });
 
         /**
          * Handle toggle for UTM parameters section
          */
-        $('#wbcd_track_utm').on('change', function() {
-            var $utmParamsSection = $('#wbcd-utm-params-section');
+        $('#bmcf_track_utm').on('change', function() {
+            var $utmParamsSection = $('#bmcf-utm-params-section');
             if ($(this).is(':checked')) {
                 $utmParamsSection.slideDown(300);
             } else {
@@ -63,7 +63,7 @@
          * Get i18n string
          */
         function i18n(key) {
-            return wbcdAdminSettings.i18n[key] || '';
+            return bmcfAdminSettings.i18n[key] || '';
         }
 
         /**
@@ -116,7 +116,7 @@
                 errors.push('Form #' + formNumber + ': ' + i18n('currenciesRequired'));
                 $formItem.addClass(SELECTORS.hasErrorClass);
                 $formItem.find(SELECTORS.currenciesSection + ' h4')
-                    .after('<span class="wbcd-validation-error">' + i18n('currenciesRequired') + '</span>');
+                    .after('<span class="bmcf-validation-error">' + i18n('currenciesRequired') + '</span>');
             }
 
             return {isValid: isValid, errors: errors};
@@ -186,8 +186,8 @@
          * Uses validation rules from PHP (single source of truth)
          */
         function validateFormId(formId) {
-            var validation = wbcdAdminSettings.validation;
-            var messages = wbcdAdminSettings.validationMessages;
+            var validation = bmcfAdminSettings.validation;
+            var messages = bmcfAdminSettings.validationMessages;
             
             // Remove whitespace
             formId = formId.trim();
@@ -229,8 +229,8 @@
          */
         function addCurrencyToForm($button) {
             var formIndex = $button.data('form-index');
-            var $select = $('#wbcd_new_currency_' + formIndex);
-            var $idInput = $('#wbcd_new_currency_id_' + formIndex);
+            var $select = $('#bmcf_new_currency_' + formIndex);
+            var $idInput = $('#bmcf_new_currency_id_' + formIndex);
             var currency = $select.val();
             var formId = $idInput.val().trim();
 
@@ -267,11 +267,11 @@
             // Display the FULL currency info in the Currency column
             const row = `<tr>
                 <td data-label="${i18n('default')}">
-                <input type="radio" name="wbcd_forms[${formIndex}][default_currency]" value="${currency}" ${isFirstCurrency ? 'checked' : ''} title="${i18n('setAsDefault')}" />
+                <input type="radio" name="bmcf_forms[${formIndex}][default_currency]" value="${currency}" ${isFirstCurrency ? 'checked' : ''} title="${i18n('setAsDefault')}" />
                 </td>
                 <td data-label="${i18n('currency')}"><strong>${currencyFullText}</strong></td>
-                <td data-label="${i18n('beaconFormId')}"><input type="text" name="wbcd_forms[${formIndex}][currencies][${currency}]" value="${formId}" class="regular-text" placeholder="${i18n('beaconFormIdPlaceholder')}" /></td>
-                <td data-label="${i18n('action')}"><button type="button" class="button wbcd-remove-currency">${i18n('remove')}</button></td>
+                <td data-label="${i18n('beaconFormId')}"><input type="text" name="bmcf_forms[${formIndex}][currencies][${currency}]" value="${formId}" class="regular-text" placeholder="${i18n('beaconFormIdPlaceholder')}" /></td>
+                <td data-label="${i18n('action')}"><button type="button" class="button bmcf-remove-currency">${i18n('remove')}</button></td>
                 </tr>`;
 
             $table.append(row);
@@ -324,13 +324,13 @@
                 var currencyFullText = $row.find('td:nth-child(2) strong').text();
                 
                 // Get the form index
-                var formIndex = inputName.match(/wbcd_forms\[(\d+)\]/)[1];
+                var formIndex = inputName.match(/bmcf_forms\[(\d+)\]/)[1];
                 
                 // Remove the row
                 $row.remove();
                 
                 // Add the currency back to the dropdown for this form
-                var $select = $('#wbcd_new_currency_' + formIndex);
+                var $select = $('#bmcf_new_currency_' + formIndex);
                 
                 // Find the correct position to insert (maintain alphabetical order)
                 var $options = $select.find('option');
@@ -392,19 +392,19 @@
             return `<div class="${formItemClass}">
                 <h3>${i18n('form')} #${newIndex + 1}</h3>
                 <p>
-                <label for="wbcd_form_name_${newIndex}"><strong>${i18n('formName')}</strong></label><br>
-                <input type="text" id="wbcd_form_name_${newIndex}" name="wbcd_forms[${newIndex}][name]" value="" class="regular-text" required placeholder="${i18n('formNamePlaceholder')}" />
+                <label for="bmcf_form_name_${newIndex}"><strong>${i18n('formName')}</strong></label><br>
+                <input type="text" id="bmcf_form_name_${newIndex}" name="bmcf_forms[${newIndex}][name]" value="" class="regular-text" required placeholder="${i18n('formNamePlaceholder')}" />
                 </p>
                 <div class="${currenciesClass}">
                 <h4>${i18n('supportedCurrencies')}</h4>
                 <p><em>${i18n('noCurrencies')}</em></p>
                 <button type="button" class="button ${showAddCurrencyClass}" data-form-index="${newIndex}">${i18n('addMoreCurrencies') || 'Add more currencies'}</button>
                 <div class="${addCurrencyClass}" data-form-index="${newIndex}">
-                <label for="wbcd_new_currency_${newIndex}"><strong>${i18n('addCurrency')}</strong></label><br>
-                <select id="wbcd_new_currency_${newIndex}" class="${currencySelectClass}" data-form-index="${newIndex}">
+                <label for="bmcf_new_currency_${newIndex}"><strong>${i18n('addCurrency')}</strong></label><br>
+                <select id="bmcf_new_currency_${newIndex}" class="${currencySelectClass}" data-form-index="${newIndex}">
                 <option value="">${i18n('selectCurrencyOption')}</option>
                 </select> 
-                <input type="text" id="wbcd_new_currency_id_${newIndex}" class="${currencyIdClass}" placeholder="${i18n('beaconFormIdPlaceholder')}" /> 
+                <input type="text" id="bmcf_new_currency_id_${newIndex}" class="${currencyIdClass}" placeholder="${i18n('beaconFormIdPlaceholder')}" /> 
                 <button type="button" class="button ${addCurrencyBtnClass}" data-form-index="${newIndex}">${i18n('addCurrencyBtn')}</button>
                 </div>
                 </div>
@@ -424,11 +424,11 @@
             $(SELECTORS.formContainer).append(formHtml);
 
             // Populate currency options for new form
-            var $newSelect = $('#wbcd_new_currency_' + newIndex);
+            var $newSelect = $('#bmcf_new_currency_' + newIndex);
             
-            if (wbcdAdminSettings.currencies) {
+            if (bmcfAdminSettings.currencies) {
                 // Use the currencies data passed from PHP
-                $.each(wbcdAdminSettings.currencies, function(code, info) {
+                $.each(bmcfAdminSettings.currencies, function(code, info) {
                     $newSelect.append('<option value="' + code + '">' + code + ' - ' + info.name + ' (' + info.symbol + ')</option>');
                 });
             }

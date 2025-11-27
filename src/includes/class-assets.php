@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD;
+namespace BMCF;
 
 if (!defined('ABSPATH'))
     exit;
@@ -28,10 +28,10 @@ class Assets
         }
 
         wp_enqueue_script(
-            'wbcd-beacon-sdk',
-            WPBMCF_URL . 'public/js/beacon-sdk-loader.js',
+            'bmcf-beacon-sdk',
+            BMCF_URL . 'public/js/beacon-sdk-loader.js',
             [],
-            WPBMCF_VERSION,
+            BMCF_VERSION,
             false // Load in head for early initialization
         );
 
@@ -42,12 +42,12 @@ class Assets
     {
         // Shared front styles
         wp_register_style(
-            'wbcd-front',
-            WPBMCF_URL . 'public/css/donate.css',
+            'bmcf-front',
+            BMCF_URL . 'public/css/donate.css',
             [],
-            WPBMCF_VERSION
+            BMCF_VERSION
         );
-        wp_enqueue_style('wbcd-front');
+        wp_enqueue_style('bmcf-front');
 
         // Inject CSS variables from constants (AFTER enqueue)
         self::inject_css_variables();
@@ -75,7 +75,7 @@ class Assets
 
         // Output as inline script in head
         echo '<script type="text/javascript">';
-        echo 'window.WBCD_CONSTANTS = ' . wp_json_encode($constants_data) . ';';
+        echo 'window.BMCF_CONSTANTS = ' . wp_json_encode($constants_data) . ';';
         echo '</script>';
     }
 
@@ -86,9 +86,9 @@ class Assets
     public static function inject_css_variables()
     {
         $colors = Constants::get_all_colors();
-        // Inject into :root so all WBCD components (buttons, boxes, forms) can access the variables
-        $inline_css = ":root{--wpbmcf-brand:{$colors['brand']};--wpbmcf-primary:{$colors['primary']};--wpbmcf-text:{$colors['text']};--wpbmcf-border:{$colors['border']};}";
-        wp_add_inline_style('wbcd-front', $inline_css);
+        // Inject into :root so all BMCF components (buttons, boxes, forms) can access the variables
+        $inline_css = ":root{--bmcf-brand:{$colors['brand']};--bmcf-primary:{$colors['primary']};--bmcf-text:{$colors['text']};--bmcf-border:{$colors['border']};}";
+        wp_add_inline_style('bmcf-front', $inline_css);
     }
 
     public static function enqueue_donation_form($form_name = '')
@@ -109,14 +109,14 @@ class Assets
         $utm_field_names = Settings::get_utm_field_names();
 
         wp_register_script(
-            'wbcd-donate-form',
-            WPBMCF_URL . 'public/js/donate-form.js',
+            'bmcf-donate-form',
+            BMCF_URL . 'public/js/donate-form.js',
             [],
-            WPBMCF_VERSION,
+            BMCF_VERSION,
             true
         );
 
-        wp_localize_script('wbcd-donate-form', 'WPBMCF_FORM_DATA', [
+        wp_localize_script('bmcf-donate-form', 'BMCF_FORM_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $forms,
             'allowedCurrencies' => array_keys($forms),
@@ -125,7 +125,7 @@ class Assets
             'utmFieldNames' => $utm_field_names,
         ]);
 
-        wp_enqueue_script('wbcd-donate-form');
+        wp_enqueue_script('bmcf-donate-form');
     }
 
     public static function enqueue_donation_box($form_name = '', $target_page_url = '')
@@ -148,10 +148,10 @@ class Assets
         $default_currency = Settings::get_default_currency($form_name);
 
         wp_register_script(
-            'wbcd-donate-box',
-            WPBMCF_URL . 'public/js/donate-box.js',
+            'bmcf-donate-box',
+            BMCF_URL . 'public/js/donate-box.js',
             [],
-            WPBMCF_VERSION,
+            BMCF_VERSION,
             true
         );
 
@@ -162,13 +162,13 @@ class Assets
             $byCur[$code] = ['id' => $id, 'symbol' => $symbol];
         }
 
-        wp_localize_script('wbcd-donate-box', 'WPBMCF_BOX_DATA', [
+        wp_localize_script('bmcf-donate-box', 'BMCF_BOX_DATA', [
             'beaconAccountName' => $beaconAccountName,
             'formsByCurrency' => $byCur,
             'baseURL' => $target_page_url,
             'defaultCurrency' => $default_currency,
         ]);
 
-        wp_enqueue_script('wbcd-donate-box');
+        wp_enqueue_script('bmcf-donate-box');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD;
+namespace BMCF;
 
 if (!defined('ABSPATH'))
     exit;
@@ -14,14 +14,14 @@ class GeoIP_Dependency
             return;
 
         // Check if the GeoIP setup notice has been dismissed
-        if (get_option('wbcd_geoip_notice_dismissed', false)) {
+        if (get_option('bmcf_geoip_notice_dismissed', false)) {
             return;
         }
 
         // Check if Beacon account is configured
         $beaconAccountName = Settings::get_beacon_account();
         if (empty($beaconAccountName)) {
-            $url = admin_url('options-general.php?page=wbcd-settings');
+            $url = admin_url('options-general.php?page=bmcf-settings');
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
                 /* translators: 1: open link, 2: close link */
@@ -55,7 +55,7 @@ class GeoIP_Dependency
         $ajax_doc = 'https://github.com/yellowtree/geoip-detect/wiki/API%3A-AJAX';
         $mm_doc = 'https://www.maxmind.com/en/create-account';
 
-        echo '<div class="notice notice-info is-dismissible" data-dismissible="wbcd-geoip-notice"><p>';
+        echo '<div class="notice notice-info is-dismissible" data-dismissible="bmcf-geoip-notice"><p>';
         echo wp_kses_post(sprintf(
             /* translators: 1: settings link open, 2: close, 3: docs open, 4: close, 5: MaxMind open, 6: close */
             __('For reliable currency auto-detection on cached pages, go to %1$sGeolocation IP Detection settings%2$s and enable the JS/AJAX endpoint. See the %3$sAJAX docs%4$s. Also configure automatic GeoLite2 updates with your %5$sMaxMind Account ID & License Key%6$s.', 'beacon-multi-currency-forms'),
@@ -75,9 +75,9 @@ class GeoIP_Dependency
             wp_send_json_error(['message' => 'Unauthorized'], 403);
         }
 
-        check_ajax_referer('wbcd_dismiss_geoip_notice', 'nonce');
+        check_ajax_referer('bmcf_dismiss_geoip_notice', 'nonce');
 
-        update_option('wbcd_geoip_notice_dismissed', true);
+        update_option('bmcf_geoip_notice_dismissed', true);
         wp_send_json_success();
     }
 
@@ -85,24 +85,24 @@ class GeoIP_Dependency
     {
         if (!current_user_can('manage_options'))
             return;
-        if (get_option('wbcd_geoip_notice_dismissed', false))
+        if (get_option('bmcf_geoip_notice_dismissed', false))
             return;
 
         ?>
-                <script type="text/javascript">
-                    jQuery(document).ready(function ($) {
-                        $(document).on('click', '.notice[data-dismissible="wbcd-geoip-notice"] .notice-dismiss', function () {
-                            $.ajax({
-                                url: ajaxurl,
-                                type: 'POST',
-                                data: {
-                                    action: 'wbcd_dismiss_geoip_notice',
-                                    nonce: '<?php echo esc_js(wp_create_nonce('wbcd_dismiss_geoip_notice')); ?>'
-                                }
+                        <script type="text/javascript">
+                            jQuery(document).ready(function ($) {
+                                $(document).on('click', '.notice[data-dismissible="bmcf-geoip-notice"] .notice-dismiss', function () {
+                                    $.ajax({
+                                        url: ajaxurl,
+                                        type: 'POST',
+                                        data: {
+                                            action: 'bmcf_dismiss_geoip_notice',
+                                            nonce: '<?php echo esc_js(wp_create_nonce('bmcf_dismiss_geoip_notice')); ?>'
+                                        }
+                                    });
+                                });
                             });
-                        });
-                    });
-                </script>
-                <?php
+                        </script>
+                        <?php
     }
 }

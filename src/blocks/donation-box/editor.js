@@ -15,7 +15,7 @@
   var REPLACE_NOTICE = 'Note: this is a backup option that gets replaced by your settings on the BeaconCRM Form on page load.';
 
   wp.domReady(function () {
-    registerBlockType('wbcd/donation-box', {
+    registerBlockType('bmcf/donation-box', {
       title: 'Beacon Donation Box',
       description: 'donate box that forwards to your donation form with the chosen options.',
       icon: 'money',
@@ -59,27 +59,27 @@
         },
         allowedFrequencies: {
           type: 'array',
-          default: ['single', 'monthly', 'annual'] // Must match WBCD\Constants::DEFAULT_FREQUENCIES
+          default: ['single', 'monthly', 'annual'] // Must match BMCF\Constants::DEFAULT_FREQUENCIES
         },
-        // NOTE: Preset defaults below must match WBCD\Constants preset values
+        // NOTE: Preset defaults below must match BMCF\Constants preset values
         presetsSingleStr: {
           type: 'string',
-          default: '10, 20, 30' // Must match WBCD\Constants::PRESET_SINGLE
+          default: '10, 20, 30' // Must match BMCF\Constants::PRESET_SINGLE
         },
         presetsMonthlyStr: {
           type: 'string',
-          default: '5, 10, 15' // Must match WBCD\Constants::PRESET_MONTHLY
+          default: '5, 10, 15' // Must match BMCF\Constants::PRESET_MONTHLY
         },
         presetsAnnualStr: {
           type: 'string',
-          default: '50, 100, 200' // Must match WBCD\Constants::PRESET_ANNUAL
+          default: '50, 100, 200' // Must match BMCF\Constants::PRESET_ANNUAL
         },
         defaultPresets: {
           type: 'object',
           default: {
-            single: [10, 20, 30],    // Must match WBCD\Constants::PRESET_SINGLE
-            monthly: [5, 10, 15],    // Must match WBCD\Constants::PRESET_MONTHLY
-            annual: [50, 100, 200]   // Must match WBCD\Constants::PRESET_ANNUAL
+            single: [10, 20, 30],    // Must match BMCF\Constants::PRESET_SINGLE
+            monthly: [5, 10, 15],    // Must match BMCF\Constants::PRESET_MONTHLY
+            annual: [50, 100, 200]   // Must match BMCF\Constants::PRESET_ANNUAL
           }
         }
       },
@@ -92,12 +92,12 @@
         var setAttributes = props.setAttributes;
         
         // Get forms from localized data
-        var formOptions = window.wbcdForms || [{ value: '', label: 'Default (First form)' }];
+        var formOptions = window.bmcfForms || [{ value: '', label: 'Default (First form)' }];
         
         // Get pages from localized data and format for ComboboxControl
         var pageOptions = [{ value: '0', label: '— Select Page —' }];
-        if (window.wbcdPages && window.wbcdPages.length > 0) {
-          window.wbcdPages.forEach(function(page) {
+        if (window.bmcfPages && window.bmcfPages.length > 0) {
+          window.bmcfPages.forEach(function(page) {
             var displayLabel = page.title + ' (' + page.path + ')';
             pageOptions.push({ value: String(page.id), label: displayLabel });
           });
@@ -333,7 +333,7 @@
                 el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Primary Color'),
                 el('input', {
                   type: 'color',
-                  value: attrs.primaryColor || (window.WBCD_CONSTANTS && window.WBCD_CONSTANTS.colors ? window.WBCD_CONSTANTS.colors.primary : '#FF7B1A'),
+                  value: attrs.primaryColor || (window.BMCF_CONSTANTS && window.BMCF_CONSTANTS.colors ? window.BMCF_CONSTANTS.colors.primary : '#FF7B1A'),
                   onChange: function(e) {
                     setAttributes({ primaryColor: e.target.value });
                   },
@@ -350,7 +350,7 @@
                 el('label', { style: { display: 'block', marginBottom: '4px', fontWeight: '600' } }, 'Brand Color'),
                 el('input', {
                   type: 'color',
-                  value: attrs.brandColor || (window.WBCD_CONSTANTS && window.WBCD_CONSTANTS.colors ? window.WBCD_CONSTANTS.colors.brand : '#676767'),
+                  value: attrs.brandColor || (window.BMCF_CONSTANTS && window.BMCF_CONSTANTS.colors ? window.BMCF_CONSTANTS.colors.brand : '#676767'),
                   onChange: function(e) {
                     setAttributes({ brandColor: e.target.value });
                   },

@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Integrations\Divi;
+namespace BMCF\Integrations\Divi;
 
 if (!class_exists('ET_Builder_Module')) {
     return;
@@ -9,9 +9,9 @@ if (!class_exists('ET_Builder_Module')) {
 if (!defined('ABSPATH'))
     exit;
 
-class Donate_Box_Module extends Abstract_WBCD_Divi_Module
+class Donate_Box_Module extends Abstract_BMCF_Divi_Module
 {
-    public $slug = 'wbcd_divi_donate_box';
+    public $slug = 'bmcf_divi_donate_box';
     public $vb_support = 'off';
     public $name = '';
 
@@ -60,7 +60,7 @@ class Donate_Box_Module extends Abstract_WBCD_Divi_Module
         $form_name = $this->get_form_name_from_props();
         $custom_params = $this->parse_custom_params_from_props();
         $allowed_frequencies = $this->parse_frequencies_from_props();
-        $default_presets = \WBCD\Utils\Preset_Parser::parse_all_presets($this->props);
+        $default_presets = \BMCF\Utils\Preset_Parser::parse_all_presets($this->props);
 
         // Get target page URL
         $target_page_url = '';
@@ -86,6 +86,6 @@ class Donate_Box_Module extends Abstract_WBCD_Divi_Module
         ];
 
         $this->enqueue_base_assets();
-        return \WBCD\Render\Donate_Box_Render::render($form_name, $render_args);
+        return \BMCF\Render\Donate_Box_Render::render($form_name, $render_args);
     }
 }

@@ -1,20 +1,20 @@
 (function(){
-  // Expect localized WPBMCF_BOX_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
-  if (typeof WPBMCF_BOX_DATA !== 'object') return;
+  // Expect localized BMCF_BOX_DATA: { beaconAccountName, formsByCurrency:{CODE:{id,symbol},...}, baseURL, defaultCurrency }
+  if (typeof BMCF_BOX_DATA !== 'object') return;
 
-  var formsByCurrency = WPBMCF_BOX_DATA.formsByCurrency || {};
-  var baseURL = WPBMCF_BOX_DATA.baseURL || (location.origin + "/donation-form/");
-  var DEFAULT_CURRENCY = WPBMCF_BOX_DATA.defaultCurrency || '';
+  var formsByCurrency = BMCF_BOX_DATA.formsByCurrency || {};
+  var baseURL = BMCF_BOX_DATA.baseURL || (location.origin + "/donation-form/");
+  var DEFAULT_CURRENCY = BMCF_BOX_DATA.defaultCurrency || '';
 
   // Check if we have any currencies configured
   if (!Object.keys(formsByCurrency).length) {
-    console.warn('WPBMCF: No currencies configured. Please configure donation forms in settings.');
+    console.warn('BMCF: No currencies configured. Please configure donation forms in settings.');
     return;
   }
 
   // Get default presets from localized constants with fallback
-  var DEFAULT_PRESETS = (typeof WBCD_CONSTANTS !== 'undefined' && WBCD_CONSTANTS.presets) 
-    ? WBCD_CONSTANTS.presets 
+  var DEFAULT_PRESETS = (typeof BMCF_CONSTANTS !== 'undefined' && BMCF_CONSTANTS.presets) 
+    ? BMCF_CONSTANTS.presets 
     : { single:[10,20,30], monthly:[5,10,15], annual:[50,100,200] };
 
   // Determine default currency from available ones
@@ -46,17 +46,17 @@
   };
 
   // Elements
-  var wrap = document.getElementById("wpbmcf-donate");
+  var wrap = document.getElementById("bmcf-donate");
   if(!wrap) return;
 
-  var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".wpbmcf-btn-frequency"));
-  var amountBtnsWrap = document.getElementById("wpbmcf-amount-buttons");
-  var customWrap = document.getElementById("wpbmcf-custom-wrap");
-  var customToggle = document.getElementById("wpbmcf-toggle-custom");
-  var customAmountInput = document.getElementById("wpbmcf-custom-amount");
-  var currencySymbol = document.getElementById("wpbmcf-currency-symbol");
-  var currencySelect = document.getElementById("wpbmcf-currency-select");
-  var nextBtn = document.getElementById("wpbmcf-next");
+  var freqBtns = Array.prototype.slice.call(wrap.querySelectorAll(".bmcf-btn-frequency"));
+  var amountBtnsWrap = document.getElementById("bmcf-amount-buttons");
+  var customWrap = document.getElementById("bmcf-custom-wrap");
+  var customToggle = document.getElementById("bmcf-toggle-custom");
+  var customAmountInput = document.getElementById("bmcf-custom-amount");
+  var currencySymbol = document.getElementById("bmcf-currency-symbol");
+  var currencySelect = document.getElementById("bmcf-currency-select");
+  var nextBtn = document.getElementById("bmcf-next");
 
   // Parse custom URL parameters from data attribute
   var customParams = {};
@@ -66,7 +66,7 @@
       customParams = JSON.parse(customParamsAttr);
     }
   } catch(e) {
-    console.warn('WPBMCF: Failed to parse custom params', e);
+    console.warn('BMCF: Failed to parse custom params', e);
   }
 
   // Parse allowed frequencies from data attribute
@@ -80,7 +80,7 @@
       }
     }
   } catch(e) {
-    console.warn('WPBMCF: Failed to parse allowed frequencies', e);
+    console.warn('BMCF: Failed to parse allowed frequencies', e);
   }
 
   // Parse default presets from data attribute
@@ -98,7 +98,7 @@
       }
     }
   } catch(e) {
-    console.warn('WPBMCF: Failed to parse default presets', e);
+    console.warn('BMCF: Failed to parse default presets', e);
   }
 
   // Initialize state with configured values
@@ -153,12 +153,12 @@
     safeGroup.forEach(function(v){
       var btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "wpbmcf-tab wpbmcf-btn-amount";
+      btn.className = "bmcf-tab bmcf-btn-amount";
       btn.textContent = formsByCurrency[state.currency].symbol + String(Number(v));
       btn.setAttribute("aria-pressed","false");
       btn.setAttribute("data-amount", String(v));
       btn.addEventListener("click", function(){
-        Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbmcf-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
+        Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".bmcf-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
         btn.setAttribute("aria-pressed","true");
         state.amountSelected = Number(v);
         customAmountInput.value = "";
@@ -183,18 +183,18 @@
   function applyBrandColor(color){
     if (!color) return;
     // Don't override if a color is already set inline (e.g., from Elementor settings)
-    var existingColor = wrap && wrap.style.getPropertyValue('--wpbmcf-brand');
+    var existingColor = wrap && wrap.style.getPropertyValue('--bmcf-brand');
     if (existingColor && existingColor.trim()) return;
     
     // Update the CSS variable - color-mix in CSS handles the darker shade automatically
     if (wrap) {
-      wrap.style.setProperty('--wpbmcf-brand', color);
+      wrap.style.setProperty('--bmcf-brand', color);
     }
   }
 
   function fetchPresets(currency){
     var formId = formsByCurrency[currency].id;
-    var beaconAccountName = WPBMCF_BOX_DATA.beaconAccountName;
+    var beaconAccountName = BMCF_BOX_DATA.beaconAccountName;
     var url = "https://portal.beaconproducts.co.uk/v1/account/" + beaconAccountName + "/form/" + formId + "?fp=x";
     return fetch(url, { credentials:"omit", cache:"no-store" })
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })
@@ -323,7 +323,7 @@
   customToggle.addEventListener("click", function(){ setCustomVisible(!isCustomVisible()); });
 
   customAmountInput.addEventListener("input", function(){
-    Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".wpbmcf-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
+    Array.prototype.slice.call(amountBtnsWrap.querySelectorAll(".bmcf-btn-amount")).forEach(function(el){ el.setAttribute("aria-pressed","false"); });
     state.amountSelected = null;
     updateNextButton();
   });

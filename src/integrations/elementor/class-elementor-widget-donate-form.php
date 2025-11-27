@@ -1,6 +1,6 @@
 <?php
 
-namespace WBCD\Integrations\Elementor;
+namespace BMCF\Integrations\Elementor;
 
 // If Elementor isn't loaded, bail before defining the class.
 if (!class_exists('\Elementor\Widget_Base')) {
@@ -10,11 +10,11 @@ if (!class_exists('\Elementor\Widget_Base')) {
 if (!defined('ABSPATH'))
     exit;
 
-class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
+class Donate_Form_Widget extends Abstract_BMCF_Elementor_Widget
 {
     public function get_name()
     {
-        return 'wbcd_donate_form';
+        return 'bmcf_donate_form';
     }
 
     public function get_title()
@@ -94,7 +94,7 @@ class Donate_Form_Widget extends Abstract_WBCD_Elementor_Widget
         ];
 
         $this->enqueue_base_assets();
-        \WBCD\Assets::enqueue_donation_form($form_name);
-        echo \WBCD\Render\Donate_Form_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
+        \BMCF\Assets::enqueue_donation_form($form_name);
+        echo \BMCF\Render\Donate_Form_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
     }
 }

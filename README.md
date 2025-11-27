@@ -20,7 +20,7 @@ WordPress plugin for embedding BeaconCRM donation forms with multi-currency supp
 
 This plugin integrates BeaconCRM donation forms into WordPress. Display donation forms on dedicated pages or compact donation boxes in sidebars and content areas. Each form supports multiple currencies with automatic detection based on visitor location.
 
-![Plugin Overview Screenshot](./public/frontend-wp-beacon-donate-auto-currency-selection.png)
+![Plugin Overview Screenshot](./public/frontend-wp-beacon-multi-currency-forms-auto-currency-selection.png)
 
 ---
 
@@ -36,7 +36,7 @@ Upload to `/wp-content/plugins/` and activate through WordPress admin.
 
 Go to **Settings → Beacon Multi-Currency Forms**.
 
-![Settings Page Screenshot](./public/config-wp-beacon-donate-account-id.png)
+![Settings Page Screenshot](./public/config-wp-beacon-multi-currency-forms-account-id.png)
 
 **Beacon Account Name:**
 - Find this in your BeaconCRM embed code: `data-account="yourorg"`
@@ -54,7 +54,7 @@ Go to **Settings → Beacon Multi-Currency Forms**.
 4. **Set Default Currency:** Click radio button next to one currency
 5. **Save Settings**
 
-![Form Configuration Screenshot](./public/config-wp-beacon-donate-form.png)
+![Form Configuration Screenshot](./public/config-wp-beacon-multi-currency-forms-form.png)
 
 **That's it!** You're ready to add donation forms to your pages.
 
@@ -85,7 +85,7 @@ The WordPress Block Editor (formerly called Gutenberg) provides visual controls 
    - Control frequencies (single/monthly/annual)
    - Set preset amounts per frequency
 
-![Gutenberg Block Screenshot](./public/page-wp-beacon-donate-form-block-editor.png)
+![Gutenberg Block Screenshot](./public/page-wp-beacon-multi-currency-forms-block-editor.png)
 
 **Widget Areas:**
 The Donation Box block works in widget areas (sidebars, footers). Go to **Appearance → Widgets** and add the "Beacon Donation Box" block to any widget area.
@@ -98,23 +98,23 @@ Perfect for Classic Editor, widgets, or theme files.
 
 **Basic:**
 ```
-[beaconcrm_donate_form]
+[beacondonate_form]
 ```
 
 **With Form Selection:**
 ```
-[beaconcrm_donate_form form="General Donations"]
+[beacondonate_form form="General Donations"]
 ```
 
 **With Required URL Parameters:**
 ```
-[beaconcrm_donate_form form="Emergency Relief" params="bcn_c_adopted_animal=12345&bcn_custom=abc"]
+[beacondonate_form form="Emergency Relief" params="bcn_c_adopted_animal=12345&bcn_custom=abc"]
 ```
 Visitors without these exact URL parameters will be automatically redirected.
 
 **In Theme Files:**
 ```php
-<?php echo do_shortcode('[beaconcrm_donate_form form="General Donations"]'); ?>
+<?php echo do_shortcode('[beacondonate_form form="General Donations"]'); ?>
 ```
 
 ---
@@ -123,32 +123,32 @@ Visitors without these exact URL parameters will be automatically redirected.
 
 **Basic:**
 ```
-[beaconcrm_donate_box]
+[beacondonate_box]
 ```
 
 **With Form & Customization:**
 ```
-[beaconcrm_donate_box form="Emergency Relief" title="Support Our Cause" button_text="Give Now"]
+[beacondonate_box form="Emergency Relief" title="Support Our Cause" button_text="Give Now"]
 ```
 
 **With Colors:**
 ```
-[beaconcrm_donate_box primary_color="#FF5733" brand_color="#2C3E50"]
+[beacondonate_box primary_color="#FF5733" brand_color="#2C3E50"]
 ```
 
 **With Custom Parameters:**
 ```
-[beaconcrm_donate_box params="bcn_c_adopted_animal=12345&source=newsletter"]
+[beacondonate_box params="bcn_c_adopted_animal=12345&source=newsletter"]
 ```
 
 **With Frequency Control:**
 ```
-[beaconcrm_donate_box frequencies="monthly,annual"]
+[beacondonate_box frequencies="monthly,annual"]
 ```
 
 **With Preset Amounts:**
 ```
-[beaconcrm_donate_box 
+[beacondonate_box 
     presets_single="10,20,30"
     presets_monthly="5,10,15"
     presets_annual="50,100,200"
@@ -157,7 +157,7 @@ Visitors without these exact URL parameters will be automatically redirected.
 
 **Complete Example:**
 ```
-[beaconcrm_donate_box 
+[beacondonate_box 
     form="Elephant Adoption"
     title="Adopt an Elephant"
     subtitle="Support conservation efforts"
@@ -174,7 +174,7 @@ Visitors without these exact URL parameters will be automatically redirected.
 
 **In Theme Files:**
 ```php
-<?php echo do_shortcode('[beaconcrm_donate_box form="Monthly Giving"]'); ?>
+<?php echo do_shortcode('[beacondonate_box form="Monthly Giving"]'); ?>
 ```
 
 **All Shortcode Parameters:**
@@ -261,7 +261,7 @@ In **Settings → Beacon Multi-Currency Forms**:
 - Automatically passes to donation forms
 - Configure custom parameter names (default: `bcn_pay_c_utm_source`, etc.)
 
-![UTM Settings Screenshot](./public/config-wp-beacon-donate-utm-tracking-settings.png)
+![UTM Settings Screenshot](./public/config-wp-beacon-multi-currency-forms-utm-tracking-settings.png)
 
 ### How It Works
 
@@ -312,34 +312,34 @@ The plugin inherits your theme's styles. Override with custom CSS:
 **Add to Appearance → Customize → Additional CSS:**
 ```css
 /* Change button color */
-.wpbmcf-btn {
+.bmcf-btn {
   background-color: #your-color !important;
 }
 
 /* Change card appearance */
-.wpbmcf-card {
+.bmcf-card {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Change text color */
-.wpbmcf-wrap {
+.bmcf-wrap {
   color: #333;
 }
 ```
 
 **Common CSS Classes:**
-- `.wpbmcf-wrap` - Main container
-- `.wpbmcf-card` - Donation box card
-- `.wpbmcf-btn` - Buttons
-- `.wpbmcf-select` - Dropdowns
-- `.wpbmcf-tab` - Frequency/amount buttons
+- `.bmcf-wrap` - Main container
+- `.bmcf-card` - Donation box card
+- `.bmcf-btn` - Buttons
+- `.bmcf-select` - Dropdowns
+- `.bmcf-tab` - Frequency/amount buttons
 
 **CSS Variables:**
-- `--wpbmcf-primary` - Primary button color
-- `--wpbmcf-brand` - Brand color for tabs/links
-- `--wpbmcf-text` - Text color
-- `--wpbmcf-border` - Border color
+- `--bmcf-primary` - Primary button color
+- `--bmcf-brand` - Brand color for tabs/links
+- `--bmcf-text` - Text color
+- `--bmcf-border` - Border color
 
 ---
 
