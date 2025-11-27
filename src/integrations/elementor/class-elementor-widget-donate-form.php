@@ -84,13 +84,13 @@ class Donate_Form_Widget extends Abstract_BMCF_Elementor_Widget
         }
 
         $settings = $this->get_settings_for_display();
-        $form_name = isset($settings['form_name']) ? $settings['form_name'] : '';
+        $form_name = isset($settings['form_name']) ? sanitize_text_field($settings['form_name']) : '';
         $custom_params = $this->parse_custom_params_from_settings($settings);
 
         $render_args = [
             'customParams' => $custom_params,
-            'defaultFrequency' => isset($settings['default_frequency']) ? $settings['default_frequency'] : '',
-            'defaultAmount' => isset($settings['default_amount']) ? $settings['default_amount'] : ''
+            'defaultFrequency' => isset($settings['default_frequency']) ? sanitize_text_field($settings['default_frequency']) : '',
+            'defaultAmount' => isset($settings['default_amount']) ? sanitize_text_field($settings['default_amount']) : ''
         ];
 
         $this->enqueue_base_assets();

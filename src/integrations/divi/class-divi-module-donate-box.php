@@ -73,16 +73,16 @@ class Donate_Box_Module extends Abstract_BMCF_Divi_Module
         }
 
         $render_args = [
-            'primaryColor' => isset($this->props['primary_color']) ? $this->props['primary_color'] : '',
-            'brandColor' => isset($this->props['brand_color']) ? $this->props['brand_color'] : '',
-            'title' => isset($this->props['title']) ? $this->props['title'] : __('Make a donation', 'beacon-multi-currency-forms'),
-            'subtitle' => isset($this->props['subtitle']) ? $this->props['subtitle'] : __('Pick your currency, frequency, and amount', 'beacon-multi-currency-forms'),
-            'noticeText' => isset($this->props['notice_text']) ? $this->props['notice_text'] : __("You'll be taken to our secure donation form to complete your gift.", 'beacon-multi-currency-forms'),
-            'buttonText' => isset($this->props['button_text']) ? $this->props['button_text'] : __('Donate now →', 'beacon-multi-currency-forms'),
+            'primaryColor' => isset($this->props['primary_color']) ? sanitize_hex_color($this->props['primary_color']) : '',
+            'brandColor' => isset($this->props['brand_color']) ? sanitize_hex_color($this->props['brand_color']) : '',
+            'title' => isset($this->props['title']) ? sanitize_text_field($this->props['title']) : __('Make a donation', 'beacon-multi-currency-forms'),
+            'subtitle' => isset($this->props['subtitle']) ? sanitize_text_field($this->props['subtitle']) : __('Pick your currency, frequency, and amount', 'beacon-multi-currency-forms'),
+            'noticeText' => isset($this->props['notice_text']) ? sanitize_textarea_field($this->props['notice_text']) : __("You'll be taken to our secure donation form to complete your gift.", 'beacon-multi-currency-forms'),
+            'buttonText' => isset($this->props['button_text']) ? sanitize_text_field($this->props['button_text']) : __('Donate now →', 'beacon-multi-currency-forms'),
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
             'defaultPresets' => $default_presets,
-            'targetPageUrl' => $target_page_url
+            'targetPageUrl' => esc_url_raw($target_page_url)
         ];
 
         $this->enqueue_base_assets();

@@ -140,16 +140,16 @@ class Donate_Box_Widget extends Abstract_BMCF_Elementor_Widget
         }
 
         $render_args = [
-            'primaryColor' => isset($settings['primary_color']) ? $settings['primary_color'] : '',
-            'brandColor' => isset($settings['brand_color']) ? $settings['brand_color'] : '',
-            'title' => isset($settings['title']) ? $settings['title'] : __('Make a donation', 'beacon-multi-currency-forms'),
-            'subtitle' => isset($settings['subtitle']) ? $settings['subtitle'] : __('Pick your currency, frequency, and amount', 'beacon-multi-currency-forms'),
-            'noticeText' => isset($settings['notice_text']) ? $settings['notice_text'] : __("You'll be taken to our secure donation form to complete your gift.", 'beacon-multi-currency-forms'),
-            'buttonText' => isset($settings['button_text']) ? $settings['button_text'] : __('Donate now →', 'beacon-multi-currency-forms'),
+            'primaryColor' => isset($settings['primary_color']) ? sanitize_hex_color($settings['primary_color']) : '',
+            'brandColor' => isset($settings['brand_color']) ? sanitize_hex_color($settings['brand_color']) : '',
+            'title' => isset($settings['title']) ? sanitize_text_field($settings['title']) : __('Make a donation', 'beacon-multi-currency-forms'),
+            'subtitle' => isset($settings['subtitle']) ? sanitize_text_field($settings['subtitle']) : __('Pick your currency, frequency, and amount', 'beacon-multi-currency-forms'),
+            'noticeText' => isset($settings['notice_text']) ? sanitize_textarea_field($settings['notice_text']) : __("You'll be taken to our secure donation form to complete your gift.", 'beacon-multi-currency-forms'),
+            'buttonText' => isset($settings['button_text']) ? sanitize_text_field($settings['button_text']) : __('Donate now →', 'beacon-multi-currency-forms'),
             'customParams' => $custom_params,
             'allowedFrequencies' => $allowed_frequencies,
             'defaultPresets' => $default_presets,
-            'targetPageUrl' => $target_page_url
+            'targetPageUrl' => esc_url_raw($target_page_url)
         ];
 
         $this->enqueue_base_assets();

@@ -70,13 +70,13 @@ add_action('init', function () {
         array(
             'render_callback' => function ($attrs, $content) {
                 // Get form name from block attributes
-                $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
+                $form_name = isset($attrs['formName']) ? sanitize_text_field($attrs['formName']) : '';
 
                 // Build args array from block attributes using parser
                 $render_args = [
                     'customParams' => BMCF\Utils\Block_Attrs_Parser::parse_custom_params($attrs),
-                    'defaultFrequency' => isset($attrs['defaultFrequency']) ? $attrs['defaultFrequency'] : '',
-                    'defaultAmount' => isset($attrs['defaultAmount']) ? $attrs['defaultAmount'] : ''
+                    'defaultFrequency' => isset($attrs['defaultFrequency']) ? sanitize_text_field($attrs['defaultFrequency']) : '',
+                    'defaultAmount' => isset($attrs['defaultAmount']) ? sanitize_text_field($attrs['defaultAmount']) : ''
                 ];
 
                 // Enqueue assets before rendering
@@ -94,7 +94,7 @@ add_action('init', function () {
         array(
             'render_callback' => function ($attrs, $content) {
                 // Get form name from block attributes
-                $form_name = isset($attrs['formName']) ? $attrs['formName'] : '';
+                $form_name = isset($attrs['formName']) ? sanitize_text_field($attrs['formName']) : '';
 
                 // Get target page URL from block attributes
                 $target_page_url = '';
@@ -107,16 +107,16 @@ add_action('init', function () {
 
                 // Build args array from block attributes using parsers
                 $render_args = [
-                    'primaryColor' => isset($attrs['primaryColor']) ? $attrs['primaryColor'] : '',
-                    'brandColor' => isset($attrs['brandColor']) ? $attrs['brandColor'] : '',
-                    'title' => isset($attrs['title']) ? $attrs['title'] : 'Make a donation',
-                    'subtitle' => isset($attrs['subtitle']) ? $attrs['subtitle'] : 'Pick your currency, frequency, and amount',
-                    'noticeText' => isset($attrs['noticeText']) ? $attrs['noticeText'] : "You'll be taken to our secure donation form to complete your gift.",
-                    'buttonText' => isset($attrs['buttonText']) ? $attrs['buttonText'] : 'Donate now →',
+                    'primaryColor' => isset($attrs['primaryColor']) ? sanitize_hex_color($attrs['primaryColor']) : '',
+                    'brandColor' => isset($attrs['brandColor']) ? sanitize_hex_color($attrs['brandColor']) : '',
+                    'title' => isset($attrs['title']) ? sanitize_text_field($attrs['title']) : 'Make a donation',
+                    'subtitle' => isset($attrs['subtitle']) ? sanitize_text_field($attrs['subtitle']) : 'Pick your currency, frequency, and amount',
+                    'noticeText' => isset($attrs['noticeText']) ? sanitize_textarea_field($attrs['noticeText']) : "You'll be taken to our secure donation form to complete your gift.",
+                    'buttonText' => isset($attrs['buttonText']) ? sanitize_text_field($attrs['buttonText']) : 'Donate now →',
                     'customParams' => BMCF\Utils\Block_Attrs_Parser::parse_custom_params($attrs),
                     'allowedFrequencies' => isset($attrs['allowedFrequencies']) ? $attrs['allowedFrequencies'] : ['single', 'monthly', 'annual'],
                     'defaultPresets' => isset($attrs['defaultPresets']) ? $attrs['defaultPresets'] : BMCF\Utils\Preset_Parser::get_all_defaults(),
-                    'targetPageUrl' => $target_page_url
+                    'targetPageUrl' => esc_url_raw($target_page_url)
                 ];
 
                 // Enqueue assets before rendering
@@ -136,13 +136,13 @@ add_action('init', function () {
     // Pre-process content to normalize shortcodes with line breaks and tabs
     add_filter('the_content', function ($content) {
         // Only process if content contains our shortcodes
-        if (strpos($content, '[beacondonate_') === false) {
+        if (strpos($content, '[beacon_donate_') === false) {
             return $content;
         }
 
         // Normalize line breaks and tabs within our shortcodes
         $content = preg_replace_callback(
-            '/\[beacondonate_(box|form|button)\s+([^\]]*?)\]/s',
+            '/\[beacon_donate_(box|form|button)\s+([^\]]*?)\]/s',
             function ($matches) {
                 $shortcode_name = $matches[1];
                 $attributes = $matches[2];
@@ -154,7 +154,7 @@ add_action('init', function () {
                 // Trim leading/trailing spaces
                 $attributes = trim($attributes);
 
-                return '[beacondonate_' . $shortcode_name . ' ' . $attributes . ']';
+                return '[beacon_donate_' . $shortcode_name . ' ' . $attributes . ']';
             },
             $content
         );

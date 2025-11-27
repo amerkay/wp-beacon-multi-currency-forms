@@ -98,23 +98,23 @@ Perfect for Classic Editor, widgets, or theme files.
 
 **Basic:**
 ```
-[beacondonate_form]
+[beacon_donate_form]
 ```
 
 **With Form Selection:**
 ```
-[beacondonate_form form="General Donations"]
+[beacon_donate_form form="General Donations"]
 ```
 
 **With Required URL Parameters:**
 ```
-[beacondonate_form form="Emergency Relief" params="bcn_c_adopted_animal=12345&bcn_custom=abc"]
+[beacon_donate_form form="Emergency Relief" params="bcn_c_adopted_animal=12345&bcn_custom=abc"]
 ```
 Visitors without these exact URL parameters will be automatically redirected.
 
 **In Theme Files:**
 ```php
-<?php echo do_shortcode('[beacondonate_form form="General Donations"]'); ?>
+<?php echo do_shortcode('[beacon_donate_form form="General Donations"]'); ?>
 ```
 
 ---
@@ -123,32 +123,32 @@ Visitors without these exact URL parameters will be automatically redirected.
 
 **Basic:**
 ```
-[beacondonate_box]
+[beacon_donate_box form="Default Donation Form"]
 ```
 
 **With Form & Customization:**
 ```
-[beacondonate_box form="Emergency Relief" title="Support Our Cause" button_text="Give Now"]
+[beacon_donate_box form="Emergency Relief" title="Support Our Cause" button_text="Give Now"]
 ```
 
 **With Colors:**
 ```
-[beacondonate_box primary_color="#FF5733" brand_color="#2C3E50"]
+[beacon_donate_box primary_color="#FF5733" brand_color="#2C3E50"]
 ```
 
 **With Custom Parameters:**
 ```
-[beacondonate_box params="bcn_c_adopted_animal=12345&source=newsletter"]
+[beacon_donate_box params="bcn_c_adopted_animal=12345&source=newsletter"]
 ```
 
 **With Frequency Control:**
 ```
-[beacondonate_box frequencies="monthly,annual"]
+[beacon_donate_box frequencies="monthly,annual"]
 ```
 
 **With Preset Amounts:**
 ```
-[beacondonate_box 
+[beacon_donate_box 
     presets_single="10,20,30"
     presets_monthly="5,10,15"
     presets_annual="50,100,200"
@@ -157,7 +157,7 @@ Visitors without these exact URL parameters will be automatically redirected.
 
 **Complete Example:**
 ```
-[beacondonate_box 
+[beacon_donate_box 
     form="Elephant Adoption"
     title="Adopt an Elephant"
     subtitle="Support conservation efforts"
@@ -174,7 +174,7 @@ Visitors without these exact URL parameters will be automatically redirected.
 
 **In Theme Files:**
 ```php
-<?php echo do_shortcode('[beacondonate_box form="Monthly Giving"]'); ?>
+<?php echo do_shortcode('[beacon_donate_box form="Monthly Giving"]'); ?>
 ```
 
 **All Shortcode Parameters:**

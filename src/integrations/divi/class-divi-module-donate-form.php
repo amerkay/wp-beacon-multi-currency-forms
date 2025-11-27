@@ -53,8 +53,8 @@ class Donate_Form_Module extends Abstract_BMCF_Divi_Module
 
         $render_args = [
             'customParams' => $custom_params,
-            'defaultFrequency' => isset($this->props['default_frequency']) ? $this->props['default_frequency'] : '',
-            'defaultAmount' => isset($this->props['default_amount']) ? $this->props['default_amount'] : ''
+            'defaultFrequency' => isset($this->props['default_frequency']) ? sanitize_text_field($this->props['default_frequency']) : '',
+            'defaultAmount' => isset($this->props['default_amount']) ? sanitize_text_field($this->props['default_amount']) : ''
         ];
 
         $this->enqueue_base_assets();

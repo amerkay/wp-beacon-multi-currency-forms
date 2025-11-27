@@ -11,7 +11,7 @@ class Shortcode_Donate_Form
 {
     public static function register()
     {
-        add_shortcode('beacondonate_form', [__CLASS__, 'handle']);
+        add_shortcode('beacon_donate_form', [__CLASS__, 'handle']);
     }
 
     public static function handle($atts = [])
@@ -21,7 +21,7 @@ class Shortcode_Donate_Form
             'params' => '', // URL-encoded string of custom params
             'default_frequency' => '', // Default frequency: single, monthly, annual
             'default_amount' => '', // Default amount
-        ], $atts, 'beacondonate_form');
+        ], $atts, 'beacon_donate_form');
 
         $form_name = $atts['form'];
 
@@ -30,8 +30,8 @@ class Shortcode_Donate_Form
 
         $render_args = [
             'customParams' => $custom_params,
-            'defaultFrequency' => $atts['default_frequency'],
-            'defaultAmount' => $atts['default_amount']
+            'defaultFrequency' => sanitize_text_field($atts['default_frequency']),
+            'defaultAmount' => sanitize_text_field($atts['default_amount'])
         ];
 
         // Ensure assets on shortcode use
