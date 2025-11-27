@@ -3,12 +3,18 @@
   if (typeof BMCF_BOX_DATA !== 'object') return;
 
   var formsByCurrency = BMCF_BOX_DATA.formsByCurrency || {};
-  var baseURL = BMCF_BOX_DATA.baseURL || (location.origin + "/donation-form/");
+  var baseURL = BMCF_BOX_DATA.baseURL || '';
   var DEFAULT_CURRENCY = BMCF_BOX_DATA.defaultCurrency || '';
 
   // Check if we have any currencies configured
   if (!Object.keys(formsByCurrency).length) {
     console.warn('BMCF: No currencies configured. Please configure donation forms in settings.');
+    return;
+  }
+
+  // Check if baseURL is provided
+  if (!baseURL) {
+    console.error('BMCF: No target page URL configured. Please select a target page in the block settings.');
     return;
   }
 

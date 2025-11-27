@@ -267,17 +267,14 @@ abstract class Abstract_BMCF_Divi_Module extends \ET_Builder_Module
     protected function get_page_options()
     {
         $pages = get_pages();
-        // use an empty-string key for the placeholder and make all keys strings
-        $options = ['' => __('— Select Page —', 'beacon-multi-currency-forms')];
+        // Use integer 0 for the placeholder to match the default value
+        $options = [0 => __('— Select Page —', 'beacon-multi-currency-forms')];
 
         foreach ($pages as $page) {
             $permalink = get_permalink($page->ID);
             $path = str_replace(home_url(), '', $permalink);
-            // cast the ID to string to guarantee string keys
-            $key = (string) $page->ID;
             $label = $page->post_title . ' (' . $path . ')';
-            // optional: sanitize label for safety
-            $options[$key] = wp_kses_post($label);
+            $options[$page->ID] = wp_kses_post($label);
         }
 
         return $options;

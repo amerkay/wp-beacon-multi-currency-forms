@@ -139,11 +139,6 @@ class Assets
         $forms = Settings::get_forms_by_currency($form_name);
         $symbols = Settings::get_currency_symbols();
 
-        // Use provided target page URL or fallback to home/donation-form
-        if (empty($target_page_url)) {
-            $target_page_url = home_url('/donation-form/');
-        }
-
         // Get default currency for this specific form
         $default_currency = Settings::get_default_currency($form_name);
 

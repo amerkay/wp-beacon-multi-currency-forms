@@ -24,6 +24,13 @@ class Donate_Box_Render
             'targetPageUrl' => '', // Optional target page URL
         ]);
 
+        // Validate that targetPageUrl is set
+        if (empty($args['targetPageUrl'])) {
+            return '<div class="bmcf-wrap"><p class="bmcf-error">' .
+                esc_html__('Error: No target page selected for the donation box. Please select a page from the Target Page dropdown in the block settings.', 'beacon-multi-currency-forms') .
+                '</p></div>';
+        }
+
         $currencies = \BMCF\Settings::get_forms_by_currency($form_name);
         $symbols = \BMCF\Settings::get_currency_symbols();
 
