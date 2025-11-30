@@ -201,6 +201,9 @@ Yes, the plugin is open source. View the code on [GitHub](https://github.com/ame
 == Changelog ==
 
 = 0.1.3 =
+* Added GitHub actions to automation .zip file releases when version upgraded.
+
+= 0.1.3 =
 * More consistent naming (bmcf).
 * Elementor bug fix with styling issues.
 
