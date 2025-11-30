@@ -3,7 +3,7 @@ Contributors: amerkay
 Tags: donation, fundraising, beacon, crm, charity
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -199,6 +199,10 @@ Yes, the plugin is open source. View the code on [GitHub](https://github.com/ame
 6. UTM tracking settings for campaign attribution
 
 == Changelog ==
+
+= 0.1.3 =
+* More consistent naming (bmcf).
+* Elementor bug fix with styling issues.
 
 = 0.1.2 =
 * Multi-currency support with geo-location detection

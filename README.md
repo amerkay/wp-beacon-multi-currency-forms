@@ -44,8 +44,10 @@ Go to **Settings → Beacon Multi-Currency Forms**.
 
 ### Step 3: Add Your First Form
 
-**In the Donation Forms section:**
+![Beacon Embed Form](./public/beacon-embed-form.png)
 
+
+**In the Donation Forms section:**
 1. **Form Name:** e.g., "General Donations"
 2. **Target Page:** Select the page where visitors will complete donations (optional)
 3. **Add Currencies:** Select currency and enter Beacon Form ID
@@ -345,11 +347,14 @@ The plugin inherits your theme's styles. Override with custom CSS:
 
 ## Credits
 
-**Plugin Version:** 0.1.2  
 **Author:** Amer Kawar @ [WildAmer.com](https://wildamer.com)  
 **License:** GPLv3
 
 ### Changelog
+
+**0.1.3**
+- More consistent naming (bmcf).
+- Elementor bug fix with styling issues.
 
 **0.1.2**
 - Multi-currency support with geo-location detection
