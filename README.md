@@ -46,7 +46,6 @@ Go to **Settings → Beacon Multi-Currency Forms**.
 
 ![Beacon Embed Form](./public/beacon-embed-form.png)
 
-
 **In the Donation Forms section:**
 1. **Form Name:** e.g., "General Donations"
 2. **Target Page:** Select the page where visitors will complete donations (optional)
@@ -68,6 +67,8 @@ Go to **Settings → Beacon Multi-Currency Forms**.
 
 The WordPress Block Editor (formerly called Gutenberg) provides visual controls for both donation modules.
 
+![Gutenberg Block Screenshot](./public/page-wp-beacon-multi-currency-forms-block-editor.png)
+
 **Full Donation Form:**
 1. Edit page → Click **(+)** Add block
 2. Search **"Beacon Donation Form"**
@@ -87,7 +88,8 @@ The WordPress Block Editor (formerly called Gutenberg) provides visual controls 
    - Control frequencies (single/monthly/annual)
    - Set preset amounts per frequency
 
-![Gutenberg Block Screenshot](./public/page-wp-beacon-multi-currency-forms-block-editor.png)
+![Beacon Multi-currency Forms Donation Box Screenshot](./public/frontend-wp-beacon-multi-currency-forms-donate-box.png)
+
 
 **Widget Areas:**
 The Donation Box block works in widget areas (sidebars, footers). Go to **Appearance → Widgets** and add the "Beacon Donation Box" block to any widget area.
