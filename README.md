@@ -28,7 +28,9 @@ This plugin integrates BeaconCRM donation forms into WordPress. Display donation
 
 ### Step 1: Install & Activate
 
-Upload to `/wp-content/plugins/` and activate through WordPress admin.
+1. Download the latest release .zip file from the [Releases tab](https://github.com/amerkay/wp-beacon-multi-currency-forms/releases).
+2. Go to WordPress Admin → Plugins → Add New → Upload Plugin
+3. Upload the zip file and activate
 
 > TODO: Publish to Wordpress Plugin Directory
 
