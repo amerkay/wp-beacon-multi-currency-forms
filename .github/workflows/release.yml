@@ -60,7 +60,7 @@ jobs:
             ### Installation
             1. Download the zip file below: **beacon-multi-currency-forms-${{ steps.get_version.outputs.version }}.zip**
             2. Go to WordPress Admin → Plugins → Add New → Upload Plugin
-            3. Upload the zip file and activate
+            3. Upload the zip file and activate. That's it!
             
             See [README](https://github.com/${{ github.repository }}/blob/main/README.md) for configuration instructions.
           files: beacon-multi-currency-forms-${{ steps.get_version.outputs.version }}.zip
