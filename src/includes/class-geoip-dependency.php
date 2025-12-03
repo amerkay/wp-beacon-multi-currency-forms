@@ -104,21 +104,27 @@ class GeoIP_Dependency
         if (get_option('bmcf_geoip_notice_dismissed', false))
             return;
 
-        ?>
-                        <script type="text/javascript">
-                            jQuery(document).ready(function ($) {
-                                $(document).on('click', '.notice[data-dismissible="bmcf-geoip-notice"] .notice-dismiss', function () {
-                                    $.ajax({
-                                        url: ajaxurl,
-                                        type: 'POST',
-                                        data: {
-                                            action: 'bmcf_dismiss_geoip_notice',
-                                            nonce: '<?php echo esc_js(wp_create_nonce('bmcf_dismiss_geoip_notice')); ?>'
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
-                        <?php
+        // Enqueue jQuery as dependency
+        wp_enqueue_script('jquery');
+        
+        // Register and enqueue inline script for notice dismissal
+        wp_register_script('bmcf-geoip-dismiss', '', ['jquery'], BMCF_VERSION, true);
+        wp_enqueue_script('bmcf-geoip-dismiss');
+        
+        $nonce = wp_create_nonce('bmcf_dismiss_geoip_notice');
+        $inline_script = "jQuery(document).ready(function ($) {
+            $(document).on('click', '.notice[data-dismissible=\"bmcf-geoip-notice\"] .notice-dismiss', function () {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'bmcf_dismiss_geoip_notice',
+                        nonce: '" . esc_js($nonce) . "'
+                    }
+                });
+            });
+        });";
+        
+        wp_add_inline_script('bmcf-geoip-dismiss', $inline_script);
     }
 }

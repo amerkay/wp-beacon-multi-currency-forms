@@ -73,10 +73,13 @@ class Assets
             'version' => Constants::get_version(),
         ];
 
-        // Output as inline script in head
-        echo '<script type="text/javascript">';
-        echo 'window.BMCF_CONSTANTS = ' . wp_json_encode($constants_data) . ';';
-        echo '</script>';
+        // Register a dummy script to attach inline script to
+        wp_register_script('bmcf-constants', '', [], BMCF_VERSION, false);
+        wp_enqueue_script('bmcf-constants');
+        
+        // Add inline script with constants data
+        $inline_script = 'window.BMCF_CONSTANTS = ' . wp_json_encode($constants_data) . ';';
+        wp_add_inline_script('bmcf-constants', $inline_script);
     }
 
     /**
