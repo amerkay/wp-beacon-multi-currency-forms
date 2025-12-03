@@ -16,8 +16,7 @@
  * Domain Path:       /languages
  */
 
-if (!defined('ABSPATH'))
-    exit;
+if (!defined('ABSPATH')) exit;
 
 // Extract version from plugin header (single source of truth)
 if (!defined('BMCF_VERSION')) {
