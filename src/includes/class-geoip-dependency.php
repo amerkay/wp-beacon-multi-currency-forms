@@ -13,14 +13,20 @@ class GeoIP_Dependency
         if (!current_user_can('manage_options'))
             return;
 
-        // Check if the GeoIP setup notice has been dismissed
-        if (get_option('bmcf_geoip_notice_dismissed', false)) {
+        // Get current screen to scope notices appropriately
+        $screen = get_current_screen();
+        if (!$screen) {
             return;
         }
 
-        // Check if Beacon account is configured
+        // Define which pages should show notices
+        $plugin_settings_page = 'settings_page_bmcf-settings';
+        $plugins_page = 'plugins';
+        $geoip_settings_page = 'settings_page_geoip-detect/geoip-detect';
+
+        // Check if Beacon account is configured - only show on plugin settings page
         $beaconAccountName = Settings::get_beacon_account();
-        if (empty($beaconAccountName)) {
+        if (empty($beaconAccountName) && $screen->id === $plugin_settings_page) {
             $url = admin_url('options-general.php?page=bmcf-settings');
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
@@ -33,11 +39,11 @@ class GeoIP_Dependency
             return;
         }
 
-        // Check if the plugin is active
+        // Check if the plugin is active - show on plugins page and our settings page
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
         $is_active = function_exists('is_plugin_active') && is_plugin_active('geoip-detect/geoip-detect.php');
 
-        if (!$is_active) {
+        if (!$is_active && in_array($screen->id, [$plugins_page, $plugin_settings_page], true)) {
             $url = admin_url('plugin-install.php?tab=plugin-information&plugin=geoip-detect&TB_iframe=true&width=772&height=785');
             echo '<div class="notice notice-error"><p>';
             echo wp_kses_post(sprintf(
@@ -47,6 +53,16 @@ class GeoIP_Dependency
                 '</a>'
             ));
             echo '</p></div>';
+            return;
+        }
+
+        // Only show on our settings page and GeoIP settings page
+        if (!in_array($screen->id, [$plugin_settings_page, $geoip_settings_page], true)) {
+            return;
+        }
+
+        // Check if the GeoIP setup notice has been dismissed
+        if (get_option('bmcf_geoip_notice_dismissed', false)) {
             return;
         }
 

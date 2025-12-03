@@ -452,6 +452,12 @@ class Settings
      */
     public static function settings_updated_notice()
     {
+        // Only show on our settings page
+        $screen = get_current_screen();
+        if (!$screen || $screen->id !== 'settings_page_bmcf-settings') {
+            return;
+        }
+
         // Check if our transient exists
         if (get_transient('bmcf_settings_updated')) {
             ?>
