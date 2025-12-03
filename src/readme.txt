@@ -2,8 +2,8 @@
 Contributors: amerkay
 Tags: donation, fundraising, beacon, crm, charity
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 0.1.3
+Tested up to: 6.9
+Stable tag: 0.1.5
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -220,6 +220,9 @@ Yes, the plugin is open source. View the code on [GitHub](https://github.com/ame
 * Settings page for easy configuration
 
 == Upgrade Notice ==
+
+= 0.1.5 =
+* Plugin compliance fixes.
 
 = 0.1.2 =
 Initial release with multi-currency support, geo-location detection, and UTM tracking.

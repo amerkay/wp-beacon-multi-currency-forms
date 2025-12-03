@@ -4,10 +4,10 @@
  * Plugin Name:       Beacon Multi-Currency Forms
  * Plugin URI:        https://github.com/amerkay/wp-beacon-multi-currency-forms
  * Description:       Embed Beacon CRM donation forms with multi-currency support, geo-location detection, and UTM tracking. Supports shortcodes, blocks, Elementor & Divi
- * Version:           0.1.4
+ * Version:           0.1.5
  * Requires at least: 6.0
  * Requires PHP:      7.4
- * Tested up to:      6.8
+ * Tested up to:      6.9
  * Author:            Amer Kawar
  * Author URI:        https://wildamer.com
  * License:           GPLv3

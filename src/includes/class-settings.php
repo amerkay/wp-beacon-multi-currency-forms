@@ -166,7 +166,6 @@ class Settings
             'type' => 'boolean',
             'sanitize_callback' => 'rest_sanitize_boolean',
             'default' => false,
-        ]); 'default' => false,
         ]);
 
         register_setting('bmcf_group', self::OPTION_TRACK_UTM, [

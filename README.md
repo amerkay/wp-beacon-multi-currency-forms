@@ -10,7 +10,7 @@ WordPress plugin for embedding BeaconCRM donation forms with multi-currency supp
 - Customizable colors, text, and preset amounts
 
 **Requirements:**
-- WordPress 6.0+ (tested on Wordpress v6.8.3)
+- WordPress 6.0+ (tested on Wordpress v6.9)
 - PHP 7.4+ (tested on PHP v8.1)
 - BeaconCRM account
 
