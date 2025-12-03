@@ -143,7 +143,7 @@
 
   // Geo-IP currency via ajax endpoint (requires GeoIP Detect plugin "JS API")
   function fetchGeoCurrency(){
-    var endpoint = "/wp-admin/admin-ajax.php?action=geoip_detect2_get_info_from_current_ip";
+    var endpoint = BMCF_FORM_DATA.ajax_url + "?action=geoip_detect2_get_info_from_current_ip";
     return fetch(endpoint, { credentials:"same-origin", cache:"no-store" })
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); })
       .then(function(record){

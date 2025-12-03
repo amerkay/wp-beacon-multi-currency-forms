@@ -126,6 +126,7 @@ class Assets
             'defaultCurrency' => $default_currency,
             'utmParams' => $utm_params,
             'utmFieldNames' => $utm_field_names,
+            'ajax_url' => admin_url('admin-ajax.php'),
         ]);
 
         wp_enqueue_script('bmcf-donate-form');
@@ -165,6 +166,7 @@ class Assets
             'formsByCurrency' => $byCur,
             'baseURL' => $target_page_url,
             'defaultCurrency' => $default_currency,
+            'ajax_url' => admin_url('admin-ajax.php'),
         ]);
 
         wp_enqueue_script('bmcf-donate-box');
