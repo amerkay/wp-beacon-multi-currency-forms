@@ -164,11 +164,14 @@ class Settings
 
         register_setting('bmcf_group', self::OPTION_LOAD_BEACON_GLOBALLY, [
             'type' => 'boolean',
+            'sanitize_callback' => 'rest_sanitize_boolean',
             'default' => false,
+        ]); 'default' => false,
         ]);
 
         register_setting('bmcf_group', self::OPTION_TRACK_UTM, [
             'type' => 'boolean',
+            'sanitize_callback' => 'rest_sanitize_boolean',
             'default' => false,
         ]);
 
