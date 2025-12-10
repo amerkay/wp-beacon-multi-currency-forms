@@ -45,6 +45,33 @@ abstract class Abstract_BMCF_Elementor_Widget extends \Elementor\Widget_Base
     }
 
     /**
+     * Safely output form HTML with proper escaping.
+     * Uses wp_kses with allowed form elements since render methods already escape content.
+     * 
+     * @param string $html HTML content from render method
+     * @return void
+     */
+    protected function safe_echo_form_html($html)
+    {
+        $allowed_html = [
+            'div' => ['class' => [], 'id' => [], 'style' => [], 'data-*' => [], 'role' => [], 'aria-label' => [], 'hidden' => [], 'aria-hidden' => [], 'aria-expanded' => [], 'aria-controls' => []],
+            'header' => ['class' => []],
+            'h3' => ['class' => []],
+            'h4' => ['class' => []],
+            'p' => ['class' => []],
+            'span' => ['class' => [], 'aria-hidden' => []],
+            'label' => ['for' => [], 'class' => [], 'aria-label' => []],
+            'select' => ['id' => [], 'class' => [], 'aria-label' => [], 'name' => []],
+            'option' => ['value' => [], 'selected' => []],
+            'input' => ['type' => [], 'id' => [], 'class' => [], 'name' => [], 'value' => [], 'placeholder' => [], 'min' => [], 'max' => [], 'step' => [], 'inputmode' => []],
+            'button' => ['type' => [], 'class' => [], 'data-*' => [], 'aria-selected' => [], 'aria-expanded' => [], 'aria-controls' => [], 'aria-label' => [], 'disabled' => []],
+            'strong' => [],
+            'em' => [],
+        ];
+        echo wp_kses($html, $allowed_html);
+    }
+
+    /**
      * Get form dropdown options for Elementor select control.
      * 
      * @return array Form options with empty default.

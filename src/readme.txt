@@ -3,7 +3,7 @@ Contributors: amerkay
 Tags: donation, fundraising, beacon, crm, charity
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 0.1.6
+Stable tag: 0.1.7
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -199,6 +199,9 @@ Yes, the plugin is open source. View the code on [GitHub](https://github.com/ame
 6. UTM tracking settings for campaign attribution
 
 == Changelog ==
+
+= 0.1.7 =
+* Security: Use wp_kses for proper form HTML escaping in Elementor widgets
 
 = 0.1.6 =
 * Security: Properly escape all output variables
