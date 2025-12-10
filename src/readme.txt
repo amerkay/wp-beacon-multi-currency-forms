@@ -229,20 +229,32 @@ Initial release with multi-currency support, geo-location detection, and UTM tra
 
 == Third-Party Services ==
 
-This plugin integrates with the following third-party services:
+This plugin connects to BeaconCRM's external services to display and process donation forms.
 
 = BeaconCRM =
-* Service: BeaconCRM donation form processing
-* Website: https://beaconcrm.org
-* Privacy Policy: https://beaconcrm.org/privacy
-* Terms of Service: https://beaconcrm.org/terms
-* Usage: Required for all donation form functionality
+
+This plugin uses BeaconCRM's API to embed donation forms and process donations.
+
+**What data is sent:** 
+- When forms load: Beacon account name and form IDs (no personal data)
+- When donation box displays: API requests to `portal.beaconproducts.co.uk` to fetch form presets
+- When visitors donate: Selected currency, amount, frequency, and optional UTM campaign parameters are passed to BeaconCRM's donation portal at `static.beaconproducts.co.uk`
+- All donor personal information (name, email, payment details) is collected directly by BeaconCRM
+
+**When data is sent:**
+- Every time a donation form or box is displayed on a page
+- When the donate button is clicked
+
+**Service details:**
+- Service provider: https://beaconcrm.org
+- Terms of Service: https://beaconcrm.org/terms
+- Privacy Policy: https://beaconcrm.org/privacy
+
+This service is required for all plugin functionality.
 
 = GeoIP Detection (Optional) =
-* Service: MaxMind GeoIP database for location detection
-* Plugin: https://wordpress.org/plugins/geoip-detect/
-* Privacy Policy: https://www.maxmind.com/en/privacy-policy
-* Usage: Optional, only if you install the GeoIP Detection plugin for automatic currency selection
+
+If you install the separate GeoIP Detection plugin (https://wordpress.org/plugins/geoip-detect/), it can automatically detect visitor location for currency selection. This plugin does not send data to external services - geo-location is processed locally. See the GeoIP Detection plugin documentation and MaxMind's privacy policy (https://www.maxmind.com/en/privacy-policy) for details.
 
 == Additional Information ==
 
