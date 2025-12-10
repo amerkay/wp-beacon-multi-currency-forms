@@ -200,6 +200,10 @@ Yes, the plugin is open source. View the code on [GitHub](https://github.com/ame
 
 == Changelog ==
 
+= 0.1.6 =
+* Security: Properly escape all output variables
+* Fix: Elementor widgets now render form elements correctly
+
 = 0.1.3 =
 * Added GitHub actions to automation .zip file releases when version upgraded.
 
