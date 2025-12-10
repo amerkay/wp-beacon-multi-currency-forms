@@ -153,6 +153,7 @@ class Donate_Box_Widget extends Abstract_BMCF_Elementor_Widget
         ];
 
         $this->enqueue_base_assets();
-        echo \BMCF\Render\Donate_Box_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
+        // Render method already escapes all output internally
+        echo \BMCF\Render\Donate_Box_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 }

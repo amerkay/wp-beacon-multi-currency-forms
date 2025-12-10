@@ -90,7 +90,14 @@ class Assets
     {
         $colors = Constants::get_all_colors();
         // Inject into :root so all BMCF components (buttons, boxes, forms) can access the variables
-        $inline_css = ":root{--bmcf-brand:{$colors['brand']};--bmcf-primary:{$colors['primary']};--bmcf-text:{$colors['text']};--bmcf-border:{$colors['border']};}";
+        // Escape color values to prevent potential XSS
+        $inline_css = sprintf(
+            ':root{--bmcf-brand:%s;--bmcf-primary:%s;--bmcf-text:%s;--bmcf-border:%s;}',
+            esc_attr($colors['brand']),
+            esc_attr($colors['primary']),
+            esc_attr($colors['text']),
+            esc_attr($colors['border'])
+        );
         wp_add_inline_style('bmcf-front', $inline_css);
     }
 

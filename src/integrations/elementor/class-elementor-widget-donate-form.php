@@ -95,6 +95,7 @@ class Donate_Form_Widget extends Abstract_BMCF_Elementor_Widget
 
         $this->enqueue_base_assets();
         \BMCF\Assets::enqueue_donation_form($form_name);
-        echo \BMCF\Render\Donate_Form_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput
+        // Render method already escapes all output internally
+        echo \BMCF\Render\Donate_Form_Render::render($form_name, $render_args); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 }

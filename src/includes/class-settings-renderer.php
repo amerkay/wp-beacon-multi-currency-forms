@@ -285,7 +285,7 @@ class Settings_Renderer
                     <?php esc_html_e('When enabled, UTM parameters (utm_source, utm_medium, utm_campaign) are automatically tracked across all pages and stored in a cookie for 180 days. These parameters are then passed to donation forms via data attributes.', 'beacon-multi-currency-forms'); ?>
                 </p>
 
-                <div id="bmcf-utm-params-section" <?php echo $value ? '' : 'style="display:none;"'; ?>>
+                <div id="bmcf-utm-params-section" <?php if (!$value) echo 'style="display:none;"'; ?>>
                     <h4><?php esc_html_e('Parameter Configuration', 'beacon-multi-currency-forms'); ?></h4>
                     <p class="description">
                         <?php esc_html_e('Choose the URL Data parameters as configured under "URL Data" in your forms. All parameter names must start with "bcn_".', 'beacon-multi-currency-forms'); ?>
@@ -316,13 +316,13 @@ class Settings_Renderer
                                             <input type="text"
                                                 name="<?php echo esc_attr(Settings::OPTION_UTM_PARAMS); ?>[<?php echo esc_attr($key); ?>][payment]"
                                                 value="<?php echo esc_attr($payment_value); ?>" class="regular-text"
-                                                placeholder="<?php echo esc_attr('bcn_pay_c_' . $key); ?>" />
+                                                placeholder="<?php echo esc_attr(sprintf('bcn_pay_c_%s', $key)); ?>" />
                                         </td>
                                         <td data-label="<?php esc_attr_e('Subscription Parameter', 'beacon-multi-currency-forms'); ?>">
                                             <input type="text"
                                                 name="<?php echo esc_attr(Settings::OPTION_UTM_PARAMS); ?>[<?php echo esc_attr($key); ?>][subscription]"
                                                 value="<?php echo esc_attr($subscription_value); ?>" class="regular-text"
-                                                placeholder="<?php echo esc_attr('bcn_sub_c_' . $key); ?>" />
+                                                placeholder="<?php echo esc_attr(sprintf('bcn_sub_c_%s', $key)); ?>" />
                                         </td>
                                     </tr>
                                     <?php
